@@ -7,15 +7,15 @@
 using namespace std;
 
 enum Material{
-    NONE=0,
-    WOOD=59,
-    STONE=131,
-    IRON=250,
-    GOLD=32,
-    DIAMOND=1561
+    NONE = 0,
+    WOOD = 59,
+    STONE = 131,
+    IRON = 250,
+    GOLD = 32,
+    DIAMOND = 1561
 };
 
-class Combat : public Weapon {
+class Combat : public Weapon{
 protected:
     Material material;
     int durability;
@@ -30,12 +30,11 @@ public:
     bool isCombat() const override;
     
     int getDurability() const;
-    void repair(int ammount);
+    void repair(int amount);
     void loseDurability(int amount);
 
     virtual int attack() = 0;
     
-
     virtual ~Combat();
 };
 

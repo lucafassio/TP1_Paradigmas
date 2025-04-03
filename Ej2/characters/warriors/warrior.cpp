@@ -41,14 +41,3 @@ void Warrior::addWeapon(Weapon* w){
 std::pair<Weapon*, Weapon*> Warrior::inventory() const {
     return weapons;
 }
-
-int Warrior::useWeapon(Weapon* w, Character* op){
-    if (!w) return BASE_DAMAGE;
-    if (w->isCombat()){
-        int fullDamage=BASE_DAMAGE + w->attack();
-        op->reciveDamage(fullDamage);
-        return fullDamage;
-    }
-    return 0;
-}
-

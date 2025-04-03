@@ -37,9 +37,9 @@
 #include "Ej3/factory.hpp"
 
 int main(){
-    Team* team1 = new Team(1);
+    Team* team1 = new Team();
     if (team1) cout << "Team 1 created correctly." << endl;
-    Team* team2 = new Team(2);
+    Team* team2 = new Team();
     if (team2) cout << "Team 2 created correctly." << endl;
     PersonajeFactory* factory = new PersonajeFactory();
     if (factory) cout << "Factory created correctly." << endl;
@@ -67,11 +67,16 @@ int main(){
     cout << team1->getMember("Conan")->inventory().first->getName() << endl;
     cout << team1->getMember("Conan")->inventory().first->getMaterial() << endl;
     cout << team1->getMember("Conan")->inventory().first->attack() << endl;
+    cout << team1->getMember("Conan")->inventory().first->getDurability() << endl;
     
     team1->getMember("Conan")->useWeapon(team1->getMember("Conan")->inventory().first, team2->getMember("Maximus"));
     cout << "Conan attacks Maximus with sword!" << endl;
     cout << team2->getMember("Maximus")->getName() << endl;
     cout << team2->getMember("Maximus")->getHealth() << endl;
+
+    cout << team1->getMember("Conan")->inventory().first->getName() << endl;
+    cout << team1->getMember("Conan")->inventory().first->getMaterial() << endl;
+    cout << team1->getMember("Conan")->inventory().first->getDurability() << endl;
     
     return 0;
 }

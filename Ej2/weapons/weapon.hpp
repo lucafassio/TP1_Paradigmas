@@ -11,6 +11,7 @@ class Weapon {
         virtual string getName() const = 0;
         virtual int attack() = 0;
         virtual bool isCombat() const = 0;
+        virtual int getDurability() const = 0;
         
         virtual ~Weapon() = default;
 };

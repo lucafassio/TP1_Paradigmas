@@ -16,8 +16,8 @@ void Potion::use() {
     durability--;
 }
 
-void Potion::castSpell(const string& spellName) {
-    cout << "Potions cannot cast spells!" << endl;
+void Potion::castSpell(const string& spellName){
+    cout << "Potions cannot cast spells!" << spellName << endl;
 }
 
 string Potion::getType() const {

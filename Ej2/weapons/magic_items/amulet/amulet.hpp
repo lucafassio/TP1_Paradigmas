@@ -6,18 +6,25 @@
 #include <iostream>
 using namespace std;
 
+enum AmuletProp{
+    HEALING,
+    FIRE,
+    INMUNITY
+};
+
 class Amulet final : public Magic {
 private:
-    string property;
+    AmuletProp property;
     bool active;
 
 public:
-    Amulet(const string& name, int magicPower, int durability, const string& property, bool active);
+    Amulet(AmuletProp prop);
 
     int getWeight() const;
     void use();
     void castSpell(const string& spellName) override;
     int attack() override;  // Add this line
+    string getMaterial() const override;
 
     // Additional methods
     void activate();

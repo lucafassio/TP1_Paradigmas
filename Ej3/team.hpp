@@ -9,7 +9,7 @@ class Team {
     public:
         vector<Character*> members;  // Made public temporarily
         
-        Team(int num);
+        Team();
 
         Character* getMember(string name) const;
         friend class PersonajeFactory;

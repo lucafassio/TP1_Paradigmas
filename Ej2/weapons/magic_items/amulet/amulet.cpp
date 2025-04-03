@@ -1,8 +1,25 @@
 #include "amulet.hpp"
 
-Amulet::Amulet(const string& name, int magicPower, int durability, const string& property, bool active)
-    : Magic(name, magicPower, durability), property(property), active(active) {
+Amulet::Amulet(AmuletProp prop): 
+    Magic(magicPower, durability), property(prop), active(false){
+        name = getMaterial();
 }
+
+string Amulet::getMaterial() const {
+    switch (property) {
+        case HEALING: return "Healing Amulet";
+        case FIRE: return "Fire Amulet";
+        case INMUNITY: return "Inmunity Amulet";
+        default: return "Unknown Amulet";
+    }
+}
+
+
+
+
+
+
+
 
 int Amulet::getWeight() const {
     return 1;

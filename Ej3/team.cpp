@@ -1,6 +1,6 @@
 #include "team.hpp"
 
-Team::Team(int num): members() {} // Initialize empty vector
+Team::Team(): members() {} // Initialize empty vector
 
 Character* Team::getMember(string name) const {
     for (auto& member : members) {

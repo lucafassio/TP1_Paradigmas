@@ -1,6 +1,6 @@
 # Compilador y flags
 CXX := g++
-CXXFLAGS := -Wall -Wextra -std=c++17 -MMD -MP -I./Ej2 -I./Ej3
+CXXFLAGS := -Wall -Wextra -MMD -MP -I./Ej2 -I./Ej3
 
 # Carpetas
 SRC_DIRS := Ej2 Ej3

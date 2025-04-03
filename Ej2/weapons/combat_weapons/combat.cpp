@@ -4,7 +4,7 @@ Combat::Combat(Material mat):
     material(mat), durability(mat)
 {}
 
-Combat::~Combat() {
+Combat::~Combat(){
     // Virtual destructor implementation (can be empty)
 }
 
@@ -31,16 +31,16 @@ int Combat::getDurability() const {
     return this->durability;
 }
 
-void Combat::repair(int ammount){
-    this->durability+=ammount;
-    if (this->durability>this->material){
-        this->durability=this->material;
+void Combat::repair(int amount){
+    this->durability += amount;
+    if (this->durability > this->material) {
+        this->durability = this->material;
     }
 }
 
 void Combat::loseDurability(int amount){
-    this->durability-=amount;
-    if (this->durability<0){
-        this->durability=0;
+    this->durability -= amount;
+    if (this->durability < 0) {
+        this->durability = 0;
     }
 }

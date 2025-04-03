@@ -28,10 +28,12 @@ public:
     int getHealth() const override;
     int getArmor() const;
     int getBuff() const override;
+
     void reciveDamage(int dam) override;
+
     void addWeapon(Weapon *w) override;
     std::pair<Weapon*, Weapon*> inventory() const override;
-    int useWeapon(Weapon* w, Character* op) override;
+    int useWeapon(Weapon* w, Character* op) = 0;
     
 };
 
