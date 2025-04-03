@@ -19,12 +19,6 @@ public:
     int attack() override;
     int getDamage() const;
     int getWeight() const;
-
-    // Additional methods
-    void swing();
-    void chop();
-    void sharpen();
-    void breakAxe();
 };
 
 #endif // AXE_HPP

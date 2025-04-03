@@ -19,12 +19,16 @@ string Combat::getMaterial() const {
     }
 }
 
-int Combat::getDurability() const {
-    return this->durability;
-}
-
 string Combat::getName() const {
     return this->name;
+}
+
+bool Combat::isCombat() const {
+    return true;
+}
+
+int Combat::getDurability() const {
+    return this->durability;
 }
 
 void Combat::repair(int ammount){
@@ -36,7 +40,7 @@ void Combat::repair(int ammount){
 
 void Combat::loseDurability(int amount){
     this->durability-=amount;
-    if (this->durability<0) {
+    if (this->durability<0){
         this->durability=0;
     }
 }

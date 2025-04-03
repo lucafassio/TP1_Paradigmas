@@ -2,9 +2,8 @@
 #define MAGE_HPP
 
 #include "../character.hpp"
+#include <vector>
 #include <string>
-#include <iostream>
-using namespace std;
 
 class Mage : public Character {
 protected:
@@ -13,24 +12,26 @@ protected:
     int mana;
     int magicPower;
     int spellSlots;
+    pair<Weapon*, Weapon*> weapons;
 
 public:
-    Mage(const string& name, int health, int mana, int magicPower, int spellSlots);
+    Mage(string name);
+    virtual ~Mage() = default;
 
+    // Character interface implementation
     string getName() const override;
     int getHealth() const override;
-    int getMana() const override;
+    int getMana() const;
+    int getBuff() const override;
+    void reciveDamage(int dam) override;
+    void addWeapon(Weapon* w) override;
+    pair<Weapon*, Weapon*> inventory() const override;
+    int useWeapon(Weapon* w, Character* op) override;
 
+    // Mage specific methods
+    virtual void castSpell(const string& spellName) = 0;
     int getMagicPower() const;
     int getSpellSlots() const;
-    void rechargeMana(int amount);
-    void enhanceMagicPower(int amount);
-
-    virtual void castSpell(const string& spellName) override;
-    virtual void attack() override;
-    virtual void defend() override;
-
-    virtual ~Mage() = default;
 };
 
 #endif // MAGE_HPP

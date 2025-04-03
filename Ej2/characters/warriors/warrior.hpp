@@ -1,36 +1,38 @@
+
+
 #ifndef WARRIOR_HPP
 #define WARRIOR_HPP
 
+#define INCLUDED_CORRECTLY
+
 #include "../character.hpp"
+#include "../../weapons/weapon.hpp"
 #include <string>
 #include <iostream>
+#include <vector>
 using namespace std;
 
 class Warrior : public Character {
 protected:
     string name;
     int health;
-    int mana;
-    int strength;
     int armor;
+    int combatBuff;
+    pair<Weapon*, Weapon*> weapons;
+    int BASE_DAMAGE=10;
 
 public:
-    Warrior(const string& name, int health, int mana, int strength, int armor);
+    Warrior(string name);
 
     string getName() const override;
     int getHealth() const override;
-    int getMana() const override;
-
-    int getStrength() const;
     int getArmor() const;
-    void enhanceStrength(int amount);
-    void repairArmor(int amount);
-
-    virtual void attack() override;
-    virtual void defend() override;
-    virtual void specialMove() = 0;
-
-    virtual ~Warrior() = default;
+    int getBuff() const override;
+    void reciveDamage(int dam) override;
+    void addWeapon(Weapon *w) override;
+    std::pair<Weapon*, Weapon*> inventory() const override;
+    int useWeapon(Weapon* w, Character* op) override;
+    
 };
 
 #endif // WARRIOR_HPP

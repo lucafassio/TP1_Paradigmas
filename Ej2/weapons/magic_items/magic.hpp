@@ -8,16 +8,17 @@ using namespace std;
 
 class Magic : public Weapon {
 protected:
+    string name; 
     int magicPower;
     int durability;
-    string name;
+    
 
 public:
     Magic(const string& name, int magicPower, int durability);
 
+    string getMaterial() const override;
     string getName() const override;
-    int getDurability() const override;
-    void repair() override;
+    bool isCombat() const override;
 
     // Shared methods for all magic items
     int getMagicPower() const;
@@ -25,6 +26,7 @@ public:
     void drainMagicPower(int amount);
 
     virtual void castSpell(const string& spellName) = 0;
+    int attack() = 0;
 
     virtual ~Magic() = default;
 };

@@ -26,14 +26,17 @@ public:
     Combat(Material dur);
 
     string getMaterial() const override;
-    int getDurability() const override;
     string getName() const override;
-
+    bool isCombat() const override;
+    
+    int getDurability() const;
     void repair(int ammount);
     void loseDurability(int amount);
 
     virtual int attack() = 0;
-    virtual ~Combat(); // Remove override specifier
+    
+
+    virtual ~Combat();
 };
 
 #endif // COMBAT_HPP

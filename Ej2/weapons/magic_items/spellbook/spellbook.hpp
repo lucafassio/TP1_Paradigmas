@@ -1,28 +1,26 @@
 #ifndef SPELLBOOK_HPP
 #define SPELLBOOK_HPP
 
-#include "magic.hpp"
+#include "../magic.hpp"
 #include <vector>
 #include <string>
-#include <iostream>
-using namespace std;
 
-class Spellbook final : public Magic {
-private:
-    vector<string> spells;
-
+class Spellbook : public Magic {
 public:
-    Spellbook(const string& name, int magicPower, int durability);
+    Spellbook(string name, int magicPower, int durability);
 
-    int getWeight() const override;
-    void use() override;
+    int getWeight() const;
+    void use();
     void castSpell(const string& spellName) override;
+    int attack() override;
 
-    // Additional methods
     void addSpell(const string& spellName);
     void removeSpell(const string& spellName);
     vector<string> listSpells() const;
     bool hasSpell(const string& spellName) const;
+
+private:
+    vector<string> spells;
 };
 
 #endif // SPELLBOOK_HPP

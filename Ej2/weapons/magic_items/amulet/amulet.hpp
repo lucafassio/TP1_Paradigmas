@@ -1,7 +1,7 @@
 #ifndef AMULET_HPP
 #define AMULET_HPP
 
-#include "magic.hpp"
+#include "../magic.hpp"
 #include <string>
 #include <iostream>
 using namespace std;
@@ -14,9 +14,10 @@ private:
 public:
     Amulet(const string& name, int magicPower, int durability, const string& property, bool active);
 
-    int getWeight() const override;
-    void use() override;
+    int getWeight() const;
+    void use();
     void castSpell(const string& spellName) override;
+    int attack() override;  // Add this line
 
     // Additional methods
     void activate();

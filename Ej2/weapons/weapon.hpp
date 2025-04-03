@@ -8,10 +8,11 @@ using namespace std;
 class Weapon {
     public:
         virtual string getMaterial() const = 0;
-        virtual int getDurability() const = 0;
         virtual string getName() const = 0;
-
-        virtual ~Weapon() = default; // Add virtual destructor
+        virtual int attack() = 0;
+        virtual bool isCombat() const = 0;
+        
+        virtual ~Weapon() = default;
 };
 
 #endif // WEAPON_HPP
