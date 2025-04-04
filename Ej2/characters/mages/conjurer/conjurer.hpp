@@ -5,8 +5,7 @@
 
 class Conjurer : public Mage {
 public:
-    Conjurer(const string& name);
-    Conjurer(const string& name, int health, int mana, int magicPower, int spellSlots);
+    Conjurer(string name);
 
     void castSpell(const string& spellName) override;
 

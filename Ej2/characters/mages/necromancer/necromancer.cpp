@@ -1,6 +1,6 @@
 #include "necromancer.hpp"
 
-Necromancer::Necromancer(const string& name)
+Necromancer::Necromancer(string name)
     : Mage(name) {
 }
 

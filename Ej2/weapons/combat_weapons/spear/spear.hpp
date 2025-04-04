@@ -2,9 +2,6 @@
 #define SPEAR_HPP
 
 #include "../combat.hpp"
-#include <string>
-#include <iostream>
-using namespace std;
 
 class Spear final : public Combat{
 private:

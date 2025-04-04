@@ -1,6 +1,6 @@
 #include "spear.hpp"
 
-Spear::Spear(Material mat) : 
+Spear::Spear(Material mat): 
     Combat(mat){
         setDamage(mat);
         name = this->getMaterial() + " Spear";
@@ -18,7 +18,7 @@ void Spear::setDamage(Material mat){
 }
 
 int Spear::attack(){
-    if (this->durability <= 0) {
+    if (this->durability <= 0){
         cout << "Spear is broken!" << endl;
         return 0;
     }

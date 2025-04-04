@@ -1,5 +1,4 @@
 #include "axe.hpp"
-#include <cstdlib> // For rand()
 
 Axe::Axe(Material mat): 
     Combat(mat){

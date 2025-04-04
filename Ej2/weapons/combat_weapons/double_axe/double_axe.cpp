@@ -1,5 +1,4 @@
 #include "double_axe.hpp"
-#include <cstdlib>
 
 DoubleAxe::DoubleAxe(Material mat): 
     Combat(mat){

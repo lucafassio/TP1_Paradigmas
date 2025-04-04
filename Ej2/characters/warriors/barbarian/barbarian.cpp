@@ -1,35 +1,49 @@
 #include "barbarian.hpp"
 
 Barbarian::Barbarian(string name): 
-    Warrior(name)
+    Warrior(name, BARBARIAN)
 {srand(time(nullptr));}
 
-int Barbarian::useWeapon(Weapon* w, Character* op){
+int Barbarian::useWeapon(Weapon* weapon, Character* target){
+    int finalDamage = BASE_DAMAGE + Warrior::useWeapon(weapon, target);
+
     //verificar si se activa rage (20% de probabilidad).
     if (!isInRage() && (rand() % 100) < 20){
         rageAttacksLeft=2;
-        cout << name << " enters RAGE mode!" << endl;
+        cout << name << " (Barbarian) enters RAGE mode!" << endl;
     }
 
-    cout << name << " attacks " << op->getName();
+    cout << name << " (Barbarian) attacks " << target->getName() << " (" << target->getType() << ")";
 
-    int fullDamage = BASE_DAMAGE;
-    if(w){
-        if (w->isCombat()) fullDamage += w->attack();
-        cout << " with " << w->getName();
-    }
+    if(weapon) cout << " with " << weapon->getName();
     else cout << " with bare hands";
 
     //aplicar multiplicador de daño si está en rage.
     if (isInRage()){
-        fullDamage = static_cast<int>(fullDamage * RAGE_DAMAGE_MULTIPLIER);
+        finalDamage = static_cast<int>(finalDamage * RAGE_DAMAGE_MULTIPLIER);
         decreaseRageTurns();
     }
 
+    //20% de probabilidad de activar un crítico (si ya venia forzado sigue igual).
+    if ((rand() % 100) < 20) forcedCritical = true;
+
+    if (strengthBuff){
+        finalDamage = static_cast<int>(finalDamage * 1.5); //aplico el buff de fuerza.
+        
+        //desactivo el buff de fuerza (si aun quedan turnos en el efecto luego se volvera a activar).
+        strengthBuff = false; 
+    }
+
+    if (forcedCritical){
+        finalDamage = static_cast<int>(finalDamage * 1.5); //aumento daño por critico.
+        forcedCritical = false;
+    }
+
     //aplicar daño al oponente.
-    op->reciveDamage(fullDamage);
-    cout << " and deals " << fullDamage << " damage!" << endl;
-    return fullDamage;
+    target->reciveDamage(finalDamage);
+    cout << " and deals " << finalDamage << " damage!" << endl;
+
+    return finalDamage;
 }
 
 bool Barbarian::isInRage() const {

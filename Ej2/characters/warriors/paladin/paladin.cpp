@@ -1,6 +1,6 @@
 #include "paladin.hpp"
 
-Paladin::Paladin(const string& name)
-    : Warrior(name){
-}
+Paladin::Paladin(string name): 
+    Warrior(name, PALADIN)
+{}
 

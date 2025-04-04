@@ -44,3 +44,14 @@ void Combat::loseDurability(int amount){
         this->durability = 0;
     }
 }
+
+void Combat::use() {
+    if (this->durability <= 0) {
+        cout << "Weapon is broken!" << endl;
+        return;
+    }
+    this->durability--;
+    if (this->durability == 0) {
+        cout << "Weapon broke!" << endl;
+    }
+}

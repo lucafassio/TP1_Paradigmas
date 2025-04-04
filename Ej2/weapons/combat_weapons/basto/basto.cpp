@@ -1,6 +1,6 @@
 #include "basto.hpp"
 
-Basto::Basto() : 
+Basto::Basto(): 
     Combat(WOOD), durabilityBoost(0), damageBoost(0) {
         this->damage = 3;
         name = this->getMaterial() + " Basto";

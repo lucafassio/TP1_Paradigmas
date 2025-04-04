@@ -2,9 +2,6 @@
 #define COMBAT_HPP
 
 #include "../weapon.hpp"
-#include <string>
-#include <iostream>
-using namespace std;
 
 enum Material{
     NONE = 0,
@@ -35,6 +32,8 @@ public:
 
     virtual int attack() = 0;
     
+    void use() override;
+
     virtual ~Combat();
 };
 

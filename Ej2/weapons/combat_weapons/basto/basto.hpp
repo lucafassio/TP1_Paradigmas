@@ -2,9 +2,6 @@
 #define BASTO_HPP
 
 #include "../combat.hpp"
-#include <string>
-#include <iostream>
-using namespace std;
 
 class Basto final : public Combat{
 private:

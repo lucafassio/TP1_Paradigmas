@@ -1,6 +1,16 @@
 #ifndef FACTORY_HPP
 #define FACTORY_HPP
 
+#include <iostream>
+#include <iomanip>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
+using namespace std;
+
 // Combat weapons and base
 #include "../Ej2/weapons/combat_weapons/combat.hpp"
 #include "../Ej2/weapons/combat_weapons/sword/sword.hpp"
@@ -36,22 +46,8 @@
 
 #include <iostream>
 
-enum CharacterType{
-    //mages
-    CONJURER,
-    NECRO,
-    SORCERER,
-    WARLOCK,
-
-    //warriors
-    BARBARIAN,
-    GLADIATOR,
-    KNIGHT,
-    MERCENARY,
-    PALADIN
-};
-
 enum WeaponType{
+    //combat weapons
     AXE,
     BASTO,
     DOUBLE_AXE,
@@ -73,7 +69,8 @@ class PersonajeFactory{
         ~PersonajeFactory();  // Add destructor
 
         void createCharacter(Team* team, CharacterType type, string name);
-        Weapon* createWeapon(WeaponType type, Material mat);  // Fixed return type
+        Weapon* createWeapon(WeaponType type, Material mat);
+        Weapon* createWeapon(WeaponType type, AmuletProp prop);
         void addWeaponToCharacter(Character* character, Weapon* weapon);
 };
 

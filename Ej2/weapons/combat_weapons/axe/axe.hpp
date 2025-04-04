@@ -2,9 +2,6 @@
 #define AXE_HPP
 
 #include "../combat.hpp"
-#include <string>
-#include <iostream>
-using namespace std;
 
 class Axe final : public Combat{
 private:

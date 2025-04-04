@@ -18,7 +18,7 @@ void PersonajeFactory::createCharacter(Team* team, CharacterType type, string na
         default: break;
     }
     if (!team->members.back()) {
-        cout << "Error creating character!" << endl; //throw?
+        cout << "Error creating character!" << endl;
         return;
     }
 }
@@ -30,19 +30,29 @@ Weapon* PersonajeFactory::createWeapon(WeaponType type, Material mat) {
         case DOUBLE_AXE: return new DoubleAxe(mat);
         case SPEAR: return new Spear(mat);
         case SWORD: return new Sword(mat);
-        // case AMULET: return new Amulet("Magic Amulet");
-        // case POTION: return new Potion("Health Potion");
-        // case SPELLBOOK: return new Spellbook("Spellbook");
-        case STAFF: return nullptr; // Implement if Staff class exists
+        case AMULET: return new Amulet(PROP_HEALING, nullptr);
+        case POTION: return new Potion("Health Potion", 3);
+        case SPELLBOOK: return new Spellbook("Spellbook", 3);
+        case STAFF: return new Staff("Magic Staff", 3);
         default: return nullptr;
     }
 }
 
+Weapon* PersonajeFactory::createWeapon(WeaponType type, AmuletProp prop){
+    if (type != AMULET) {
+        cout << "Invalid weapon type for amulet creation!" << endl;
+        return nullptr;
+    }
+    return new Amulet(prop, nullptr);
+}
+
 void PersonajeFactory::addWeaponToCharacter(Character* character, Weapon* weapon) {
     if (character && weapon){
-        cout << character->getName() << " adds weapon: " << weapon->getName() << endl;
         character->addWeapon(weapon);
-    } else {
-        cout << "Error adding weapon to character!" << endl; //throw?
-    }
+
+        //si el arma es un amuleto, se le asigna el holder.
+        Amulet* amulet = dynamic_cast<Amulet*>(weapon);
+        if (amulet) amulet->setHolder(character);
+    } 
+    else cout << "Error adding weapon to character!" << endl;
 }

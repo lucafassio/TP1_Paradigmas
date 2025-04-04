@@ -2,9 +2,6 @@
 #define DOUBLE_AXE_HPP
 
 #include "../combat.hpp"
-#include <string>
-#include <iostream>
-using namespace std;
 
 class DoubleAxe final : public Combat{
 private:

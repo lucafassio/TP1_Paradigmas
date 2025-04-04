@@ -1,6 +1,8 @@
 #include "mercenary.hpp"
 
-Mercenary::Mercenary(string name) : Warrior(name), combatSkill(50) {}
+Mercenary::Mercenary(string name): 
+    Warrior(name, MERCENARY), combatSkill(50) 
+{}
 
 void Mercenary::executeContract(const string& contractDetails) {
     cout << "Mercenary executes contract: " << contractDetails << endl;

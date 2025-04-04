@@ -2,9 +2,6 @@
 #define GLADIATOR_HPP
 
 #include "../warrior.hpp"
-#include <iostream>
-#include <string>
-using namespace std;
 
 class Gladiator final: public Warrior {
 private:

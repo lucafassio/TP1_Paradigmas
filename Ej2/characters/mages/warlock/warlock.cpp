@@ -1,6 +1,6 @@
 #include "warlock.hpp"
 
-Warlock::Warlock(const string& name)
+Warlock::Warlock(string name)
     : Mage(name) {
 }
 

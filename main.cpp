@@ -48,6 +48,8 @@ int main(){
     factory->createCharacter(team2, BARBARIAN, "Maximus");
     if (team2->getMember("Maximus")) cout << "Maximus created correctly." << endl;
 
+    cout << endl << "Attack test." << endl;
+
     cout << team1->getMember("Conan")->getName() << endl;
     cout << team1->getMember("Conan")->getHealth() << endl;
     cout << team2->getMember("Maximus")->getName() << endl;
@@ -57,6 +59,8 @@ int main(){
     cout << "Conan attacks Maximus!" << endl;
     cout << team2->getMember("Maximus")->getName() << endl;
     cout << team2->getMember("Maximus")->getHealth() << endl;
+
+    cout << endl << "Combat weapon test." << endl;
     
     Weapon* sword = factory->createWeapon(SWORD, IRON);
     if (sword) cout << "Sword created correctly." << endl;
@@ -77,6 +81,25 @@ int main(){
     cout << team1->getMember("Conan")->inventory().first->getName() << endl;
     cout << team1->getMember("Conan")->inventory().first->getMaterial() << endl;
     cout << team1->getMember("Conan")->inventory().first->getDurability() << endl;
+
+    cout << endl << "Amulet test." << endl;
+
+    Weapon* amulet = factory->createWeapon(AMULET, PROP_HEALING);
+    if (amulet) cout << "Amulet created correctly." << endl;
+
+    cout << "Attempting to use factory to add amulet..." << endl;
+    if (!team2->getMember("Maximus")->inventory().first && !team2->getMember("Maximus")->inventory().second) cout << "Maximus inventory is empty" << endl;
+    factory->addWeaponToCharacter(team2->getMember("Maximus"), amulet);
+    if (team2->getMember("Maximus")->inventory().first) cout << "Amulet added to Maximus's inventory" << endl;
+
+    cout << team2->getMember("Maximus")->inventory().first->getName() << endl;
+    cout << team2->getMember("Maximus")->inventory().first->getMaterial() << endl; //type of amulet
+    cout << team2->getMember("Maximus")->inventory().first->getDurability() << endl;
     
+    cout << "Maximus current health: " << team2->getMember("Maximus")->getHealth() << endl;
+    cout << "Simulating turn passed..." << endl;
+    team2->getMember("Maximus")->effectUpdate();
+    cout << "Maximus current health: " << team2->getMember("Maximus")->getHealth() << endl;
+
     return 0;
 }

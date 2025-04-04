@@ -1,17 +1,28 @@
 #ifndef WEAPON_HPP
 #define WEAPON_HPP
 
-#include <string>
 #include <iostream>
+#include <iomanip>
+#include <string>
+#include <vector>
+#include <algorithm>
+#include <cmath>
+#include <cstdlib>
+#include <ctime>
 using namespace std;
 
-class Weapon {
+class Character;
+
+class Weapon{
     public:
-        virtual string getMaterial() const = 0;
         virtual string getName() const = 0;
-        virtual int attack() = 0;
         virtual bool isCombat() const = 0;
         virtual int getDurability() const = 0;
+        
+        virtual string getMaterial() const = 0;
+        virtual void use() = 0;
+        
+        virtual int attack() = 0;
         
         virtual ~Weapon() = default;
 };

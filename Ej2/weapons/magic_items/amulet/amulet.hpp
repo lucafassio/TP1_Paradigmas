@@ -2,35 +2,35 @@
 #define AMULET_HPP
 
 #include "../magic.hpp"
-#include <string>
-#include <iostream>
-using namespace std;
+
+class Character;
 
 enum AmuletProp{
-    HEALING,
-    FIRE,
-    INMUNITY
+    PROP_HEALING,
+    PROP_STRENGTH,
+    PROP_IMMUNITY,
+    PROP_LUCK,
+    PROP_INVISIBILITY
 };
 
-class Amulet final : public Magic {
-private:
-    AmuletProp property;
-    bool active;
+class Amulet final : public Magic{
+    private:
+        AmuletProp property;
+        bool active;
+        int cooldown;
+        Character* holder;
 
-public:
-    Amulet(AmuletProp prop);
+    public:
+        Amulet(AmuletProp prop, Character* holder);
+        
+        string getMaterial() const override;
 
-    int getWeight() const;
-    void use();
-    void castSpell(const string& spellName) override;
-    int attack() override;  // Add this line
-    string getMaterial() const override;
+        void setHolder(Character* holder);
 
-    // Additional methods
-    void activate();
-    void deactivate();
-    string getProperty() const;
-    void setProperty(const string& newProperty);
+        void use();
+        void giveEffect();
+        void update(Character* target);
+    
 };
 
 #endif // AMULET_HPP

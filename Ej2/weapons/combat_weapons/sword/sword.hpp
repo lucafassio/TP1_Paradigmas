@@ -2,9 +2,6 @@
 #define SWORD_HPP
 
 #include "../combat.hpp"
-#include <string>
-#include <iostream>
-using namespace std;
 
 class Sword final : public Combat{
 private:

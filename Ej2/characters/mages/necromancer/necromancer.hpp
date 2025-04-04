@@ -2,14 +2,10 @@
 #define NECROMANCER_HPP
 
 #include "../mage.hpp"
-#include <string>
-#include <iostream>
-using namespace std;
 
 class Necromancer final : public Mage {
 public:
-    Necromancer(const string& name);
-    Necromancer(const string& name, int health, int mana, int magicPower, int spellSlots);
+    Necromancer(string name);
 
     void castSpell(const string& spellName) override;
 

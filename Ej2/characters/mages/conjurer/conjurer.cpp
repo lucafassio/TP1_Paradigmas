@@ -1,6 +1,6 @@
 #include "conjurer.hpp"
 
-Conjurer::Conjurer(const string& name)
+Conjurer::Conjurer(string name)
     : Mage(name)
 {}
 

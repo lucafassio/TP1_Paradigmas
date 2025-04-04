@@ -1,7 +1,8 @@
 #include "gladiator.hpp"
 
-Gladiator::Gladiator(string name) : Warrior(name), popularity(0) {
-    this->combatBuff = 5; // Gladiators start with a combat buff
+Gladiator::Gladiator(string name):
+    Warrior(name, GLADIATOR), popularity(0){
+        this->combatBuff = 5;
 }
 
 void Gladiator::performMove(const string& moveName) {

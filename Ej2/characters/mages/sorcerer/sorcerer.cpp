@@ -1,6 +1,6 @@
 #include "sorcerer.hpp"
 
-Sorcerer::Sorcerer(const string& name)
+Sorcerer::Sorcerer(string name)
     : Mage(name) {
 }
 

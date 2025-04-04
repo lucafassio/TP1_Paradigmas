@@ -5,13 +5,10 @@
 
 class Staff : public Magic {
 public:
-    Staff(const string& name, int magicPower, int durability);
-    int getWeight() const;
-    void use();
-    void castSpell(const string& spellName) override;
-    int attack() override;
-    void recharge();
-    void breakStaff();
+    Staff(string name, int durability);
+
+    string getMaterial() const override;
+    void use() override;
 };
 
 #endif // STAFF_HPP

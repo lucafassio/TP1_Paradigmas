@@ -1,73 +1,40 @@
 #include "amulet.hpp"
+#include "../../../characters/character.hpp"
 
-Amulet::Amulet(AmuletProp prop): 
-    Magic(magicPower, durability), property(prop), active(false){
+Amulet::Amulet(AmuletProp prop, Character* holder): 
+    Magic(3), property(prop), active(false), cooldown(0){
         name = getMaterial();
+        holder = holder;
+        if (holder) giveEffect();
 }
 
 string Amulet::getMaterial() const {
-    switch (property) {
-        case HEALING: return "Healing Amulet";
-        case FIRE: return "Fire Amulet";
-        case INMUNITY: return "Inmunity Amulet";
+    switch (property){
+        case PROP_HEALING: return "Healing Amulet";
+        case PROP_STRENGTH: return "Strength Amulet";
+        case PROP_IMMUNITY: return "Immunity Amulet";
+        case PROP_LUCK: return "Lucky Amulet";
+        case PROP_INVISIBILITY: return "Invisible Amulet";
         default: return "Unknown Amulet";
     }
 }
 
-
-
-
-
-
-
-
-int Amulet::getWeight() const {
-    return 1;
+void Amulet::setHolder(Character* holder){
+    this->holder = holder;
+    giveEffect();
 }
 
-void Amulet::use() {
-    if (durability <= 0) {
-        cout << "Amulet is broken!" << endl;
-        return;
+void Amulet::use(){
+    if (cooldown) {cout << "You must wait " << cooldown << " turns to use the amulet again." << endl; return;}
+    active = !active;
+}
+
+void Amulet::giveEffect(){
+    switch (property){
+        case PROP_HEALING: holder->applyEffect(REGENERATION, durability); break;
+        case PROP_STRENGTH: holder->applyEffect(STRENGTH, durability); break;
+        case PROP_IMMUNITY: holder->applyEffect(IMMUNITY, durability); break;
+        case PROP_LUCK: holder->applyEffect(LUCK, durability); break;
+        case PROP_INVISIBILITY: holder->applyEffect(INVISIBILITY, durability); break;
     }
-    if (!active) {
-        cout << "Amulet is not active!" << endl;
-        return;
-    }
-    durability--;
-}
-
-void Amulet::castSpell(const string& spellName) {
-    if (!active) {
-        cout << "Amulet is not active!" << endl;
-        return;
-    }
-    cout << "Casting " << spellName << " with property: " << property << endl;
-}
-
-void Amulet::activate() {
-    active = true;
-    cout << "Amulet activated!" << endl;
-}
-
-void Amulet::deactivate() {
-    active = false;
-    cout << "Amulet deactivated!" << endl;
-}
-
-string Amulet::getProperty() const {
-    return property;
-}
-
-void Amulet::setProperty(const string& newProperty) {
-    property = newProperty;
-    cout << "Amulet property changed to: " << property << endl;
-}
-
-int Amulet::attack() {
-    if (!active || durability <= 0) {
-        return 0;
-    }
-    durability--;
-    return magicPower;
 }

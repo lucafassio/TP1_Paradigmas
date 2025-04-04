@@ -2,11 +2,6 @@
 #define BARBARIAN_HPP
 
 #include "../warrior.hpp"
-#include <string>
-#include <iostream>
-#include <cstdlib>
-#include <ctime>
-using namespace std;
 
 class Barbarian final : public Warrior {
 private:
@@ -19,6 +14,8 @@ public:
     int useWeapon(Weapon* w, Character* op) override;
     bool isInRage() const;
     void decreaseRageTurns();
+
+    friend class Amulet;
 };
 
 #endif // BARBARIAN_HPP

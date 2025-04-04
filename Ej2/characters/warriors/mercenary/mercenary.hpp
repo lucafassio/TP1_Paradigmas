@@ -2,8 +2,6 @@
 #define MERCENARY_HPP
 
 #include "../warrior.hpp"
-#include <string>
-#include <iostream>
 
 class Mercenary : public Warrior {
 private:
