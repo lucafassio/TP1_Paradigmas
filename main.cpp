@@ -48,19 +48,19 @@ int main(){
     factory->createCharacter(team2, BARBARIAN, "Maximus");
     if (team2->getMember("Maximus")) cout << "Maximus created correctly." << endl;
 
-    cout << endl << "Attack test." << endl;
+    cout << endl << "========== Attack test. ==========" << endl;
 
     cout << team1->getMember("Conan")->getName() << endl;
     cout << team1->getMember("Conan")->getHealth() << endl;
     cout << team2->getMember("Maximus")->getName() << endl;
     cout << team2->getMember("Maximus")->getHealth() << endl;
 
-    team1->getMember("Conan")->useWeapon(nullptr, team2->getMember("Maximus"));
+    team1->getMember("Conan")->useWeapon(nullptr, team2->getMember("Maximus"), team2);
     cout << "Conan attacks Maximus!" << endl;
     cout << team2->getMember("Maximus")->getName() << endl;
     cout << team2->getMember("Maximus")->getHealth() << endl;
 
-    cout << endl << "Combat weapon test." << endl;
+    cout << endl << "========== Combat weapon test. ==========" << endl;
     
     Weapon* sword = factory->createWeapon(SWORD, IRON);
     if (sword) cout << "Sword created correctly." << endl;
@@ -73,7 +73,7 @@ int main(){
     cout << team1->getMember("Conan")->inventory().first->attack() << endl;
     cout << team1->getMember("Conan")->inventory().first->getDurability() << endl;
     
-    team1->getMember("Conan")->useWeapon(team1->getMember("Conan")->inventory().first, team2->getMember("Maximus"));
+    team1->getMember("Conan")->useWeapon(team1->getMember("Conan")->inventory().first, team2->getMember("Maximus"), team2);
     cout << "Conan attacks Maximus with sword!" << endl;
     cout << team2->getMember("Maximus")->getName() << endl;
     cout << team2->getMember("Maximus")->getHealth() << endl;
@@ -82,7 +82,7 @@ int main(){
     cout << team1->getMember("Conan")->inventory().first->getMaterial() << endl;
     cout << team1->getMember("Conan")->inventory().first->getDurability() << endl;
 
-    cout << endl << "Amulet test." << endl;
+    cout << endl << "========== Amulet test. ==========" << endl;
 
     Weapon* amulet = factory->createWeapon(AMULET, PROP_HEALING);
     if (amulet) cout << "Amulet created correctly." << endl;
@@ -100,6 +100,92 @@ int main(){
     cout << "Simulating turn passed..." << endl;
     team2->getMember("Maximus")->effectUpdate();
     cout << "Maximus current health: " << team2->getMember("Maximus")->getHealth() << endl;
+
+    cout << endl << "========== Mercenary test. ==========" << endl;
+
+    factory->createCharacter(team1, MERCENARY, "Alfredo");
+    if (team1->getMember("Alfredo")) cout << "Alfredo created correctly." << endl;
+    factory->createCharacter(team2, MERCENARY, "Carlos");
+    if (team2->getMember("Carlos")) cout << "Carlos created correctly." << endl;
+
+    cout << endl;
+    team1->showMembers();
+    cout << endl;
+    team2->showMembers();
+    cout << endl;
+
+    team1->getMember("Alfredo")->useWeapon(nullptr, team2->getMember("Carlos"), team2);
+    cout << "Alfredo attacked Carlos!" << endl;
+    cout << endl;
+    cout << team2->getMember("Carlos")->getName() << endl;
+    cout << team2->getMember("Carlos")->getHealth() << endl;
+    cout << endl;
+
+    Mercenary* carlos = dynamic_cast<Mercenary*>(team2->getMember("Carlos"));
+    if (carlos) {
+        carlos->betray(team2, team1);
+        cout << "Carlos has betrayed their team!" << endl;
+        cout << "Carlos is now in team 1." << endl;
+    } else {
+        cout << "Carlos is not a Mercenary and cannot betray." << endl;
+    }
+
+    cout << endl;
+    team1->showMembers();
+    cout << endl;
+    team2->showMembers();
+    cout << endl;
+
+    cout << "Carlos current health: " << team1->getMember("Carlos")->getHealth() << endl;
+
+    cout << endl << "========== Stealing test. ==========" << endl;
+
+    cout << endl << "Carlos inventory: " << endl;
+    if (carlos->inventory().first) cout << carlos->inventory().first->getName() << endl;
+    if (carlos->inventory().second) cout << carlos->inventory().second->getName() << endl;
+
+    cout << endl << "Alfredo inventory: " << endl;
+    if (team1->getMember("Alfredo")->inventory().first) cout << team1->getMember("Alfredo")->inventory().first->getName() << endl;
+    if (team1->getMember("Alfredo")->inventory().second) cout << team1->getMember("Alfredo")->inventory().second->getName() << endl;
+
+    cout << endl << "Conan inventory: " << endl;
+    if (team1->getMember("Conan")->inventory().first) cout << team1->getMember("Conan")->inventory().first->getName() << endl;
+    if (team1->getMember("Conan")->inventory().second) cout << team1->getMember("Conan")->inventory().second->getName() << endl;
+
+    cout << endl << "Carlos will steal a weapon from Alfredo and Conan." << endl;
+    carlos->stealWeapon(team1->getMember("Alfredo")); //alfredo no tiene armas.
+    carlos->stealWeapon(team1->getMember("Conan")); //conan tiene espada.
+
+    cout << endl << "Carlos inventory: " << endl;
+    if (carlos->inventory().first) cout << carlos->inventory().first->getName() << endl;
+    if (carlos->inventory().second) cout << carlos->inventory().second->getName() << endl;
+
+    cout << endl << "Alfredo inventory: " << endl;
+    if (team1->getMember("Alfredo")->inventory().first) cout << team1->getMember("Alfredo")->inventory().first->getName() << endl;
+    if (team1->getMember("Alfredo")->inventory().second) cout << team1->getMember("Alfredo")->inventory().second->getName() << endl;
+
+    cout << endl << "Conan inventory: " << endl;
+    if (team1->getMember("Conan")->inventory().first) cout << team1->getMember("Conan")->inventory().first->getName() << endl;
+    if (team1->getMember("Conan")->inventory().second) cout << team1->getMember("Conan")->inventory().second->getName() << endl;
+
+    cout << endl << "========== Recruitment test. ==========" << endl;
+    cout << "Carlos will recruit an ally." << endl;
+    carlos->reclutAlly();
+    cout << "Carlos has recruited an ally!" << endl;
+
+    cout << endl;
+    team1->showMembers();
+    cout << endl;
+
+    cout << "Carlos will run away." << endl;
+    carlos->runAway();
+    cout << "Carlos has run away!" << endl;
+
+    cout << endl;
+    team1->showMembers();
+    cout << endl;
+
+    cout << endl << "========== Necromancer tests. ==========" << endl;
 
     return 0;
 }

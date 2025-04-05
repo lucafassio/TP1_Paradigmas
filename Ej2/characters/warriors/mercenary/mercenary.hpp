@@ -3,15 +3,23 @@
 
 #include "../warrior.hpp"
 
-class Mercenary : public Warrior {
+class Team;
+
+class Mercenary : public Warrior{
 private:
-    int combatSkill;
-    
+    int allysRemaining;
+    Team* currentTeam;
+
 public:
-    Mercenary(string name);
-    void executeContract(const string& contractDetails);
-    int getCombatSkill() const;
-    void train();
+    Mercenary(string name, Team* currentTeam);
+
+    int useWeapon(Weapon* weapon, Character* traget, Team* targetTeam) override;
+    void reciveDamage(int dam) override;
+    void runAway();
+    void betray(Team* currentTeam, Team* objective);
+    void stealWeapon(Character* target);
+    void getInvisible();
+    void recruitAlly();
 };
 
 #endif // MERCENARY_HPP

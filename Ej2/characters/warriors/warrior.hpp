@@ -23,7 +23,7 @@ protected:
     bool opponentMiss = false; 
 
 public:
-    Warrior(string name, CharacterType type);
+    Warrior(string name, CharacterType type, int health, int armor);
 
     string getName() const override;
     int getHealth() const override;
@@ -36,19 +36,20 @@ public:
 
     void addWeapon(Weapon *w) override;
     pair<Weapon*, Weapon*> inventory() const override;
-    int useWeapon(Weapon* weapon, Character* target) override;
+    int useWeapon(Weapon* weapon, Character* target, Team* targetTeam) override;
+    void loseWeapon(Weapon* weapon) override;
 
     //metodos para manejar efectos.
     void applyEffect(Effect effect, int duration) override;
     void effectUpdate() override;
-    void regenCase();
-    void strengthCase();
-    void burnCase();
-    void poisonCase();
-    void stunCase();
-    void luckCase();
-    void immunityCase();
-    void invisibilityCase();
+    void regenCase() override;
+    void strengthCase() override;
+    void burnCase() override;
+    void poisonCase() override;
+    void stunCase() override;
+    void luckCase() override;
+    void immunityCase() override;
+    void invisibilityCase() override;
 };
 
 #endif // WARRIOR_HPP

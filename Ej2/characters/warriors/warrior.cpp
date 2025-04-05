@@ -1,7 +1,7 @@
 #include "warrior.hpp"
 
-Warrior::Warrior(string name, CharacterType type):
-    name(name), type(type), health(100), armor(0), combatBuff(0), weapons(nullptr, nullptr)
+Warrior::Warrior(string name, CharacterType type, int health, int armor):
+    name(name), type(type), health(health), armor(armor), weapons(nullptr, nullptr)
 {}
 
 string Warrior::getName() const {
@@ -16,26 +16,25 @@ int Warrior::getArmor() const {
     return armor;
 }
 
+int Warrior::getBuff() const {
+    return combatBuff;
+}
+
 void Warrior::heal(int amount) {
     health += amount;
     if (health > 100) health = 100; //no se puede curar mas del maximo de vida.
 }
 
 void Warrior::reciveDamage(int dam){
-    if (immune){
-        immune = false;
-        cout << name << " is immune right now!" << endl;
+    if (opponentMiss) {
+        cout << name << " dodges the attack!" << endl;
+        opponentMiss = false;
         return;
     }
     health-=dam;
     if (health<0){
         health=0;
-        //muere
     }
-}
-
-int Warrior::getBuff() const {
-    return combatBuff;
 }
 
 string Warrior::getType() const {
@@ -54,7 +53,6 @@ string Warrior::getType() const {
 }
 
 void Warrior::addWeapon(Weapon* w){
-    cout << "Adding weapon. Current weapons: " << weapons.first << ", " << weapons.second << endl;
     if (weapons.first == nullptr) weapons.first = w;
     else if (weapons.second == nullptr) weapons.second = w;
 }
@@ -63,7 +61,8 @@ pair<Weapon*, Weapon*> Warrior::inventory() const {
     return weapons;
 }
 
-int Warrior::useWeapon(Weapon* weapon, Character* target){
+int Warrior::useWeapon(Weapon* weapon, Character* target, Team* targetTeam){
+    if (!targetTeam) return 0;
     if (!weapon) return 0;
 
     int weaponDamage = 0;
@@ -79,6 +78,12 @@ int Warrior::useWeapon(Weapon* weapon, Character* target){
     }
 
     return weaponDamage;
+}
+
+void Warrior::loseWeapon(Weapon* weapon){
+    if (weapons.first == weapon) weapons.first = nullptr;
+    else if (weapons.second == weapon) weapons.second = nullptr;
+    else cout << "Weapon not found in inventory." << endl;
 }
 
 // ======= METODOS PARA MANEJAR EFECTOS ======= //

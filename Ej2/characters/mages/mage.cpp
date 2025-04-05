@@ -1,9 +1,8 @@
 #include "mage.hpp"
-#include "../../weapons/weapon.hpp"
 
-Mage::Mage(string name)
-    : name(name), health(100), mana(100), magicPower(50), spellSlots(3){
-}
+Mage::Mage(string name, CharacterType type, int health, int mana):
+    name(name), type(type), health(health), mana(mana), weapons(nullptr, nullptr)
+{}
 
 string Mage::getName() const {
     return name;
@@ -18,55 +17,33 @@ int Mage::getMana() const {
 }
 
 int Mage::getBuff() const {
-    return magicPower;
+    return magicBuff;
 }
 
-void Mage::reciveDamage(int dam) {
-    health -= dam;
+void Mage::heal(int amount) {
+    health += amount;
+    if (health > 100) health = 100; //no se puede curar mas del maximo de vida.
 }
 
-void Mage::addWeapon(Weapon* w) {
-    if (weapons.first == nullptr) {
-        weapons.first = w;
-    } else if (weapons.second == nullptr) {
-        weapons.second = w;
+void Mage::reciveDamage(int dam){
+    if (opponentMiss) {
+        cout << name << " dodges the attack!" << endl;
+        opponentMiss = false;
+        return;
     }
-    // If both slots are full, the weapon is not added
-}
-
-pair<Weapon*, Weapon*> Mage::inventory() const {
-    return weapons;
-}
-
-int Mage::useWeapon(Weapon* w, Character* op) {
-    if (!w) return 0; // No weapon to use
-    if (w->isCombat()) {
-        int fullDamage = magicPower + w->attack();
-        op->reciveDamage(fullDamage);
-        return fullDamage;
-    }
-    return 0; // Non-combat weapon, no damage dealt
-}
-
-int Mage::getMagicPower() const {
-    return magicPower;
-}
-
-int Mage::getSpellSlots() const {
-    return spellSlots;
-}
-
-void Mage::castSpell(const string& spellName) {
-    if (spellSlots > 0) {
-        cout << name << " casts " << spellName << "!" << endl;
-        spellSlots--;
-    } else {
-        cout << name << " has no spell slots left!" << endl;
+    health-=dam;
+    if (health<0){
+        health=0;
     }
 }
 
 string Mage::getType() const {
-    switch (type) {
+    switch (type){
+        case BARBARIAN: return "Barbarian"; break;
+        case GLADIATOR: return "Gladiator"; break;
+        case KNIGHT: return "Knight"; break;
+        case MERCENARY: return "Mercenary"; break;
+        case PALADIN: return "Paladin"; break;
         case CONJURER: return "Conjurer"; break;
         case NECRO: return "Necromancer"; break;
         case SORCERER: return "Sorcerer"; break;
@@ -75,15 +52,42 @@ string Mage::getType() const {
     }
 }
 
-void Mage::heal(int amount) {
-    health += amount;
-    if (health > 100) health = 100; // Max health cap
+void Mage::addWeapon(Weapon* w){
+    if (weapons.first == nullptr) weapons.first = w;
+    else if (weapons.second == nullptr) weapons.second = w;
+}
+
+pair<Weapon*, Weapon*> Mage::inventory() const {
+    return weapons;
+}
+
+int Mage::useWeapon(Weapon* weapon, Character* target, Team* targetTeam){
+    if (!targetTeam) return 0;
+    if (!weapon) return 0;
+
+    int weaponDamage = 0;
+
+    if (weapon->isCombat()) weaponDamage = weapon->attack();
+
+    //SIN IMPLEMENTAR
+    //si el arma es magica se aplicaran los efectos correspondientes.
+    if (!weapon->isCombat()){
+        //aplicar efectos de magia.
+        target->getName(); //para que no me tire warning de variable no usada.
+    }
+
+    return weaponDamage;
+}
+
+void Mage::loseWeapon(Weapon* weapon){
+    if (weapons.first == weapon) weapons.first = nullptr;
+    else if (weapons.second == weapon) weapons.second = nullptr;
+    else cout << "Weapon not found in inventory." << endl;
 }
 
 // ======= METODOS PARA MANEJAR EFECTOS ======= //
 void Mage::applyEffect(Effect effect, int duration) {
-    // Implement effect application logic here
-    cout << name << " applies effect: " << effect << " for " << duration << " turns." << endl;
+    currentEffects.push_back(make_pair(effect, duration));
 }
 
 void Mage::effectUpdate(){

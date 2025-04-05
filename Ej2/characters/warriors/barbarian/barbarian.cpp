@@ -1,11 +1,13 @@
 #include "barbarian.hpp"
+#include "../../../../Ej3/team.hpp"
+
 
 Barbarian::Barbarian(string name): 
-    Warrior(name, BARBARIAN)
+    Warrior(name, BARBARIAN, 100, 3)
 {srand(time(nullptr));}
 
-int Barbarian::useWeapon(Weapon* weapon, Character* target){
-    int finalDamage = BASE_DAMAGE + Warrior::useWeapon(weapon, target);
+int Barbarian::useWeapon(Weapon* weapon, Character* target, Team* targetTeam){
+    int finalDamage = BASE_DAMAGE + Warrior::useWeapon(weapon, target, targetTeam);
 
     //verificar si se activa rage (20% de probabilidad).
     if (!isInRage() && (rand() % 100) < 20){
@@ -41,6 +43,7 @@ int Barbarian::useWeapon(Weapon* weapon, Character* target){
 
     //aplicar daño al oponente.
     target->reciveDamage(finalDamage);
+    if (!target->getHealth()) targetTeam->loseMember(target);
     cout << " and deals " << finalDamage << " damage!" << endl;
 
     return finalDamage;

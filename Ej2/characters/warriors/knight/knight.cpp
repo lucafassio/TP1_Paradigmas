@@ -1,8 +1,8 @@
 #include "knight.hpp"
 
 Knight::Knight(string name): 
-    Warrior(name, KNIGHT){
-        this->armorLevel = 100;
-}
+    Warrior(name, KNIGHT, 100, 3)
+{}
+
 
 

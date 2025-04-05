@@ -13,7 +13,7 @@ void PersonajeFactory::createCharacter(Team* team, CharacterType type, string na
         case BARBARIAN: team->members.push_back(new Barbarian(name)); break;
         case GLADIATOR: team->members.push_back(new Gladiator(name)); break;
         case KNIGHT: team->members.push_back(new Knight(name)); break;
-        case MERCENARY: team->members.push_back(new Mercenary(name)); break;
+        case MERCENARY: team->members.push_back(new Mercenary(name, team)); break;
         case PALADIN: team->members.push_back(new Paladin(name)); break;
         default: break;
     }

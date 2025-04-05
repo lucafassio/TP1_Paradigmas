@@ -3,17 +3,27 @@
 
 #include "../mage.hpp"
 
-class Necromancer final : public Mage {
+//Skelly stats
+#define SKELETON_HEALTH 30
+#define SKELETON_DAMAGE 6
+
+struct Skelly{
+    int health;
+    int damage;
+
+    Skelly(): health(SKELETON_HEALTH), damage(SKELETON_DAMAGE){};
+};
+
+
+class Necromancer final : public Mage{
+private:
+    bool skellyAlive = false;
+
 public:
     Necromancer(string name);
 
-    void castSpell(const string& spellName) override;
-
-    // Additional methods
-    void raiseDead(const string& corpseName);
-    void strengthenControl();
-    void summonUndead();
-    void curseEnemy();
+    int useWeapon(Weapon* weapon, Character* target, Team* targetTeam) override;
+    void raiseDead();
 };
 
 #endif // NECROMANCER_HPP

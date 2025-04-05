@@ -13,16 +13,19 @@ using namespace std;
 
 #include "../Ej2/characters/character.hpp"
 #include "../Ej2/weapons/weapon.hpp"
-#include <vector>
 
-class Team {
+class Team{
+    private:
+        vector<Character*> members;
+
     public:
-        vector<Character*> members;  // Made public temporarily
-        
         Team();
 
         Character* getMember(string name) const;
+        void loseMember(Character* member);
+        void showMembers() const;
         friend class PersonajeFactory;
+        friend class Mercenary;
 };
 
 #endif // TEAM_HPP

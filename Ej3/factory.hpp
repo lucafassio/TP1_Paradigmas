@@ -66,7 +66,7 @@ class PersonajeFactory{
 
     public:
         PersonajeFactory();
-        ~PersonajeFactory();  // Add destructor
+        ~PersonajeFactory();
 
         void createCharacter(Team* team, CharacterType type, string name);
         Weapon* createWeapon(WeaponType type, Material mat);

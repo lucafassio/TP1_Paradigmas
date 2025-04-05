@@ -11,7 +11,7 @@ private:
 
 public:
     Barbarian(string name);
-    int useWeapon(Weapon* w, Character* op) override;
+    int useWeapon(Weapon* w, Character* op, Team* targetTeam) override;
     bool isInRage() const;
     void decreaseRageTurns();
 
