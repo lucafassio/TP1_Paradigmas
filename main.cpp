@@ -101,7 +101,7 @@ int main(){
     
     cout << "Maximus current health: " << team2->getMember("Maximus")->getHealth() << endl;
     cout << "Simulating turn passed..." << endl;
-    team2->getMember("Maximus")->effectUpdate();
+    team2->getMember("Maximus")->effectUpdate(team2);
     cout << "Maximus current health: " << team2->getMember("Maximus")->getHealth() << endl;
 
     cout << endl << "========== Mercenary test. ==========" << endl;
@@ -189,6 +189,58 @@ int main(){
     cout << endl;
 
     cout << endl << "========== Necromancer tests. ==========" << endl;
+    Factory::addCharacterToTeam(team1, Factory::createCharacter(NECRO, "Velkor"));
+    
+    cout << "Creating a skelly" << endl;
+    auto necro = dynamic_pointer_cast<Necromancer>(team1->getMember("Velkor"));
+    if (necro) necro->raiseDead(team1);
+    else cout << "Velkor is not a Necromancer." << endl;
+
+    cout << endl;
+    team1->showMembers();
+    cout << endl;
+
+    cout << "Larry current health: " << team1->getMember("Larry")->getHealth() << endl;
+    
+    team1->getMember("Larry")->useWeapon(nullptr, team2->getMember("Maximus"), team2);
+    team2->getMember("Maximus")->useWeapon(nullptr, team1->getMember("Larry"), team1);
+    team2->getMember("Maximus")->useWeapon(nullptr, team1->getMember("Larry"), team1);
+    team2->getMember("Maximus")->useWeapon(nullptr, team1->getMember("Larry"), team1);
+
+    cout << endl;
+    team1->showMembers();
+    cout << endl;
+
+    cout << "Velkor will drain life from Maximus with max health." << endl;
+    cout << "Velkor current health: " << team1->getMember("Velkor")->getHealth() << endl;
+    cout << "Maximus current health: " << team2->getMember("Maximus")->getHealth() << endl;
+
+    necro->drainLife(team2->getMember("Maximus"), team2);
+
+    cout << endl;
+    cout << "Velkor current health: " << team1->getMember("Velkor")->getHealth() << endl;
+    cout << "Maximus current health: " << team2->getMember("Maximus")->getHealth() << endl;
+    cout << endl;
+
+    necro->reciveDamage(50);
+
+    cout << "Velkor current health: " << team1->getMember("Velkor")->getHealth() << endl;
+    cout << "Maximus current health: " << team2->getMember("Maximus")->getHealth() << endl;
+
+    necro->drainLife(team2->getMember("Maximus"), team2);
+
+    cout << endl;
+    cout << "Velkor current health: " << team1->getMember("Velkor")->getHealth() << endl;
+    cout << "Maximus current health: " << team2->getMember("Maximus")->getHealth() << endl;
+    cout << endl;
+
+    cout << "Larry comes back. But for the other team???" << endl;
+    necro->raiseDead(team2);
+
+    cout << "Larry current health: " << team2->getMember("Larry")->getHealth() << endl;
+    cout << endl;
+
+    team2->showMembers();
 
     return 0;
 }

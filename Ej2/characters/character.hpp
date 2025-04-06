@@ -35,10 +35,11 @@ public:
 
     //metodos para manejar efectos.
     virtual void applyEffect(Effect effect, int duration) = 0;
-    virtual void effectUpdate() = 0;
+    virtual void effectUpdate(shared_ptr<Team> currentTeam) = 0;
     virtual void regenCase() = 0;
     virtual void strengthCase() = 0;
     virtual void burnCase() = 0;
+    virtual void bleedCase() = 0;
     virtual void poisonCase() = 0;
     virtual void stunCase() = 0;
     virtual void luckCase() = 0;

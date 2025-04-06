@@ -1,4 +1,5 @@
 #include "mage.hpp"
+#include "../../../Ej3/team.hpp"
 
 Mage::Mage(string name, CharacterType type, int health, int mana):
     name(name), type(type), health(health), mana(mana), weapons(nullptr, nullptr)
@@ -90,7 +91,7 @@ void Mage::applyEffect(Effect effect, int duration) {
     currentEffects.push_back(make_pair(effect, duration));
 }
 
-void Mage::effectUpdate(){
+void Mage::effectUpdate(shared_ptr<Team> currentTeam){
     for (auto effect = this->currentEffects.begin(); effect != this->currentEffects.end();){
         if (effect->second == 0){
             effect = this->currentEffects.erase(effect);
@@ -100,12 +101,14 @@ void Mage::effectUpdate(){
                 case REGENERATION: this->regenCase(); break;
                 case STRENGTH: this->strengthCase(); break;
                 case BURNING: this->burnCase(); break;
+                case BLEEDING: this->bleedCase(); break;
                 case POISON: this->poisonCase(); break;
                 case LUCK: this->luckCase(); break;
                 case STUN: this->stunCase(); break;
                 case IMMUNITY: this->immunityCase(); break;
                 case INVISIBILITY: this->invisibilityCase(); break;
             }
+            if (!this->health) currentTeam->loseMember(shared_from_this());
         }
         effect->second--; 
     }
@@ -121,12 +124,17 @@ void Mage::strengthCase(){
 }
 
 void Mage::burnCase(){
+    if (!immune) health -= 5;
+    if (health < 0) health = 0;
+}
+
+void Mage::bleedCase(){
     health -= 5;
-    if (health < 0) health = 0; //no se puede morir por veneno.
+    if (health < 0) health = 0;
 }
 
 void Mage::poisonCase(){
-    health -= 5;
+    if (!immune) health -= 5;
     if (health < 1) health = 1; //el veneno nunca es letal.
 }
 

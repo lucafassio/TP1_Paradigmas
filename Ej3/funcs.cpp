@@ -1,4 +1,4 @@
-#include "utils.hpp"
+#include "funcs.hpp"
 
 //esto esta sacado de internet, es para limpiar la terminal nomas.
 void clearScreen() {
@@ -115,11 +115,6 @@ void fullFillingWeapons(shared_ptr<Character> character, bool random){
             i--;
             continue;
         }
-        catch (out_of_range &e){
-            cout << e.what() << endl;
-            i--;
-            return;
-        }
         catch (exception& e){
             cout << e.what() << endl;
             return;
@@ -130,7 +125,6 @@ void fullFillingWeapons(shared_ptr<Character> character, bool random){
 void fullFillingTeam(shared_ptr<Team> team, int numWarriors, int numMages, bool random){
     //primero meto los guerreros.
     for (int i = 0; i < numWarriors; i++){
-        clearScreen();
         try{
             int selectedWarrior;
             shared_ptr<Character> warrior = nullptr;

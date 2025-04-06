@@ -1,8 +1,9 @@
 #include "necromancer.hpp"
 #include "../../../../Ej3/team.hpp"
+#include "larry.hpp"
 
-Necromancer::Necromancer(string name)
-    : Mage(name, NECRO, 100, 100)
+Necromancer::Necromancer(string name): 
+    Mage(name, NECRO, 100, 100)
 {}
 
 int Necromancer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
@@ -36,14 +37,27 @@ int Necromancer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> targ
     return finalDamage;
 }
 
-void Necromancer::raiseDead(){
-    if (skellyAlive) {
-        cout << name << " already has Skelly alive!" << endl;
+void Necromancer::raiseDead(shared_ptr<Team> currentTeam){
+    if (larryAlive){
+        cout << name << " already has a Skelly alive!" << endl;
         return;
     }
-    if (mana >= 25) {
-        cout << name << " raises Skelly from the dead!" << endl;
-        skellyAlive = true;
+    if (mana >= 25){
+        cout << name << " raises Larry from the dead!" << endl;
+        currentTeam->members.push_back(static_pointer_cast<Character>(make_shared<Larry>()));
         mana -= 25;
+    }
+}
+
+void Necromancer::drainLife(shared_ptr<Character> target, shared_ptr<Team> targetTeam){
+    if (mana >= 10){
+        cout << name << " drains 10 life from " << target->getName();
+        target->reciveDamage(10);
+        if (!target->getHealth()){
+            targetTeam->loseMember(target);
+            cout << " taking him to the death world";
+        }
+        cout << "!" << endl;
+        this->heal(10);
     }
 }

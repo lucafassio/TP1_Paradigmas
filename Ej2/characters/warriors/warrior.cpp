@@ -1,4 +1,5 @@
 #include "warrior.hpp"
+#include "../../../Ej3/team.hpp"
 
 Warrior::Warrior(string name, CharacterType type, int health, int armor):
     name(name), type(type), health(health), armor(armor), weapons(nullptr, nullptr)
@@ -91,7 +92,7 @@ void Warrior::applyEffect(Effect effect, int duration){
     currentEffects.push_back(make_pair(effect, duration));
 }
 
-void Warrior::effectUpdate(){
+void Warrior::effectUpdate(shared_ptr<Team> currentTeam){
     for (auto effect = this->currentEffects.begin(); effect != this->currentEffects.end();){
         if (effect->second == 0){
             effect = this->currentEffects.erase(effect);
@@ -101,12 +102,14 @@ void Warrior::effectUpdate(){
                 case REGENERATION: this->regenCase(); break;
                 case STRENGTH: this->strengthCase(); break;
                 case BURNING: this->burnCase(); break;
+                case BLEEDING: this->bleedCase(); break;
                 case POISON: this->poisonCase(); break;
                 case LUCK: this->luckCase(); break;
                 case STUN: this->stunCase(); break;
                 case IMMUNITY: this->immunityCase(); break;
                 case INVISIBILITY: this->invisibilityCase(); break;
             }
+            if (!this->health) currentTeam->loseMember(shared_from_this());
         }
         effect->second--;
         effect++;
@@ -123,12 +126,17 @@ void Warrior::strengthCase(){
 }
 
 void Warrior::burnCase(){
+    if (!immune) health -= 5;
+    if (health < 0) health = 0;
+}
+
+void Warrior::bleedCase(){
     health -= 5;
-    if (health < 0) health = 0; //no se puede morir por veneno.
+    if (health < 0) health = 0;
 }
 
 void Warrior::poisonCase(){
-    health -= 5;
+    if (!immune) health -= 5;
     if (health < 1) health = 1; //el veneno nunca es letal.
 }
 

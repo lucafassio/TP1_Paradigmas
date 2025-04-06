@@ -3,6 +3,7 @@
 class Team;
 
 int main(){
+    clearScreen();
     cout << "========== Ej 3: Factory ==========" << endl;
     srand(time(nullptr));
     int numWarriors = rand() % 5 + 3; //numero entre 3 y 7.

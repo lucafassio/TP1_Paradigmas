@@ -48,6 +48,7 @@ enum Effect{
     REGENERATION,
     STRENGTH,
     BURNING,
+    BLEEDING,
     POISON,
     STUN,
     LUCK,

@@ -3,7 +3,6 @@
 Basto::Basto(Material reinforcement) : 
     Combat(WOOD) {
         this->damage = 3;
-        name = "hola";
         reinforce(reinforcement);
 }
 

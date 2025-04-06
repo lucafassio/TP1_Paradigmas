@@ -5,7 +5,7 @@
 
 class Team;
 
-class Mercenary : public Warrior, public enable_shared_from_this<Mercenary>{
+class Mercenary : public Warrior{
 private:
     int allysRemaining;
     shared_ptr<Team> currentTeam;

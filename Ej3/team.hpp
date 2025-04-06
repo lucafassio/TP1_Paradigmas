@@ -28,6 +28,7 @@ class Team{
         void showMembers() const;
         friend class Factory;
         friend class Mercenary;
+        friend class Necromancer;
 };
 
 #endif // TEAM_HPP

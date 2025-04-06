@@ -3,9 +3,8 @@
 
 #include "../character.hpp"
 #include "../../weapons/weapon.hpp"
-#include <memory>
 
-class Mage : public Character{
+class Mage : public Character, public enable_shared_from_this<Mage>{
 protected:
     string name;
     CharacterType type;
@@ -42,10 +41,11 @@ public:
     
     //metodos para manejar efectos.
     void applyEffect(Effect effect, int duration) override;
-    void effectUpdate() override;
+    void effectUpdate(shared_ptr<Team> currentTeam) override;
     void regenCase() override;
     void strengthCase() override;
     void burnCase() override;
+    void bleedCase() override;
     void poisonCase() override;
     void stunCase() override;
     void luckCase() override;

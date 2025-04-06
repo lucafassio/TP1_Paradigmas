@@ -3,27 +3,18 @@
 
 #include "../mage.hpp"
 
-//Skelly stats
-#define SKELETON_HEALTH 30
-#define SKELETON_DAMAGE 6
-
-struct Skelly{
-    int health;
-    int damage;
-
-    Skelly(): health(SKELETON_HEALTH), damage(SKELETON_DAMAGE){};
-};
-
+class Larry;
 
 class Necromancer final : public Mage{
 private:
-    bool skellyAlive = false;
+    bool larryAlive = false;
 
 public:
     Necromancer(string name);
 
     int useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
-    void raiseDead();
+    void raiseDead(shared_ptr<Team> currentTeam);
+    void drainLife(shared_ptr<Character> target, shared_ptr<Team> targetTeam);
 };
 
 #endif // NECROMANCER_HPP
