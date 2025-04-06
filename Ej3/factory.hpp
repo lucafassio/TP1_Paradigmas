@@ -9,7 +9,11 @@
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
+#include <fstream>
 using namespace std;
+
+//enums data
+#include "../utils/enums_data.hpp"
 
 // Combat weapons and base
 #include "../Ej2/weapons/combat_weapons/combat.hpp"
@@ -46,32 +50,17 @@ using namespace std;
 
 #include <iostream>
 
-enum WeaponType{
-    //combat weapons
-    AXE,
-    BASTO,
-    DOUBLE_AXE,
-    SPEAR,
-    SWORD,
-
-    //magic items
-    AMULET,
-    POTION,
-    SPELLBOOK,
-    STAFF
-};
-
-class PersonajeFactory{
+//no me gustaba el nombre PersonajeFactory, lo cambie a Factory porque tambien hace armas.
+class Factory{
     private:
+        Factory() = delete;
 
     public:
-        PersonajeFactory();
-        ~PersonajeFactory();
-
-        void createCharacter(Team* team, CharacterType type, string name);
-        Weapon* createWeapon(WeaponType type, Material mat);
-        Weapon* createWeapon(WeaponType type, AmuletProp prop);
-        void addWeaponToCharacter(Character* character, Weapon* weapon);
+        static shared_ptr<Character> createCharacter(CharacterType type, string name);
+        static void addCharacterToTeam(shared_ptr<Team> team, shared_ptr<Character> character);
+        static shared_ptr<Weapon> createWeapon(WeaponType type, Material mat);
+        static shared_ptr<Weapon> createWeapon(WeaponType type, AmuletProp prop);
+        static void addWeaponToCharacter(shared_ptr<Character> character, shared_ptr<Weapon> weapon);
 };
 
 #endif // FACTORY_HPP

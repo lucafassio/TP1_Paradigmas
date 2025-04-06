@@ -22,7 +22,7 @@ private:
 public:
     Necromancer(string name);
 
-    int useWeapon(Weapon* weapon, Character* target, Team* targetTeam) override;
+    int useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
     void raiseDead();
 };
 

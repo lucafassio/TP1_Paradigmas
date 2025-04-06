@@ -1,10 +1,10 @@
 # Compilador y flags
 CXX := g++
-CXXFLAGS := -Wall -Wextra -MMD -MP -I./Ej2 -I./Ej3
+CXXFLAGS := -Wall -Wextra -std=c++17 -MMD -MP -I./Ej2 -I./Ej3 -I./utils
 
 # Carpetas
-SRC_DIRS := Ej2 Ej3
-BUILD_DIR := build
+SRC_DIRS := Ej2 Ej3 utils
+BUILD_DIR := utils/build
 BIN_DIR := bin
 
 # Main general (para pruebas integradas)
@@ -24,28 +24,27 @@ OBJ_FILES := $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(CPP_FILES))
 DEP_FILES := $(OBJ_FILES:.o=.d)
 
 # Archivos de objeto por ejercicio
-OBJ_EJ2 := $(filter $(BUILD_DIR)/Ej2/%,$(OBJ_FILES))
-OBJ_EJ3 := $(filter $(BUILD_DIR)/Ej3/%,$(OBJ_FILES))
+OBJ_EJ2 := $(filter-out $(BUILD_DIR)/Ej3/main.o $(BUILD_DIR)/main.o,$(filter $(BUILD_DIR)/Ej2/% $(BUILD_DIR)/utils/%, $(OBJ_FILES)))
+OBJ_EJ3 := $(filter-out $(BUILD_DIR)/Ej2/main.o $(BUILD_DIR)/main.o,$(filter $(BUILD_DIR)/Ej3/% $(BUILD_DIR)/Ej2/% $(BUILD_DIR)/utils/%, $(OBJ_FILES)))
 
 # Target por defecto
 .PHONY: all
 all: $(EXEC_GLOBAL)
 
 # Ejecutables por ejercicio y global
-$(EXEC_GLOBAL): $(OBJ_FILES) $(MAIN_GLOBAL:.cpp=.o) | $(BIN_DIR)
+$(EXEC_GLOBAL): $(filter-out $(BUILD_DIR)/Ej2/main.o $(BUILD_DIR)/Ej3/main.o, $(OBJ_FILES)) $(MAIN_GLOBAL:.cpp=.o) | $(BIN_DIR)
 	$(CXX) $^ -o $@
 
-$(EXEC_EJ2): $(OBJ_EJ2) $(MAIN_EJ2:.cpp=.o) | $(BIN_DIR)
+$(EXEC_EJ2): $(OBJ_EJ2) | $(BIN_DIR)
 	$(CXX) $^ -o $@
 
-$(EXEC_EJ3): $(OBJ_EJ3) $(MAIN_EJ3:.cpp=.o) | $(BIN_DIR)
+$(EXEC_EJ3): $(OBJ_EJ3) | $(BIN_DIR)
 	$(CXX) $^ -o $@
 
-# Compilación de cualquier .cpp a .o
+# Compilación de cualquier .cpp a .o dentro de BUILD_DIR
 $(BUILD_DIR)/%.o: %.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) -c $< -o $@
-
 
 # Compilación de main global y específicos
 %.o: %.cpp

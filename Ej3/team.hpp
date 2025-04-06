@@ -9,22 +9,24 @@
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
+#include <memory>
+#include <fstream>
 using namespace std;
 
 #include "../Ej2/characters/character.hpp"
-#include "../Ej2/weapons/weapon.hpp"
 
 class Team{
     private:
-        vector<Character*> members;
+        vector<shared_ptr<Character>> members;
 
     public:
         Team();
 
-        Character* getMember(string name) const;
-        void loseMember(Character* member);
+        vector<shared_ptr<Character>> getMembers() const;
+        shared_ptr<Character> getMember(string name) const;
+        void loseMember(shared_ptr<Character> member);
         void showMembers() const;
-        friend class PersonajeFactory;
+        friend class Factory;
         friend class Mercenary;
 };
 

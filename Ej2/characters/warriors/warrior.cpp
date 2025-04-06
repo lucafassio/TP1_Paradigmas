@@ -52,16 +52,16 @@ string Warrior::getType() const {
     }
 }
 
-void Warrior::addWeapon(Weapon* w){
+void Warrior::addWeapon(shared_ptr<Weapon> w){
     if (weapons.first == nullptr) weapons.first = w;
     else if (weapons.second == nullptr) weapons.second = w;
 }
 
-pair<Weapon*, Weapon*> Warrior::inventory() const {
+pair<shared_ptr<Weapon>, shared_ptr<Weapon>> Warrior::inventory() const {
     return weapons;
 }
 
-int Warrior::useWeapon(Weapon* weapon, Character* target, Team* targetTeam){
+int Warrior::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
     if (!targetTeam) return 0;
     if (!weapon) return 0;
 
@@ -80,7 +80,7 @@ int Warrior::useWeapon(Weapon* weapon, Character* target, Team* targetTeam){
     return weaponDamage;
 }
 
-void Warrior::loseWeapon(Weapon* weapon){
+void Warrior::loseWeapon(shared_ptr<Weapon> weapon){
     if (weapons.first == weapon) weapons.first = nullptr;
     else if (weapons.second == weapon) weapons.second = nullptr;
     else cout << "Weapon not found in inventory." << endl;

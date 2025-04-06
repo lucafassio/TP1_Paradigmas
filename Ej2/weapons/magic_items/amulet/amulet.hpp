@@ -2,34 +2,27 @@
 #define AMULET_HPP
 
 #include "../magic.hpp"
+#include "../../../../utils/enums_data.hpp"
 
 class Character;
-
-enum AmuletProp{
-    PROP_HEALING,
-    PROP_STRENGTH,
-    PROP_IMMUNITY,
-    PROP_LUCK,
-    PROP_INVISIBILITY
-};
 
 class Amulet final : public Magic{
     private:
         AmuletProp property;
         bool active;
         int cooldown;
-        Character* holder;
+        shared_ptr<Character> holder;
 
     public:
-        Amulet(AmuletProp prop, Character* holder);
+        Amulet(AmuletProp prop, shared_ptr<Character> holder);
         
         string getMaterial() const override;
 
-        void setHolder(Character* holder);
+        void setHolder(shared_ptr<Character> holder);
 
         void use();
         void giveEffect();
-        void update(Character* target);
+        void update(shared_ptr<Character> target);
     
 };
 

@@ -1,19 +1,13 @@
 #include "basto.hpp"
 
-Basto::Basto(): 
-    Combat(WOOD), durabilityBoost(0), damageBoost(0) {
-        this->damage = 3;
-        name = this->getMaterial() + " Basto";
-}
-
 Basto::Basto(Material reinforcement) : 
     Combat(WOOD) {
         this->damage = 3;
+        name = "hola";
         reinforce(reinforcement);
-        name = this->getMaterial() + " Basto";
 }
 
-int Basto::attack() {
+int Basto::attack(){
     if (this->durability <= 0) {
         cout << "Basto is broken!" << endl;
         return 0;
@@ -35,26 +29,32 @@ void Basto::reinforce(Material mat) {
         case NONE:
             this->damageBoost = 0;
             this->durabilityBoost = 0;
+            name = "Basto";
             break;
         case WOOD: 
             this->damageBoost = 2;
             this->durabilityBoost = WOOD;
+            name = "Reinforced Basto (wood)";
             break;
         case STONE:
             this->damageBoost = 3;
             this->durabilityBoost = STONE - WOOD;
+            name = "Reinforced Basto (stone)";
             break;
         case IRON:
             this->damageBoost = 4;
             this->durabilityBoost = IRON - WOOD;
+            name = "Reinforced Basto (iron)";
             break;
         case GOLD:
             this->damageBoost = 2;
             this->durabilityBoost = GOLD - WOOD;
+            name = "Reinforced Basto (gold)";
             break;
         case DIAMOND:
             this->damageBoost = 5;
             this->durabilityBoost = DIAMOND - WOOD;
+            name = "Reinforced Basto (diamond) ";
             break;
         default:
             cout << "Invalid material!" << endl;

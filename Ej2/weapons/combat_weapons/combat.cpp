@@ -4,10 +4,6 @@ Combat::Combat(Material mat):
     material(mat), durability(mat)
 {}
 
-Combat::~Combat(){
-    // Virtual destructor implementation (can be empty)
-}
-
 string Combat::getMaterial() const {
     switch (this->material) {
         case WOOD: return "Wooden";

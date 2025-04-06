@@ -3,6 +3,7 @@
 
 #include "../character.hpp"
 #include "../../weapons/weapon.hpp"
+#include <memory>
 
 class Mage : public Character{
 protected:
@@ -11,7 +12,7 @@ protected:
     int health;
     int mana;
     int magicBuff;
-    pair<Weapon*, Weapon*> weapons;
+    pair<shared_ptr<Weapon>, shared_ptr<Weapon>> weapons;
     int BASE_DAMAGE=10;
 
     //atributos para manejar efectos.
@@ -34,10 +35,10 @@ public:
     void heal(int amount) override;
     string getType() const override;
 
-    void addWeapon(Weapon* w) override;
-    pair<Weapon*, Weapon*> inventory() const override;
-    int useWeapon(Weapon* w, Character* op, Team* targetTeam) override;
-    void loseWeapon(Weapon* weapon) override;
+    void addWeapon(shared_ptr<Weapon> w) override;
+    pair<shared_ptr<Weapon>, shared_ptr<Weapon>> inventory() const override;
+    int useWeapon(shared_ptr<Weapon> w, shared_ptr<Character> op, shared_ptr<Team> targetTeam) override;
+    void loseWeapon(shared_ptr<Weapon> weapon) override;
     
     //metodos para manejar efectos.
     void applyEffect(Effect effect, int duration) override;

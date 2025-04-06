@@ -36,16 +36,19 @@
 #include "Ej3/team.hpp"
 #include "Ej3/factory.hpp"
 
+#include <memory>
+
 int main(){
-    Team* team1 = new Team();
+    auto team1 = make_shared<Team>();
     if (team1) cout << "Team 1 created correctly." << endl;
-    Team* team2 = new Team();
+    auto team2 = make_shared<Team>();
     if (team2) cout << "Team 2 created correctly." << endl;
-    PersonajeFactory* factory = new PersonajeFactory();
-    if (factory) cout << "Factory created correctly." << endl;
-    factory->createCharacter(team1, BARBARIAN, "Conan");
+
+    shared_ptr<Character> conan = Factory::createCharacter(BARBARIAN, "Conan");
+    Factory::addCharacterToTeam(team1, conan);
     if (team1->getMember("Conan")) cout << "Conan created correctly." << endl;
-    factory->createCharacter(team2, BARBARIAN, "Maximus");
+    shared_ptr<Character> maximus = Factory::createCharacter(BARBARIAN, "Maximus");
+    Factory::addCharacterToTeam(team2, maximus);
     if (team2->getMember("Maximus")) cout << "Maximus created correctly." << endl;
 
     cout << endl << "========== Attack test. ==========" << endl;
@@ -62,11 +65,11 @@ int main(){
 
     cout << endl << "========== Combat weapon test. ==========" << endl;
     
-    Weapon* sword = factory->createWeapon(SWORD, IRON);
+    shared_ptr<Weapon> sword = Factory::createWeapon(SWORD, IRON);
     if (sword) cout << "Sword created correctly." << endl;
 
     cout << "Attempting to use factory to add weapon..." << endl;
-    factory->addWeaponToCharacter(team1->getMember("Conan"), sword);
+    Factory::addWeaponToCharacter(team1->getMember("Conan"), sword);
     if (team1->getMember("Conan")->inventory().first) cout << "Sword added to Conan's inventory." << endl;
     cout << team1->getMember("Conan")->inventory().first->getName() << endl;
     cout << team1->getMember("Conan")->inventory().first->getMaterial() << endl;
@@ -84,12 +87,12 @@ int main(){
 
     cout << endl << "========== Amulet test. ==========" << endl;
 
-    Weapon* amulet = factory->createWeapon(AMULET, PROP_HEALING);
+    shared_ptr<Weapon> amulet = Factory::createWeapon(AMULET, PROP_HEALING);
     if (amulet) cout << "Amulet created correctly." << endl;
 
     cout << "Attempting to use factory to add amulet..." << endl;
     if (!team2->getMember("Maximus")->inventory().first && !team2->getMember("Maximus")->inventory().second) cout << "Maximus inventory is empty" << endl;
-    factory->addWeaponToCharacter(team2->getMember("Maximus"), amulet);
+    Factory::addWeaponToCharacter(team2->getMember("Maximus"), amulet);
     if (team2->getMember("Maximus")->inventory().first) cout << "Amulet added to Maximus's inventory" << endl;
 
     cout << team2->getMember("Maximus")->inventory().first->getName() << endl;
@@ -103,9 +106,9 @@ int main(){
 
     cout << endl << "========== Mercenary test. ==========" << endl;
 
-    factory->createCharacter(team1, MERCENARY, "Alfredo");
+    Factory::addCharacterToTeam(team1, Factory::createCharacter(MERCENARY, "Alfredo"));
     if (team1->getMember("Alfredo")) cout << "Alfredo created correctly." << endl;
-    factory->createCharacter(team2, MERCENARY, "Carlos");
+    Factory::addCharacterToTeam(team2, Factory::createCharacter(MERCENARY, "Carlos"));
     if (team2->getMember("Carlos")) cout << "Carlos created correctly." << endl;
 
     cout << endl;
@@ -121,7 +124,7 @@ int main(){
     cout << team2->getMember("Carlos")->getHealth() << endl;
     cout << endl;
 
-    Mercenary* carlos = dynamic_cast<Mercenary*>(team2->getMember("Carlos"));
+    auto carlos = dynamic_pointer_cast<Mercenary>(team2->getMember("Carlos"));
     if (carlos) {
         carlos->betray(team2, team1);
         cout << "Carlos has betrayed their team!" << endl;
@@ -170,7 +173,7 @@ int main(){
 
     cout << endl << "========== Recruitment test. ==========" << endl;
     cout << "Carlos will recruit an ally." << endl;
-    carlos->reclutAlly();
+    carlos->recruitAlly();
     cout << "Carlos has recruited an ally!" << endl;
 
     cout << endl;

@@ -13,34 +13,10 @@
 #include <memory>
 using namespace std;
 
+#include "../../utils/enums_data.hpp"
+
 class Weapon;
 class Team;
-
-enum CharacterType{
-    //mages
-    CONJURER,
-    NECRO,
-    SORCERER,
-    WARLOCK,
-
-    //warriors
-    BARBARIAN,
-    GLADIATOR,
-    KNIGHT,
-    MERCENARY,
-    PALADIN
-};
-
-enum Effect {
-    REGENERATION,
-    STRENGTH,
-    BURNING,
-    POISON,
-    STUN,
-    LUCK,
-    IMMUNITY,
-    INVISIBILITY
-};
 
 class Character{
 public:
@@ -52,10 +28,10 @@ public:
     virtual void heal(int amount) = 0;
     virtual void reciveDamage(int dam) = 0;
 
-    virtual void addWeapon(Weapon *w) = 0;
-    virtual pair<Weapon*, Weapon*> inventory() const = 0;
-    virtual int useWeapon(Weapon* weapon, Character* target, Team* targetTeam) = 0;
-    virtual void loseWeapon(Weapon* weapon) = 0;
+    virtual void addWeapon(shared_ptr<Weapon> w) = 0;
+    virtual pair<shared_ptr<Weapon>, shared_ptr<Weapon>> inventory() const = 0;
+    virtual int useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) = 0;
+    virtual void loseWeapon(shared_ptr<Weapon> weapon) = 0;
 
     //metodos para manejar efectos.
     virtual void applyEffect(Effect effect, int duration) = 0;

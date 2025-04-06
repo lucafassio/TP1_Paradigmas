@@ -52,16 +52,16 @@ string Mage::getType() const {
     }
 }
 
-void Mage::addWeapon(Weapon* w){
+void Mage::addWeapon(shared_ptr<Weapon> w){
     if (weapons.first == nullptr) weapons.first = w;
     else if (weapons.second == nullptr) weapons.second = w;
 }
 
-pair<Weapon*, Weapon*> Mage::inventory() const {
+pair<shared_ptr<Weapon>, shared_ptr<Weapon>> Mage::inventory() const {
     return weapons;
 }
 
-int Mage::useWeapon(Weapon* weapon, Character* target, Team* targetTeam){
+int Mage::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
     if (!targetTeam) return 0;
     if (!weapon) return 0;
 
@@ -79,7 +79,7 @@ int Mage::useWeapon(Weapon* weapon, Character* target, Team* targetTeam){
     return weaponDamage;
 }
 
-void Mage::loseWeapon(Weapon* weapon){
+void Mage::loseWeapon(shared_ptr<Weapon> weapon){
     if (weapons.first == weapon) weapons.first = nullptr;
     else if (weapons.second == weapon) weapons.second = nullptr;
     else cout << "Weapon not found in inventory." << endl;

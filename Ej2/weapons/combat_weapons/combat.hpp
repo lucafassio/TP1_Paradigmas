@@ -2,15 +2,7 @@
 #define COMBAT_HPP
 
 #include "../weapon.hpp"
-
-enum Material{
-    NONE = 0,
-    WOOD = 59,
-    STONE = 131,
-    IRON = 250,
-    GOLD = 32,
-    DIAMOND = 1561
-};
+#include "../../../utils/enums_data.hpp"
 
 class Combat : public Weapon{
 protected:
@@ -33,8 +25,6 @@ public:
     virtual int attack() = 0;
     
     void use() override;
-
-    virtual ~Combat();
 };
 
 #endif // COMBAT_HPP

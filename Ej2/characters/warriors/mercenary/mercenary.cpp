@@ -1,11 +1,11 @@
 #include "mercenary.hpp"
 #include "../../../../Ej3/team.hpp"
 
-Mercenary::Mercenary(string name, Team* currentTeam): 
+Mercenary::Mercenary(string name, shared_ptr<Team> currentTeam): 
     Warrior(name, MERCENARY, 70, 0), allysRemaining(1), currentTeam(currentTeam) 
 {}
 
-int Mercenary::useWeapon(Weapon* weapon, Character* target, Team* targetTeam){
+int Mercenary::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
     int finalDamage = BASE_DAMAGE + Warrior::useWeapon(weapon, target, targetTeam);
 
     cout << name << " (Mercenary) attacks " << target->getName() << " (" << target->getType() << ")";
@@ -44,16 +44,16 @@ void Mercenary::reciveDamage(int dam){
 
 void Mercenary::runAway(){
     cout << name << " has run away!" << endl;
-    currentTeam->loseMember(this);
+    currentTeam->loseMember(shared_from_this());
 }
 
-void Mercenary::betray(Team* currentTeam, Team* objective){
+void Mercenary::betray(shared_ptr<Team> currentTeam, shared_ptr<Team> objective){
     //delete mercenary from current team.
     for (auto it = currentTeam->members.begin(); it != currentTeam->members.end(); ++it) {
-        if (*it == this){
+        if (*it == shared_from_this()){
             currentTeam->members.erase(it);
             //add mercenary to vsTeam.
-            objective->members.push_back(this);
+            objective->members.push_back(shared_from_this());
             cout << name << " has betrayed their team!" << endl;
             this->currentTeam = objective;
             return;
@@ -62,7 +62,7 @@ void Mercenary::betray(Team* currentTeam, Team* objective){
     cout << "Mercenary is not in this team." << endl;
 }
 
-void Mercenary::stealWeapon(Character* target){
+void Mercenary::stealWeapon(shared_ptr<Character> target){
     cout << name << " attempts to steal a weapon from " << target->getName() << "!" << endl;
     cout << "Select a weapon to steal." << endl;
 
@@ -81,7 +81,7 @@ void Mercenary::stealWeapon(Character* target){
     int choice=1;
     //cin >> choice;
 
-    Weapon* stolenWeapon = nullptr;
+    shared_ptr<Weapon> stolenWeapon = nullptr;
     switch (choice){
         case 1:
             if (target->inventory().first) stolenWeapon = target->inventory().first;
@@ -106,6 +106,6 @@ void Mercenary::getInvisible(){
 }
 
 void Mercenary::recruitAlly(){
-    currentTeam->members.push_back(new Mercenary(this->getName() + "'s Ally", currentTeam));
+    currentTeam->members.push_back(make_shared<Mercenary>(this->getName() + "'s Ally", currentTeam));
     currentTeam->showMembers();
 }

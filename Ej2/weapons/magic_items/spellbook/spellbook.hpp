@@ -5,7 +5,6 @@
 
 class Spellbook : public Magic {
 private:
-    string name;
     vector<string> spells;
 
 public:

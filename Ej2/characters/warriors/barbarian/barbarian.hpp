@@ -2,6 +2,7 @@
 #define BARBARIAN_HPP
 
 #include "../warrior.hpp"
+#include <memory>
 
 class Barbarian final : public Warrior {
 private:
@@ -11,7 +12,7 @@ private:
 
 public:
     Barbarian(string name);
-    int useWeapon(Weapon* w, Character* op, Team* targetTeam) override;
+    int useWeapon(shared_ptr<Weapon> w, shared_ptr<Character> op, shared_ptr<Team> targetTeam) override;
     bool isInRage() const;
     void decreaseRageTurns();
 

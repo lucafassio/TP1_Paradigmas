@@ -1,58 +1,61 @@
 #include "factory.hpp"
 
-PersonajeFactory::PersonajeFactory(){}
-
-PersonajeFactory::~PersonajeFactory() {}
-
-void PersonajeFactory::createCharacter(Team* team, CharacterType type, string name){
+shared_ptr<Character> Factory::createCharacter(CharacterType type, string name){
     switch (type){
-        case CONJURER: team->members.push_back(new Conjurer(name)); break;
-        case NECRO: team->members.push_back(new Necromancer(name)); break;
-        case SORCERER: team->members.push_back(new Sorcerer(name)); break;
-        case WARLOCK: team->members.push_back(new Warlock(name)); break;
-        case BARBARIAN: team->members.push_back(new Barbarian(name)); break;
-        case GLADIATOR: team->members.push_back(new Gladiator(name)); break;
-        case KNIGHT: team->members.push_back(new Knight(name)); break;
-        case MERCENARY: team->members.push_back(new Mercenary(name, team)); break;
-        case PALADIN: team->members.push_back(new Paladin(name)); break;
-        default: break;
-    }
-    if (!team->members.back()) {
-        cout << "Error creating character!" << endl;
-        return;
-    }
-}
-
-Weapon* PersonajeFactory::createWeapon(WeaponType type, Material mat) {
-    switch (type) {
-        case AXE: return new Axe(mat);
-        case BASTO: return new Basto();
-        case DOUBLE_AXE: return new DoubleAxe(mat);
-        case SPEAR: return new Spear(mat);
-        case SWORD: return new Sword(mat);
-        case AMULET: return new Amulet(PROP_HEALING, nullptr);
-        case POTION: return new Potion("Health Potion", 3);
-        case SPELLBOOK: return new Spellbook("Spellbook", 3);
-        case STAFF: return new Staff("Magic Staff", 3);
+        case CONJURER: return make_shared<Conjurer>(name);
+        case NECRO: return make_shared<Necromancer>(name);
+        case SORCERER: return make_shared<Sorcerer>(name);
+        case WARLOCK: return make_shared<Warlock>(name);
+        case BARBARIAN: return make_shared<Barbarian>(name);
+        case GLADIATOR: return make_shared<Gladiator>(name);
+        case KNIGHT: return make_shared<Knight>(name);
+        case MERCENARY: return make_shared<Mercenary>(name, nullptr);
+        case PALADIN: return make_shared<Paladin>(name);
         default: return nullptr;
     }
 }
 
-Weapon* PersonajeFactory::createWeapon(WeaponType type, AmuletProp prop){
+void Factory::addCharacterToTeam(shared_ptr<Team> team, shared_ptr<Character> character){
+    if (team && character){
+        team->members.push_back(character);
+        cout << character->getName() << " has joined the team!" << endl;
+    } else {
+        cout << "Error adding character to team!" << endl;
+    }
+}
+
+shared_ptr<Weapon> Factory::createWeapon(WeaponType type, Material mat){
+    switch (type){
+        case AXE: return make_shared<Axe>(mat);
+        case BASTO: return make_shared<Basto>(mat);
+        case DOUBLE_AXE: return make_shared<DoubleAxe>(mat);
+        case SPEAR: return make_shared<Spear>(mat);
+        case SWORD: return make_shared<Sword>(mat);
+        case AMULET: return make_shared<Amulet>(PROP_HEALING, nullptr);
+        case POTION: return make_shared<Potion>("Health", 3);
+        case SPELLBOOK: return make_shared<Spellbook>("Spellbook", 3);
+        case STAFF: return make_shared<Staff>("Magic Staff", 3);
+        default: return nullptr;
+    }
+}
+
+shared_ptr<Weapon> Factory::createWeapon(WeaponType type, AmuletProp prop){
     if (type != AMULET) {
         cout << "Invalid weapon type for amulet creation!" << endl;
         return nullptr;
     }
-    return new Amulet(prop, nullptr);
+    return make_shared<Amulet>(prop, nullptr);
 }
 
-void PersonajeFactory::addWeaponToCharacter(Character* character, Weapon* weapon) {
+void Factory::addWeaponToCharacter(shared_ptr<Character> character, shared_ptr<Weapon> weapon) {
     if (character && weapon){
         character->addWeapon(weapon);
 
         //si el arma es un amuleto, se le asigna el holder.
-        Amulet* amulet = dynamic_cast<Amulet*>(weapon);
-        if (amulet) amulet->setHolder(character);
+        shared_ptr<Amulet> amulet = dynamic_pointer_cast<Amulet>(weapon);
+        if (amulet) {
+            amulet->setHolder(character);
+        }
     } 
     else cout << "Error adding weapon to character!" << endl;
 }

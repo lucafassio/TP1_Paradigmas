@@ -1,10 +1,11 @@
 #include "amulet.hpp"
 #include "../../../characters/character.hpp"
+#include <memory>
 
-Amulet::Amulet(AmuletProp prop, Character* holder): 
+Amulet::Amulet(AmuletProp prop, shared_ptr<Character> holder): 
     Magic(3), property(prop), active(false), cooldown(0){
         name = getMaterial();
-        holder = holder;
+        this->holder = holder;
         if (holder) giveEffect();
 }
 
@@ -19,7 +20,7 @@ string Amulet::getMaterial() const {
     }
 }
 
-void Amulet::setHolder(Character* holder){
+void Amulet::setHolder(shared_ptr<Character> holder){
     this->holder = holder;
     giveEffect();
 }

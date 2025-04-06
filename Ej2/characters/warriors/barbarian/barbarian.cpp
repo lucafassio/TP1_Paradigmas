@@ -6,7 +6,7 @@ Barbarian::Barbarian(string name):
     Warrior(name, BARBARIAN, 100, 3)
 {srand(time(nullptr));}
 
-int Barbarian::useWeapon(Weapon* weapon, Character* target, Team* targetTeam){
+int Barbarian::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
     int finalDamage = BASE_DAMAGE + Warrior::useWeapon(weapon, target, targetTeam);
 
     //verificar si se activa rage (20% de probabilidad).

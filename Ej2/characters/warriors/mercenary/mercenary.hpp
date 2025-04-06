@@ -5,19 +5,19 @@
 
 class Team;
 
-class Mercenary : public Warrior{
+class Mercenary : public Warrior, public enable_shared_from_this<Mercenary>{
 private:
     int allysRemaining;
-    Team* currentTeam;
+    shared_ptr<Team> currentTeam;
 
 public:
-    Mercenary(string name, Team* currentTeam);
+    Mercenary(string name, shared_ptr<Team> currentTeam);
 
-    int useWeapon(Weapon* weapon, Character* traget, Team* targetTeam) override;
+    int useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
     void reciveDamage(int dam) override;
     void runAway();
-    void betray(Team* currentTeam, Team* objective);
-    void stealWeapon(Character* target);
+    void betray(shared_ptr<Team> currentTeam, shared_ptr<Team> objective);
+    void stealWeapon(shared_ptr<Character> target);
     void getInvisible();
     void recruitAlly();
 };

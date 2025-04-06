@@ -5,7 +5,7 @@ Necromancer::Necromancer(string name)
     : Mage(name, NECRO, 100, 100)
 {}
 
-int Necromancer::useWeapon(Weapon* weapon, Character* target, Team* targetTeam){
+int Necromancer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
     int finalDamage = BASE_DAMAGE + Mage::useWeapon(weapon, target, targetTeam);
 
     cout << name << " (Necromancer) attacks " << target->getName() << " (" << target->getType() << ")";

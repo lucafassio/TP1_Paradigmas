@@ -10,7 +10,6 @@ private:
     Material reinforcement;
 
 public:
-    Basto();
     Basto(Material reinforcement);
 
     int attack();
