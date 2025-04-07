@@ -222,7 +222,7 @@ int main(){
     cout << "Maximus current health: " << team2->getMember("Maximus")->getHealth() << endl;
     cout << endl;
 
-    necro->reciveDamage(50);
+    necro->receiveDamage(50);
 
     cout << "Velkor current health: " << team1->getMember("Velkor")->getHealth() << endl;
     cout << "Maximus current health: " << team2->getMember("Maximus")->getHealth() << endl;

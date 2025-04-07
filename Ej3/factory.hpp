@@ -13,10 +13,9 @@
 using namespace std;
 
 //enums data
-#include "../utils/enums_data.hpp"
+#include "../utils/data.hpp"
 
 // Combat weapons and base
-#include "../Ej2/weapons/combat_weapons/combat.hpp"
 #include "../Ej2/weapons/combat_weapons/sword/sword.hpp"
 #include "../Ej2/weapons/combat_weapons/axe/axe.hpp"
 #include "../Ej2/weapons/combat_weapons/spear/spear.hpp"
@@ -24,17 +23,12 @@ using namespace std;
 #include "../Ej2/weapons/combat_weapons/double_axe/double_axe.hpp"
 
 // Magic items
-#include "../Ej2/weapons/magic_items/magic.hpp"
 #include "../Ej2/weapons/magic_items/amulet/amulet.hpp"
 #include "../Ej2/weapons/magic_items/potion/potion.hpp"
 #include "../Ej2/weapons/magic_items/spellbook/spellbook.hpp"
 #include "../Ej2/weapons/magic_items/staff/staff.hpp"
 
-// Characters
-#include "../Ej2/characters/character.hpp"
-
 // Warriors
-#include "../Ej2/characters/warriors/warrior.hpp"
 #include "../Ej2/characters/warriors/barbarian/barbarian.hpp"
 #include "../Ej2/characters/warriors/gladiator/gladiator.hpp"
 #include "../Ej2/characters/warriors/knight/knight.hpp"
@@ -46,9 +40,8 @@ using namespace std;
 #include "../Ej2/characters/mages/sorcerer/sorcerer.hpp"
 #include "../Ej2/characters/mages/warlock/warlock.hpp"
 #include "../Ej2/characters/mages/necromancer/necromancer.hpp"
-#include "team.hpp"
 
-#include <iostream>
+class Team;
 
 //no me gustaba el nombre PersonajeFactory, lo cambie a Factory porque tambien hace armas.
 class Factory{

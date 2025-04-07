@@ -3,7 +3,7 @@
 
 Larry::Larry():
     //pongo tipo necro pero no afecta en nada porque overrideo el metodo getType.
-    Mage("Larry", NECRO, SKELETON_HEALTH, 0)
+    Mage("Larry", NECRO, 0)
 {}
 
 string Larry::getType() const {
@@ -32,7 +32,7 @@ int Larry::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, sh
     }
 
     //aplicar daño al oponente.
-    target->reciveDamage(finalDamage);
+    target->receiveDamage(finalDamage);
     if (!target->getHealth()) targetTeam->loseMember(target);
     cout << " and deals " << finalDamage << " damage!" << endl;
 

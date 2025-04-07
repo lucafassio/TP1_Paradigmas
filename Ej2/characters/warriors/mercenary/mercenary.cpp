@@ -2,7 +2,7 @@
 #include "../../../../Ej3/team.hpp"
 
 Mercenary::Mercenary(string name, shared_ptr<Team> currentTeam): 
-    Warrior(name, MERCENARY, 70, 0), allysRemaining(1), currentTeam(currentTeam) 
+    Warrior(name, MERCENARY, 0), allysRemaining(1), currentTeam(currentTeam) 
 {}
 
 int Mercenary::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
@@ -29,15 +29,15 @@ int Mercenary::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target
     }
 
     //aplicar daño al oponente.
-    target->reciveDamage(finalDamage);
+    target->receiveDamage(finalDamage);
     if (!target->getHealth()) targetTeam->loseMember(target);
     cout << " and deals " << finalDamage << " damage!" << endl;
 
     return finalDamage;
 }
 
-void Mercenary::reciveDamage(int dam){
-    Warrior::reciveDamage(dam);
+void Mercenary::receiveDamage(int dam){
+    Warrior::receiveDamage(dam);
     if (health <= 30)
         if ((rand() % 100) < 20) runAway();
 }

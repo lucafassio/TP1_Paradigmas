@@ -2,8 +2,6 @@
 #define WARRIOR_HPP
 
 #include "../character.hpp"
-#include "../../weapons/weapon.hpp"
-#include <memory>
 
 class Warrior : public Character, public enable_shared_from_this<Warrior>{
 protected:
@@ -24,7 +22,7 @@ protected:
     bool opponentMiss = false; 
 
 public:
-    Warrior(string name, CharacterType type, int health, int armor);
+    Warrior(string name, CharacterType type, int armor);
 
     string getName() const override;
     int getHealth() const override;
@@ -33,7 +31,7 @@ public:
     string getType() const override;
 
     void heal(int amount) override;
-    void reciveDamage(int dam) override;
+    void receiveDamage(int dam) override;
 
     void addWeapon(shared_ptr<Weapon> w) override;
     pair<shared_ptr<Weapon>, shared_ptr<Weapon>> inventory() const override;

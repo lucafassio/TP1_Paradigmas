@@ -2,7 +2,6 @@
 #define BARBARIAN_HPP
 
 #include "../warrior.hpp"
-#include <memory>
 
 class Barbarian final : public Warrior {
 private:

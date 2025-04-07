@@ -14,7 +14,7 @@ public:
     Mercenary(string name, shared_ptr<Team> currentTeam);
 
     int useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
-    void reciveDamage(int dam) override;
+    void receiveDamage(int dam) override;
     void runAway();
     void betray(shared_ptr<Team> currentTeam, shared_ptr<Team> objective);
     void stealWeapon(shared_ptr<Character> target);

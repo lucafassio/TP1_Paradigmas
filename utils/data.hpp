@@ -9,6 +9,7 @@
 #include <cmath>
 #include <cstdlib>
 #include <ctime>
+#include <memory>
 using namespace std;
 
 //tipos de armas que pueden existir en el juego.
@@ -73,6 +74,13 @@ enum AmuletProp{
     PROP_IMMUNITY,
     PROP_LUCK,
     PROP_INVISIBILITY
+};
+
+//ataques del ejercicio 4.
+enum Attack{
+    GOLPE_RAPIDO = 1,
+    GOLPE_FUERTE = 2,
+    DEFENSA_Y_GOLPE = 3
 };
 
 #endif // ENUMS_DATA_HPP

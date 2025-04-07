@@ -2,7 +2,6 @@
 #define COMBAT_HPP
 
 #include "../weapon.hpp"
-#include "../../../utils/enums_data.hpp"
 
 class Combat : public Weapon{
 protected:

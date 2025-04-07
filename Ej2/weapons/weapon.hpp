@@ -1,16 +1,7 @@
 #ifndef WEAPON_HPP
 #define WEAPON_HPP
 
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <memory>
-using namespace std;
+#include "../../utils/data.hpp"
 
 class Character;
 

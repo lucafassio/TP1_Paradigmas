@@ -1,77 +1,87 @@
 # Compilador y flags
-CXX := g++
-CXXFLAGS := -Wall -Wextra -std=c++17 -MMD -MP -I./Ej2 -I./Ej3 -I./utils
+CXX = g++
+CXXFLAGS = -Wall -Wextra -std=c++17 -MMD -MP
 
-# Carpetas
-SRC_DIRS := Ej2 Ej3 utils
-BUILD_DIR := utils/build
-BIN_DIR := bin
+# Carpetas internas (ya estamos en la raíz)
+SRC_DIR_EJ2 = Ej2
+SRC_DIR_EJ3 = Ej3
+SRC_DIR_EJ4 = Ej4
+UTILS_DIR = utils
+BUILD_DIR = $(UTILS_DIR)/build
+BIN_DIR = bin
 
-# Main general (para pruebas integradas)
-MAIN_GLOBAL := main.cpp
-EXEC_GLOBAL := $(BIN_DIR)/juego
+# Includes
+INCLUDES = -I./$(SRC_DIR_EJ2) -I./$(SRC_DIR_EJ3) -I./$(SRC_DIR_EJ4) -I./$(UTILS_DIR)
 
-# Mains por ejercicio
-MAIN_EJ2 := Ej2/main.cpp
-EXEC_EJ2 := $(BIN_DIR)/ej2
+# Archivos fuente y objetos
+CPP_FILES_EJ2 = $(shell find $(SRC_DIR_EJ2) -name '*.cpp')
+OBJ_FILES_EJ2 = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(CPP_FILES_EJ2))
 
-MAIN_EJ3 := Ej3/main.cpp
-EXEC_EJ3 := $(BIN_DIR)/ej3
+CPP_FILES_EJ3 = $(shell find $(SRC_DIR_EJ3) -name '*.cpp' ! -name 'main.cpp')
+OBJ_FILES_EJ3 = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(CPP_FILES_EJ3))
 
-# Buscar todos los archivos .cpp en subdirectorios
-CPP_FILES := $(shell find $(SRC_DIRS) -name '*.cpp')
-OBJ_FILES := $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(CPP_FILES))
-DEP_FILES := $(OBJ_FILES:.o=.d)
+CPP_FILES_EJ4 = $(shell find $(SRC_DIR_EJ4) -name '*.cpp' ! -name 'main.cpp')
+OBJ_FILES_EJ4 = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(CPP_FILES_EJ4))
 
-# Archivos de objeto por ejercicio
-OBJ_EJ2 := $(filter-out $(BUILD_DIR)/Ej3/main.o $(BUILD_DIR)/main.o,$(filter $(BUILD_DIR)/Ej2/% $(BUILD_DIR)/utils/%, $(OBJ_FILES)))
-OBJ_EJ3 := $(filter-out $(BUILD_DIR)/Ej2/main.o $(BUILD_DIR)/main.o,$(filter $(BUILD_DIR)/Ej3/% $(BUILD_DIR)/Ej2/% $(BUILD_DIR)/utils/%, $(OBJ_FILES)))
+UTILS_CPP = $(shell find $(UTILS_DIR) -name '*.cpp')
+UTILS_OBJ = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(UTILS_CPP))
 
-# Target por defecto
-.PHONY: all
-all: $(EXEC_GLOBAL)
+MAIN_GLOBAL = $(shell find . -maxdepth 1 -name 'main.cpp')
+MAIN_OBJ = $(patsubst %.cpp,%.o,$(MAIN_GLOBAL))
 
-# Ejecutables por ejercicio y global
-$(EXEC_GLOBAL): $(filter-out $(BUILD_DIR)/Ej2/main.o $(BUILD_DIR)/Ej3/main.o, $(OBJ_FILES)) $(MAIN_GLOBAL:.cpp=.o) | $(BIN_DIR)
-	$(CXX) $^ -o $@
+# Ejecutables
+BIN_EJ3 = $(BIN_DIR)/ej3
+BIN_EJ4 = $(BIN_DIR)/ej4
+BIN_JUEGO = $(BIN_DIR)/juego
 
-$(EXEC_EJ2): $(OBJ_EJ2) | $(BIN_DIR)
-	$(CXX) $^ -o $@
+# Default
+default: all
+all: $(BIN_EJ3) $(BIN_EJ4) $(BIN_JUEGO)
 
-$(EXEC_EJ3): $(OBJ_EJ3) | $(BIN_DIR)
-	$(CXX) $^ -o $@
-
-# Compilación de cualquier .cpp a .o dentro de BUILD_DIR
+# Regla general para objetos
 $(BUILD_DIR)/%.o: %.cpp
 	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
-# Compilación de main global y específicos
-%.o: %.cpp
-	$(CXX) $(CXXFLAGS) -c $< -o $@
+# Ejecutable Ej3
+$(BIN_EJ3): $(OBJ_FILES_EJ2) $(OBJ_FILES_EJ3) $(BUILD_DIR)/$(SRC_DIR_EJ3)/main.o
+	@mkdir -p $(BIN_DIR)
+	$(CXX) $^ -o $@
 
-# Carpetas necesarias
-$(BIN_DIR):
-	@mkdir -p $@
+# Ejecutable Ej4
+$(BIN_EJ4): $(OBJ_FILES_EJ2) $(OBJ_FILES_EJ3) $(OBJ_FILES_EJ4) $(BUILD_DIR)/$(SRC_DIR_EJ4)/main.o
+	@mkdir -p $(BIN_DIR)
+	$(CXX) $^ -o $@
 
-# Targets individuales
-.PHONY: ej2 ej3 clean run run2 run3
+# Ejecutable principal con main global
+$(BIN_JUEGO): $(OBJ_FILES_EJ2) $(OBJ_FILES_EJ3) $(MAIN_OBJ)
+	@mkdir -p $(BIN_DIR)
+	$(CXX) $^ -o $@
 
-ej2: $(EXEC_EJ2)
-ej3: $(EXEC_EJ3)
+# Comandos de ejecución
+run3: $(BIN_EJ3)
+	./$(BIN_EJ3)
 
-run: $(EXEC_GLOBAL)
-	./$<
+run4: $(BIN_EJ4)
+	./$(BIN_EJ4)
 
-run2: $(EXEC_EJ2)
-	./$<
+runjuego: $(BIN_JUEGO)
+	./$(BIN_JUEGO)
 
-run3: $(EXEC_EJ3)
-	./$<
+valgrind3: $(BIN_EJ3)
+	valgrind --leak-check=full ./$(BIN_EJ3)
 
-# Limpieza total
+valgrind4: $(BIN_EJ4)
+	valgrind --leak-check=full ./$(BIN_EJ4)
+
+valgrindjuego: $(BIN_JUEGO)
+	valgrind --leak-check=full ./$(BIN_JUEGO)
+
+# Clean
 clean:
 	rm -rf $(BUILD_DIR) $(BIN_DIR) *.o *.d
 
-# Incluir dependencias si existen
--include $(DEP_FILES)
+-include $(OBJ_FILES_EJ2:.o=.d)
+-include $(OBJ_FILES_EJ3:.o=.d)
+-include $(OBJ_FILES_EJ4:.o=.d)
+-include $(UTILS_OBJ:.o=.d)

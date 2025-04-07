@@ -2,7 +2,6 @@
 #define MAGE_HPP
 
 #include "../character.hpp"
-#include "../../weapons/weapon.hpp"
 
 class Mage : public Character, public enable_shared_from_this<Mage>{
 protected:
@@ -23,13 +22,13 @@ protected:
     bool opponentMiss = false;
 
 public:
-    Mage(string name, CharacterType type, int health, int mana);
+    Mage(string name, CharacterType type, int mana);
 
     string getName() const override;
     int getHealth() const override;
     int getMana() const;
     int getBuff() const override;
-    void reciveDamage(int dam) override;
+    void receiveDamage(int dam) override;
 
     void heal(int amount) override;
     string getType() const override;

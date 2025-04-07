@@ -1,4 +1,5 @@
 #include "team.hpp"
+#include "../Ej2/characters/character.hpp"
 
 Team::Team(): members(){}
 

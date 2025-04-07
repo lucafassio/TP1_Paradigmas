@@ -2,7 +2,6 @@
 #define AMULET_HPP
 
 #include "../magic.hpp"
-#include "../../../../utils/enums_data.hpp"
 
 class Character;
 

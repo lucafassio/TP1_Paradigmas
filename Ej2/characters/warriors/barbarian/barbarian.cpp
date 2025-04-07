@@ -3,8 +3,8 @@
 
 
 Barbarian::Barbarian(string name): 
-    Warrior(name, BARBARIAN, 100, 3)
-{srand(time(nullptr));}
+    Warrior(name, BARBARIAN, 3)
+{}
 
 int Barbarian::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
     int finalDamage = BASE_DAMAGE + Warrior::useWeapon(weapon, target, targetTeam);
@@ -42,7 +42,7 @@ int Barbarian::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target
     }
 
     //aplicar daño al oponente.
-    target->reciveDamage(finalDamage);
+    target->receiveDamage(finalDamage);
     if (!target->getHealth()) targetTeam->loseMember(target);
     cout << " and deals " << finalDamage << " damage!" << endl;
 

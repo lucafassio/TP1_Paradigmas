@@ -3,7 +3,8 @@
 
 #include "factory.hpp"
 #include "team.hpp"
-#include "../Ej2/characters/character.hpp"
+
+class Character;
 
 void clearScreen();
 

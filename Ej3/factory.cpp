@@ -1,4 +1,5 @@
 #include "factory.hpp"
+#include "team.hpp"
 
 shared_ptr<Character> Factory::createCharacter(CharacterType type, string name){
     switch (type){

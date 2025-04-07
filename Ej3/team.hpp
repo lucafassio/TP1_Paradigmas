@@ -1,19 +1,9 @@
 #ifndef TEAM_HPP
 #define TEAM_HPP
 
-#include <iostream>
-#include <iomanip>
-#include <string>
-#include <vector>
-#include <algorithm>
-#include <cmath>
-#include <cstdlib>
-#include <ctime>
-#include <memory>
-#include <fstream>
-using namespace std;
+#include "../utils/data.hpp"
 
-#include "../Ej2/characters/character.hpp"
+class Character;
 
 class Team{
     private:

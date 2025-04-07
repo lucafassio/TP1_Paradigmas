@@ -3,7 +3,7 @@
 #include "larry.hpp"
 
 Necromancer::Necromancer(string name): 
-    Mage(name, NECRO, 100, 100)
+    Mage(name, NECRO, 100)
 {}
 
 int Necromancer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
@@ -30,7 +30,7 @@ int Necromancer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> targ
     }
 
     //aplicar daño al oponente.
-    target->reciveDamage(finalDamage);
+    target->receiveDamage(finalDamage);
     if (!target->getHealth()) targetTeam->loseMember(target);
     cout << " and deals " << finalDamage << " damage!" << endl;
 
@@ -52,7 +52,7 @@ void Necromancer::raiseDead(shared_ptr<Team> currentTeam){
 void Necromancer::drainLife(shared_ptr<Character> target, shared_ptr<Team> targetTeam){
     if (mana >= 10){
         cout << name << " drains 10 life from " << target->getName();
-        target->reciveDamage(10);
+        target->receiveDamage(10);
         if (!target->getHealth()){
             targetTeam->loseMember(target);
             cout << " taking him to the death world";

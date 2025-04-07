@@ -1,8 +1,8 @@
 #include "warrior.hpp"
 #include "../../../Ej3/team.hpp"
 
-Warrior::Warrior(string name, CharacterType type, int health, int armor):
-    name(name), type(type), health(health), armor(armor), weapons(nullptr, nullptr)
+Warrior::Warrior(string name, CharacterType type, int armor):
+    name(name), type(type), health(100), armor(armor), weapons(nullptr, nullptr)
 {}
 
 string Warrior::getName() const {
@@ -26,7 +26,7 @@ void Warrior::heal(int amount) {
     if (health > 100) health = 100; //no se puede curar mas del maximo de vida.
 }
 
-void Warrior::reciveDamage(int dam){
+void Warrior::receiveDamage(int dam){
     if (opponentMiss) {
         cout << name << " dodges the attack!" << endl;
         opponentMiss = false;

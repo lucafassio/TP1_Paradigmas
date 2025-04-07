@@ -1,8 +1,8 @@
 #include "mage.hpp"
 #include "../../../Ej3/team.hpp"
 
-Mage::Mage(string name, CharacterType type, int health, int mana):
-    name(name), type(type), health(health), mana(mana), weapons(nullptr, nullptr)
+Mage::Mage(string name, CharacterType type, int mana):
+    name(name), type(type), health(100), mana(mana), weapons(nullptr, nullptr)
 {}
 
 string Mage::getName() const {
@@ -26,7 +26,7 @@ void Mage::heal(int amount) {
     if (health > 100) health = 100; //no se puede curar mas del maximo de vida.
 }
 
-void Mage::reciveDamage(int dam){
+void Mage::receiveDamage(int dam){
     if (opponentMiss) {
         cout << name << " dodges the attack!" << endl;
         opponentMiss = false;
