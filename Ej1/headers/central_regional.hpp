@@ -26,6 +26,7 @@ class CentralRegional : public EntidadOrganizativa{
         //metodos agregados por mi para el main.
         void agregarGerenteAlto(shared_ptr<GerenteAlto> gerenteAlto);
         void agregarGerenteMedio(shared_ptr<GerenteMedio> gerenteMedio);
+        void agregarEmpresa(shared_ptr<Empresa> empresa);
 };
 
 #endif

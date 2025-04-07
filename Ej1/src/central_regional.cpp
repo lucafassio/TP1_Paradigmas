@@ -1,6 +1,7 @@
 #include "central_regional.hpp"
 #include "manager.hpp"
 #include "empresa.hpp"
+#include "departamento.hpp"
 
 CentralRegional::CentralRegional(string nombre, set<string> paises): 
     EntidadOrganizativa(nombre), paises(paises), cantEmpleados(0)
@@ -32,4 +33,9 @@ void CentralRegional::agregarGerenteAlto(shared_ptr<GerenteAlto> gerenteAlto){
 void CentralRegional::agregarGerenteMedio(shared_ptr<GerenteMedio> gerenteMedio){
     if (gerentesMedio.size() < 20) {this->gerentesMedio.push_back(gerenteMedio); this->cantEmpleados++;}
     else cout << "No se pueden agregar mas gerentes medios." << endl;
+}
+
+void CentralRegional::agregarEmpresa(shared_ptr<Empresa> empresa){
+    this->empresas.push_back(empresa);
+    this->cantEmpleados += Departamento::contarEmpleados();
 }
