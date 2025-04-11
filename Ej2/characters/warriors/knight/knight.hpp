@@ -3,13 +3,19 @@
 
 #include "../warrior.hpp"
 
-class Knight : public Warrior{
+class Knight : public Warrior {
 private:
-    int armorLevel;
+    int turnsWithIronWill;
+    int cooldownIronWill;
+    bool ironWillActive;
     
 public:
     Knight(string name);
-    virtual ~Knight() = default;
+
+    int useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
+
+    void ironWill();
+    void endTurnUpdate(shared_ptr<Team> currentTeam) override;
 };
 
-#endif // KNIGHT_HPP
+#endif

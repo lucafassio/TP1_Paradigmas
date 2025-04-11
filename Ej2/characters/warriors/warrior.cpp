@@ -1,8 +1,12 @@
 #include "warrior.hpp"
 #include "../../../Ej3/team.hpp"
 
+void Warrior::setHealth(int health) {
+    this->health = health;
+}
+
 Warrior::Warrior(string name, CharacterType type, int armor):
-    name(name), type(type), health(100), armor(armor), weapons(nullptr, nullptr)
+    name(name), type(type), health(100), armor(armor), combatBuff(2), weapons(nullptr, nullptr)
 {}
 
 string Warrior::getName() const {
@@ -78,6 +82,12 @@ int Warrior::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, 
         target->getName(); //para que no me tire warning de variable no usada.
     }
 
+    if ((target->getType() == "Barbarian" || target->getType() == "Gladiator") && rand() % 100 < 20){
+        //los barbaros y gladiadores tienen un 20% de chance de contraatacar haciendo un 40% menos de daño.
+        this->receiveDamage(weaponDamage * 0.6);
+        cout << target->getName() << " (" << target->getType() << ") counterattacks!" << endl;
+    }
+
     return weaponDamage;
 }
 
@@ -87,9 +97,21 @@ void Warrior::loseWeapon(shared_ptr<Weapon> weapon){
     else cout << "Weapon not found in inventory." << endl;
 }
 
+void Warrior::endTurnUpdate(shared_ptr<Team> currentTeam){
+    this->effectUpdate(currentTeam);
+    if (!this->health) currentTeam->loseMember(shared_from_this());
+}
+
 // ======= METODOS PARA MANEJAR EFECTOS ======= //
 void Warrior::applyEffect(Effect effect, int duration){
     currentEffects.push_back(make_pair(effect, duration));
+}
+
+bool Warrior::hasEffect(Effect effect) const {
+    for (auto& e : currentEffects) {
+        if (e.first == effect) return true;
+    }
+    return false;
 }
 
 void Warrior::effectUpdate(shared_ptr<Team> currentTeam){
@@ -108,6 +130,12 @@ void Warrior::effectUpdate(shared_ptr<Team> currentTeam){
                 case STUN: this->stunCase(); break;
                 case IMMUNITY: this->immunityCase(); break;
                 case INVISIBILITY: this->invisibilityCase(); break;
+                case FROZEN: this->frozenCase(); break;
+                case STONE_SKIN: break; //no afecta a los warriors
+                case MAGIC_SILENCE: break; //no afecta a los warriors
+                case ELEMENTAL_EXPOSURE: this->elementalExposureCase(); break;
+                case SOUL_LINKED: break; //no se aplica aca.
+                case MANA_LEECH: break; //no afectan a los warriors.
             }
             if (!this->health) currentTeam->loseMember(shared_from_this());
         }
@@ -164,4 +192,12 @@ void Warrior::immunityCase(){
 
 void Warrior::invisibilityCase(){
     opponentMiss = true;
+}
+
+void Warrior::frozenCase(){
+    stunned = true; //el proximo turno no puede atacar.
+}
+
+void Warrior::elementalExposureCase(){
+    exposed = true; //el proximo ataque del oponente sera un critico.
 }

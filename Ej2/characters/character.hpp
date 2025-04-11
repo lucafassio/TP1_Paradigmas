@@ -3,7 +3,7 @@
 
 #include "../../utils/data.hpp"
 #include "../weapons/weapon.hpp"
-#include "../Ej3/team.hpp"
+#include "../../Ej3/team.hpp"
 
 class Weapon;
 class Team;
@@ -22,9 +22,11 @@ public:
     virtual pair<shared_ptr<Weapon>, shared_ptr<Weapon>> inventory() const = 0;
     virtual int useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) = 0;
     virtual void loseWeapon(shared_ptr<Weapon> weapon) = 0;
+    virtual void endTurnUpdate(shared_ptr<Team> currentTeam) = 0;
 
     //metodos para manejar efectos.
     virtual void applyEffect(Effect effect, int duration) = 0;
+    virtual bool hasEffect(Effect effect) const = 0;
     virtual void effectUpdate(shared_ptr<Team> currentTeam) = 0;
     virtual void regenCase() = 0;
     virtual void strengthCase() = 0;
@@ -35,7 +37,8 @@ public:
     virtual void luckCase() = 0;
     virtual void immunityCase() = 0;
     virtual void invisibilityCase() = 0;
-    
+    virtual void frozenCase() = 0;
+    virtual void elementalExposureCase() = 0;
 
     virtual ~Character() = default;
 };

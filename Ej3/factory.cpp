@@ -3,15 +3,15 @@
 
 shared_ptr<Character> Factory::createCharacter(CharacterType type, string name){
     switch (type){
-        case CONJURER: return make_shared<Conjurer>(name);
-        case NECRO: return make_shared<Necromancer>(name);
-        case SORCERER: return make_shared<Sorcerer>(name);
-        case WARLOCK: return make_shared<Warlock>(name);
         case BARBARIAN: return make_shared<Barbarian>(name);
         case GLADIATOR: return make_shared<Gladiator>(name);
         case KNIGHT: return make_shared<Knight>(name);
         case MERCENARY: return make_shared<Mercenary>(name, nullptr);
         case PALADIN: return make_shared<Paladin>(name);
+        case CONJURER: return make_shared<Conjurer>(name);
+        case NECRO: return make_shared<Necromancer>(name);
+        case SORCERER: return make_shared<Sorcerer>(name);
+        case WARLOCK: return make_shared<Warlock>(name);
         default: return nullptr;
     }
 }

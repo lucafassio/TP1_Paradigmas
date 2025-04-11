@@ -54,7 +54,13 @@ enum Effect{
     STUN,
     LUCK,
     IMMUNITY,
-    INVISIBILITY
+    INVISIBILITY,
+    FROZEN,
+    STONE_SKIN,
+    MAGIC_SILENCE,
+    ELEMENTAL_EXPOSURE,
+    MANA_LEECH,
+    SOUL_LINKED
 };
 
 //materiales y durabilidad de las armas de combate.
@@ -74,6 +80,13 @@ enum AmuletProp{
     PROP_IMMUNITY,
     PROP_LUCK,
     PROP_INVISIBILITY
+};
+
+enum SorcererType {
+    FIRE,
+    WATER,
+    AIR,
+    EARTH
 };
 
 //ataques del ejercicio 4.

@@ -20,6 +20,7 @@ protected:
     bool stunned = false;
     bool forcedCritical = false;
     bool opponentMiss = false;
+    bool exposed = false;
 
 public:
     Mage(string name, CharacterType type, int mana);
@@ -37,9 +38,11 @@ public:
     pair<shared_ptr<Weapon>, shared_ptr<Weapon>> inventory() const override;
     int useWeapon(shared_ptr<Weapon> w, shared_ptr<Character> op, shared_ptr<Team> targetTeam) override;
     void loseWeapon(shared_ptr<Weapon> weapon) override;
+    void endTurnUpdate(shared_ptr<Team> currentTeam) override;
     
     //metodos para manejar efectos.
     void applyEffect(Effect effect, int duration) override;
+    bool hasEffect(Effect effect) const;
     void effectUpdate(shared_ptr<Team> currentTeam) override;
     void regenCase() override;
     void strengthCase() override;
@@ -50,6 +53,11 @@ public:
     void luckCase() override;
     void immunityCase() override;
     void invisibilityCase() override;
+    void frozenCase() override;
+    void stoneSkinCase();
+    void magicSilenceCase();
+    void elementalExposureCase() override;
+    void manaLeechCase();
 };
 
 #endif // MAGE_HPP

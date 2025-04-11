@@ -10,7 +10,7 @@ int Mercenary::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target
 
     cout << name << " (Mercenary) attacks " << target->getName() << " (" << target->getType() << ")";
 
-    if(weapon) cout << " with " << weapon->getName();
+    if (weapon) cout << " with " << weapon->getName();
     else cout << " with bare hands";
 
     //20% de probabilidad de activar un crítico (si ya venia forzado sigue igual).
@@ -36,8 +36,8 @@ int Mercenary::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target
     return finalDamage;
 }
 
-void Mercenary::receiveDamage(int dam){
-    Warrior::receiveDamage(dam);
+void Mercenary::receiveDamage(int damage){
+    Warrior::receiveDamage(damage);
     if (health <= 30)
         if ((rand() % 100) < 20) runAway();
 }

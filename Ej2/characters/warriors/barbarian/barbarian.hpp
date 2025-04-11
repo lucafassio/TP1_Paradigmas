@@ -14,8 +14,6 @@ public:
     int useWeapon(shared_ptr<Weapon> w, shared_ptr<Character> op, shared_ptr<Team> targetTeam) override;
     bool isInRage() const;
     void decreaseRageTurns();
-
-    friend class Amulet;
 };
 
 #endif // BARBARIAN_HPP

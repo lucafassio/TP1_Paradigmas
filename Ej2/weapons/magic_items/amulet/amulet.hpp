@@ -21,7 +21,6 @@ class Amulet final : public Magic{
 
         void use();
         void giveEffect();
-        void update(shared_ptr<Character> target);
     
 };
 

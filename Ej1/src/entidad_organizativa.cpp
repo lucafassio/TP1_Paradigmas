@@ -4,7 +4,7 @@ EntidadOrganizativa::EntidadOrganizativa(string nombre):
     nombre(nombre)
 {}
 
-void EntidadOrganizativa::agregarSubentidad(shared_ptr<EntidadOrganizativa> entidad){
+void EntidadOrganizativa::agregarSubentidad(EntidadOrganizativa entidad){
     this->subentidades.push_back(entidad);
 }
 

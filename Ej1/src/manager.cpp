@@ -1,11 +1,11 @@
 #include "manager.hpp"
 
-Manager::Manager(string nombre, string puesto, int antiguedad, float salario, float bono, string level):
+Manager::Manager(string nombre, string puesto, int antiguedad, float salario, float bono, Levels level):
     Empleado(antiguedad, salario, nombre, puesto), bono(bono), level(level)
 {}
 
 bool Manager::updateBono(float nuevoBono) {
-    if (nuevoBono > 0) {
+    if (nuevoBono > 0){
         this->bono = nuevoBono;
         return true;
     }
@@ -16,22 +16,22 @@ float Manager::getBono() const {
     return this->bono;
 }
 
-void Manager::setLevel(string nuevoLevel) {
+void Manager::setLevel(Levels nuevoLevel) {
     this->level = nuevoLevel;
 }
 
-GerenteAlto::GerenteAlto(string nombre, string puesto, int antiguedad, float salario, float bono, string level):
+GerenteAlto::GerenteAlto(string nombre, string puesto, int antiguedad, float salario, float bono, Levels level):
     Manager(nombre, puesto, antiguedad, salario, bono, level)
 {}
 
-GerenteMedio::GerenteMedio(string nombre, string puesto, int antiguedad, float salario, float bono, string level):
+GerenteMedio::GerenteMedio(string nombre, string puesto, int antiguedad, float salario, float bono, Levels level):
     Manager(nombre, puesto, antiguedad, salario, bono, level)
 {}
 
-GerenteBajo::GerenteBajo(string nombre, string puesto, int antiguedad, float salario, float bono, string level):
+GerenteBajo::GerenteBajo(string nombre, string puesto, int antiguedad, float salario, float bono, Levels level):
     Manager(nombre, puesto, antiguedad, salario, bono, level)
 {}
 
-LiderEquipo::LiderEquipo(string nombre, string puesto, int antiguedad, float salario, float bono, string level):
+LiderEquipo::LiderEquipo(string nombre, string puesto, int antiguedad, float salario, float bono, Levels level):
     Manager(nombre, puesto, antiguedad, salario, bono, level)
 {}

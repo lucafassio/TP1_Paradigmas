@@ -11,7 +11,7 @@ int Necromancer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> targ
 
     cout << name << " (Necromancer) attacks " << target->getName() << " (" << target->getType() << ")";
 
-    if(weapon) cout << " with " << weapon->getName();
+    if (weapon) cout << " with " << weapon->getName();
     else cout << " with his own power";
 
     //20% de probabilidad de activar un crítico (si ya venia forzado sigue igual).

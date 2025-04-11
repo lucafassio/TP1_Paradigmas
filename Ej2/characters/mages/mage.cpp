@@ -86,9 +86,21 @@ void Mage::loseWeapon(shared_ptr<Weapon> weapon){
     else cout << "Weapon not found in inventory." << endl;
 }
 
+void Mage::endTurnUpdate(shared_ptr<Team> currentTeam){
+    this->effectUpdate(currentTeam);
+    if (!this->health) currentTeam->loseMember(shared_from_this());
+}
+
 // ======= METODOS PARA MANEJAR EFECTOS ======= //
 void Mage::applyEffect(Effect effect, int duration) {
     currentEffects.push_back(make_pair(effect, duration));
+}
+
+bool Mage::hasEffect(Effect effect) const {
+    for (const auto& e : currentEffects) {
+        if (e.first == effect) return true;
+    }
+    return false;
 }
 
 void Mage::effectUpdate(shared_ptr<Team> currentTeam){
@@ -107,6 +119,12 @@ void Mage::effectUpdate(shared_ptr<Team> currentTeam){
                 case STUN: this->stunCase(); break;
                 case IMMUNITY: this->immunityCase(); break;
                 case INVISIBILITY: this->invisibilityCase(); break;
+                case FROZEN: this->frozenCase(); break;
+                case STONE_SKIN: this->stoneSkinCase(); break;
+                case MAGIC_SILENCE: this->magicSilenceCase(); break;
+                case ELEMENTAL_EXPOSURE: this->elementalExposureCase(); break;
+                case SOUL_LINKED: break; //no se aplica aca.
+                case MANA_LEECH: this->manaLeechCase(); break;
             }
             if (!this->health) currentTeam->loseMember(shared_from_this());
         }
@@ -162,4 +180,26 @@ void Mage::immunityCase(){
 
 void Mage::invisibilityCase(){
     opponentMiss = true;
+}
+
+void Mage::frozenCase(){
+    stunned = true; //el proximo turno no puede atacar.
+}
+
+void Mage::stoneSkinCase(){
+    this->health += 5;
+    if (this->health > 100) this->health = 100; //no se puede curar mas del maximo de vida.
+}
+
+void Mage::magicSilenceCase(){
+    this->magicBuff = 0; //no puede usar magia.
+}
+
+void Mage::elementalExposureCase(){
+    exposed = true;
+}
+
+void Mage::manaLeechCase(){
+    this->mana -= 5;
+    if (this->mana < 0) this->mana = 0;
 }

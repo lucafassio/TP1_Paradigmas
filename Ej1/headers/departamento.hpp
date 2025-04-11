@@ -14,11 +14,11 @@
 #include <set>
 using namespace std;
 
-class Empleado;
+#include "empleado.hpp"
 
 class Departamento{
     private:
-        vector<shared_ptr<Empleado>> empleados;
+        vector<Empleado> empleados;
         static int cantEmpleadosDepts;
 
     public:
@@ -28,9 +28,12 @@ class Departamento{
         Departamento(string nombre, string ubicacion);
 
         static int contarEmpleados();
-        vector<shared_ptr<Empleado>> getEmployees() const;
-        bool contratarEmpleado(shared_ptr<Empleado> empleado);
-        bool despedirEmpleado(shared_ptr<Empleado> empleado);
+        vector<Empleado> getEmployees() const;
+        bool contratarEmpleado(Empleado empleado);
+        bool despedirEmpleado(Empleado empleado);
+
+        //metodos que agrego para el main.
+        Empleado& getEmployeeByName(string nombre);
 };
 
 #endif

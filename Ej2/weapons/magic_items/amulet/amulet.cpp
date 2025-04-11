@@ -31,6 +31,7 @@ void Amulet::use(){
 }
 
 void Amulet::giveEffect(){
+    if (active) return;
     switch (property){
         case PROP_HEALING: holder->applyEffect(REGENERATION, durability); break;
         case PROP_STRENGTH: holder->applyEffect(STRENGTH, durability); break;

@@ -28,6 +28,9 @@ class Empleado{
         int getAntiguedad() const;
         bool updateSalario(float nuevoSalario);
         float getSalario() const;
+
+        //sobrecargo el operador == para buscar empleados en otra clase.
+        bool operator==(const Empleado& other) const;
 };
 
 #endif

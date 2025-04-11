@@ -17,7 +17,7 @@ int Barbarian::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target
 
     cout << name << " (Barbarian) attacks " << target->getName() << " (" << target->getType() << ")";
 
-    if(weapon) cout << " with " << weapon->getName();
+    if (weapon) cout << " with " << weapon->getName();
     else cout << " with bare hands";
 
     //aplicar multiplicador de daño si está en rage.

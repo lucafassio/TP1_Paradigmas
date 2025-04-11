@@ -87,6 +87,8 @@ shared_ptr<Character> createPlayer2(){
     shared_ptr<Character> player2 = Factory::createCharacter(type, getRandomName(type));
     Factory::addWeaponToCharacter(player2, Factory::createWeapon(static_cast<WeaponType>(rand() % 9), NONE));
 
+    cout << "Player 2, your character is: " << player2->getName() << " (" << player2->getType() << ")" << endl;
+
     return player2;
 }
 
@@ -104,7 +106,7 @@ int getWinner(Attack choice1, Attack choice2) {
 }
 
 void fight(shared_ptr<Character> player1, shared_ptr<Character> player2){
-    clearScreen();
+    //clearScreen();
     cout << "========== THE FIGHT STARTS ==========" << endl;
     while (player1->getHealth() && player2->getHealth()){
         //muestro la vida de cada jugador.

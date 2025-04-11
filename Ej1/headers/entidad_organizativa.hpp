@@ -14,16 +14,16 @@
 #include <set>
 using namespace std;
 
-class EntidadOrganizativa {
+class EntidadOrganizativa{
     protected:
-        vector<shared_ptr<EntidadOrganizativa>> subentidades;
+        vector<EntidadOrganizativa> subentidades;
 
     public:
         string nombre;
-        
+
         EntidadOrganizativa(string nombre);
 
-        void agregarSubentidad(shared_ptr<EntidadOrganizativa> entidad);
+        void agregarSubentidad(EntidadOrganizativa entidad);
         int contarSubentidades() const;
 };
 
