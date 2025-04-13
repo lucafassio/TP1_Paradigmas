@@ -1,7 +1,7 @@
 // #include "sorcerer.hpp"
 
 // Sorcerer::Sorcerer(string name): 
-//     Mage(name, SORCERER, 100), cooldown(0) 
+//     Mage(name, SORCERER, 100, 100), cooldown(0) 
 // {}
 
 // bool Sorcerer::specialReady() const {

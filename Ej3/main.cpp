@@ -12,8 +12,8 @@ int main(){
     cout << "Both teams will have " << numWarriors << " warriors and " << numMages << " mages.";
 
     //creo los dos equipos
-    shared_ptr<Team> team1 = std::make_shared<Team>();
-    shared_ptr<Team> team2 = std::make_shared<Team>();
+    shared_ptr<Team> team1 = make_shared<Team>();
+    shared_ptr<Team> team2 = make_shared<Team>();
 
     cout << endl << "First team will be created by hand." << endl;
     fullFillingTeam(team1, numWarriors, numMages, false);

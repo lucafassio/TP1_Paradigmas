@@ -1,8 +1,9 @@
 #include "mage.hpp"
 #include "../../../Ej3/team.hpp"
+#include "warlock/warlock.hpp"
 
-Mage::Mage(string name, CharacterType type, int mana):
-    name(name), type(type), health(100), mana(mana), weapons(nullptr, nullptr)
+Mage::Mage(string name, CharacterType type, int maxHealth, int mana):
+    name(name), type(type), health(100), maxHealth(maxHealth), mana(mana), weapons(nullptr, nullptr)
 {}
 
 string Mage::getName() const {
@@ -11,6 +12,10 @@ string Mage::getName() const {
 
 int Mage::getHealth() const {
     return health;
+}
+
+int Mage::getMaxHealth() const {
+    return maxHealth;
 }
 
 int Mage::getMana() const {
@@ -23,7 +28,7 @@ int Mage::getBuff() const {
 
 void Mage::heal(int amount) {
     health += amount;
-    if (health > 100) health = 100; //no se puede curar mas del maximo de vida.
+    if (health > maxHealth) health = maxHealth; //no se puede curar mas del maximo de vida.
 }
 
 void Mage::receiveDamage(int dam){
@@ -33,8 +38,9 @@ void Mage::receiveDamage(int dam){
         return;
     }
     health-=dam;
-    if (health<0){
-        health=0;
+    if (health <= 0){
+        health = 0;
+        currentEffects.clear();
     }
 }
 
@@ -86,9 +92,38 @@ void Mage::loseWeapon(shared_ptr<Weapon> weapon){
     else cout << "Weapon not found in inventory." << endl;
 }
 
-void Mage::endTurnUpdate(shared_ptr<Team> currentTeam){
-    this->effectUpdate(currentTeam);
-    if (!this->health) currentTeam->loseMember(shared_from_this());
+void Mage::endTurnUpdate(){
+    this->effectUpdate();
+}
+
+void Mage::warlockSoulLink(shared_ptr<Character> target, shared_ptr<Team> targetTeam, int finalDamage){
+    shared_ptr<Warlock> opponentWarlock = targetTeam->getWarlock();
+    if (target->hasEffect(SOUL_LINKED) && opponentWarlock->linkedAllies.size()){
+        cout << " dealing " << finalDamage << " damage to all linked allies!" << endl;
+        int nAlives = static_cast<int>(opponentWarlock->linkedAllies.size());
+        for (auto it = opponentWarlock->linkedAllies.begin(); it != opponentWarlock->linkedAllies.end(); it++){
+            auto opponent = *it;
+
+            //el daño total se reparte equitativamente entre los aliados enlazados.
+            opponent->receiveDamage(finalDamage / nAlives);
+            cout << opponent->getName() << " (" << opponent->getType() << ") receives " << finalDamage / nAlives << " damage from Soul Link!" << endl;
+
+            // si un oponente muere, se corta su vínculo.
+            if (!opponent->getHealth()){
+                it = opponentWarlock->linkedAllies.erase(it);
+                it--;
+            }
+
+            //si no queda nadie enlazado es porque murieron todos.
+            if (opponentWarlock->linkedAllies.empty()) return;
+        }
+        if (!opponentWarlock->getHealth()) opponentWarlock->breakSoulLink();
+    }
+    else{
+        //aplicar daño al oponente.
+        cout << " and deals " << finalDamage << " damage!" << endl;
+        target->receiveDamage(finalDamage);
+    }
 }
 
 // ======= METODOS PARA MANEJAR EFECTOS ======= //
@@ -103,7 +138,7 @@ bool Mage::hasEffect(Effect effect) const {
     return false;
 }
 
-void Mage::effectUpdate(shared_ptr<Team> currentTeam){
+void Mage::effectUpdate(){
     for (auto effect = this->currentEffects.begin(); effect != this->currentEffects.end();){
         if (effect->second == 0){
             effect = this->currentEffects.erase(effect);
@@ -111,13 +146,13 @@ void Mage::effectUpdate(shared_ptr<Team> currentTeam){
         else{
             switch (effect->first){
                 case REGENERATION: this->regenCase(); break;
-                case STRENGTH: this->strengthCase(); break;
+                case STRENGTH: break; //no se aplica aca.
                 case BURNING: this->burnCase(); break;
                 case BLEEDING: this->bleedCase(); break;
                 case POISON: this->poisonCase(); break;
                 case LUCK: this->luckCase(); break;
                 case STUN: this->stunCase(); break;
-                case IMMUNITY: this->immunityCase(); break;
+                case IMMUNITY: break; //no se aplica aca.
                 case INVISIBILITY: this->invisibilityCase(); break;
                 case FROZEN: this->frozenCase(); break;
                 case STONE_SKIN: this->stoneSkinCase(); break;
@@ -125,8 +160,9 @@ void Mage::effectUpdate(shared_ptr<Team> currentTeam){
                 case ELEMENTAL_EXPOSURE: this->elementalExposureCase(); break;
                 case SOUL_LINKED: break; //no se aplica aca.
                 case MANA_LEECH: this->manaLeechCase(); break;
+                case SCARED: break; //no se aplica aca.
+                case RAGE: break; //no se aplica aca.
             }
-            if (!this->health) currentTeam->loseMember(shared_from_this());
         }
         effect->second--; 
     }
@@ -137,12 +173,8 @@ void Mage::regenCase(){
     if (this->health > 100) this->health = 100; //no se puede curar mas del maximo de vida.
 }
 
-void Mage::strengthCase(){
-    this->strengthBuff = true; //activa el buff de fuerza.
-}
-
 void Mage::burnCase(){
-    if (!immune) health -= 5;
+    if (!hasEffect(IMMUNITY)) health -= 5;
     if (health < 0) health = 0;
 }
 
@@ -152,7 +184,7 @@ void Mage::bleedCase(){
 }
 
 void Mage::poisonCase(){
-    if (!immune) health -= 5;
+    if (!hasEffect(IMMUNITY)) health -= 5;
     if (health < 1) health = 1; //el veneno nunca es letal.
 }
 
@@ -172,10 +204,6 @@ void Mage::luckCase(){
         else forcedCritical = true; //proximo ataque sera un critico (x1.5 de daño).
     }
     // 20% de chances de que no pase nada, se gasta igualmente el efecto.
-}
-
-void Mage::immunityCase(){
-    immune = true;
 }
 
 void Mage::invisibilityCase(){

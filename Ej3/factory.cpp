@@ -20,6 +20,10 @@ void Factory::addCharacterToTeam(shared_ptr<Team> team, shared_ptr<Character> ch
     if (team && character){
         team->members.push_back(character);
         cout << character->getName() << " has joined the team!" << endl;
+        if (character->getType() == "Mercenary"){
+            auto mercenary = dynamic_pointer_cast<Mercenary>(character);
+            if (mercenary) mercenary->entersTeam(team);
+        }
     } else {
         cout << "Error adding character to team!" << endl;
     }

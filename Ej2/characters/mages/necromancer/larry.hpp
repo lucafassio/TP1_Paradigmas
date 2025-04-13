@@ -17,7 +17,7 @@ class Larry : public Mage{
         string getType() const override; 
         int useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
 
-        void loseLifetime(shared_ptr<Team> LarryTeam);
+        void loseLifetime();
 };
 
 #endif // LARRY_HPP

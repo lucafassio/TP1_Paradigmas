@@ -60,7 +60,9 @@ enum Effect{
     MAGIC_SILENCE,
     ELEMENTAL_EXPOSURE,
     MANA_LEECH,
-    SOUL_LINKED
+    SOUL_LINKED,
+    SCARED,
+    RAGE
 };
 
 //materiales y durabilidad de las armas de combate.

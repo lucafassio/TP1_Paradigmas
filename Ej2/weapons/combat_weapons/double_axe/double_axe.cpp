@@ -52,7 +52,6 @@ int DoubleAxe::attack(){
     int totalDamage = this->damage + this->weight / 2;
 
     if (rand() % 100 < getBonusProbability(this->material)) {
-        cout << "Bonus attack triggered! Additional damage: " << this->damage / 2 << endl;
         totalDamage += this->damage / 2;
     }
 

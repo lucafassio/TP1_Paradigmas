@@ -5,8 +5,7 @@
 
 class Paladin : public Warrior {
 private:
-    int divineShieldCooldown;
-    bool hasDivineShield;
+    int divineShieldHits;
 
 public:
     Paladin(string name);
@@ -17,7 +16,7 @@ public:
     void healingTeam(shared_ptr<Character> target1, shared_ptr<Character> target2);
     void divineShield();
 
-    void endTurnUpdate(shared_ptr<Team> currentTeam) override;
+    void endTurnUpdate() override;
 };
 
 #endif // PALADIN_HPP

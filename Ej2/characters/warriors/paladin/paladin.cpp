@@ -1,44 +1,59 @@
 #include "paladin.hpp"
+#include "../../mages/warlock/warlock.hpp"
 
 Paladin::Paladin(string name): 
-    Warrior(name, PALADIN, 30), divineShieldCooldown(0), hasDivineShield(false)
+    Warrior(name, PALADIN, 100, 30), divineShieldHits(0)
 {}
 
 int Paladin::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
-    int finalDamage = BASE_DAMAGE + Warrior::useWeapon(weapon, target, targetTeam);
+    int finalDamage = BASE_DAMAGE;
 
     cout << name << " (Paladin) attacks " << target->getName() << " (" << target->getType() << ")";
 
-    if (weapon) cout << " with " << weapon->getName();
+    if (weapon){
+        if (weapon->isCombat()) finalDamage += weapon->attack() + this->combatBuff;
+        cout << " with " << weapon->getName();
+    }
     else cout << " with bare hands";
 
-    //20% de probabilidad de activar un crítico (si ya venia forzado sigue igual).
-    if ((rand() % 100) < 20) forcedCritical = true;
+    //aplico el buff de STRENGTH si corresponde.
+    if (hasEffect(STRENGTH)) finalDamage = static_cast<int>(finalDamage * 1.5);
 
-    if (strengthBuff){
-        finalDamage = static_cast<int>(finalDamage * 1.5); //aplico el buff de fuerza.
-        
-        //desactivo el buff de fuerza (si aun quedan turnos en el efecto luego se volvera a activar).
-        strengthBuff = false; 
+    //aplico el debuff de SCARED si corresponde. Al barbaro enfurecido no le afecta.
+    if (hasEffect(SCARED) && rand() % 100 < 60){
+        cout << ". " << name << " (Paladin) is scared and misses the attack!" << endl;
+        return 0; //no hace daño.
     }
+
+    if (stunned){
+        cout << ". " << name << " (Paladin) is stunned!" << endl;
+        return 0; //no hace daño.
+    }
+
+    //siempre existe un 20% de probabilidad de activar un crítico (si ya venia forzado se mantiene igual).
+    if ((rand() % 100) < 20) forcedCritical = true;
 
     if (forcedCritical){
         finalDamage = static_cast<int>(finalDamage * 1.5); //aumento daño por critico.
         forcedCritical = false;
     }
 
-    //aplicar daño al oponente.
-    target->receiveDamage(finalDamage);
-    if (!target->getHealth()) targetTeam->loseMember(target);
-    cout << " and deals " << finalDamage << " damage!" << endl;
+    //reparto el daño para cuando el warlock haga Soul Link.
+    Warrior::warlockSoulLink(target, targetTeam, finalDamage);
+
+    if ((target->getType() == "Barbarian" || target->getType() == "Gladiator") && rand() % 100 < 20 && target->getHealth()){
+        //los barbaros y gladiadores tienen un 20% de chance de contraatacar haciendo un 40% menos de daño.
+        this->receiveDamage(finalDamage * 0.6);
+        cout << target->getName() << " (" << target->getType() << ") counterattacks!" << endl;
+    }
 
     return finalDamage;
 }
 
 void Paladin::receiveDamage(int damage){
-    if (hasDivineShield){
+    if (divineShieldHits){
         cout << name << " is protected by Divine Shield!" << endl;
-        hasDivineShield = false;
+        divineShieldHits--;
         return;
     }
     Warrior::receiveDamage(damage);
@@ -50,15 +65,9 @@ void Paladin::healingTeam(shared_ptr<Character> target1, shared_ptr<Character> t
 }
 
 void Paladin::divineShield(){
-    if (divineShieldCooldown == 0) {
-        hasDivineShield = true;
-        divineShieldCooldown = 3;
-    }
+    if (divineShieldHits == 0) divineShieldHits = 5;
 }
 
-void Paladin::endTurnUpdate(shared_ptr<Team> currentTeam){
-    Warrior::effectUpdate(currentTeam);
-    if (divineShieldCooldown > 0) divineShieldCooldown--;
-    if (divineShieldCooldown == 0) hasDivineShield = false;
-    if (!this->health) currentTeam->loseMember(shared_from_this());
+void Paladin::endTurnUpdate(){
+    Warrior::effectUpdate();
 }

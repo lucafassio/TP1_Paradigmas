@@ -5,17 +5,16 @@
 
 class Knight : public Warrior {
 private:
-    int turnsWithIronWill;
+    int timesWithIronWill;
     int cooldownIronWill;
-    bool ironWillActive;
     
 public:
     Knight(string name);
 
     int useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
-
+    void receiveDamage(int damage) override;
     void ironWill();
-    void endTurnUpdate(shared_ptr<Team> currentTeam) override;
+    void endTurnUpdate() override;
 };
 
 #endif

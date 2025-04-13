@@ -1,7 +1,7 @@
 #include "sorcerer.hpp"
 
 Sorcerer::Sorcerer(string name):
-    Mage(name, SORCERER, 100), currentType(FIRE), cooldown(0), switchCooldown(0) {}
+    Mage(name, SORCERER, 100, 100), currentType(FIRE), cooldown(0), switchCooldown(0) {}
 
 void Sorcerer::attack(shared_ptr<Character> target) {
     elementalAttack(target);

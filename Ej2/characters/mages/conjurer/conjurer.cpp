@@ -1,36 +1,51 @@
 #include "conjurer.hpp"
+#include "../warlock/warlock.hpp"
 
 Conjurer::Conjurer(string name):
-    Mage(name, CONJURER, 100), shielded(false), cooldown(0), empoweredDamage(0)
+    Mage(name, CONJURER, 100, 100), shielded(false), cooldown(0), empoweredDamage(0)
 {}
 
 int Conjurer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
-    int finalDamage = BASE_DAMAGE + Mage::useWeapon(weapon, target, targetTeam);
+    int finalDamage = BASE_DAMAGE;
 
     cout << name << " (Conjurer) attacks " << target->getName() << " (" << target->getType() << ")";
 
-    if (weapon) cout << " with " << weapon->getName();
+    if (weapon){
+        if (weapon->isCombat()) finalDamage += weapon->attack();
+        cout << " with " << weapon->getName();
+    } 
     else cout << " with his own power";
 
-    //20% de probabilidad de activar un crítico (si ya venia forzado sigue igual).
-    if ((rand() % 100) < 20) forcedCritical = true;
+    //aplico el buff de STRENGTH si corresponde.
+    if (hasEffect(STRENGTH)) finalDamage = static_cast<int>(finalDamage * 1.5);
 
-    if (strengthBuff){
-        finalDamage = static_cast<int>(finalDamage * 1.5); //aplico el buff de fuerza.
-        
-        //desactivo el buff de fuerza (si aun quedan turnos en el efecto luego se volvera a activar).
-        strengthBuff = false; 
+    //aplico el debuff de SCARED si corresponde. Al barbaro enfurecido no le afecta.
+    if (hasEffect(SCARED) && rand() % 100 < 60){
+        cout << ". " << name << " (Conjurer) is scared and misses the attack!" << endl;
+        return 0; //no hace daño.
     }
+
+    if (stunned){
+        cout << ". " << name << " (Conjurer) is stunned!" << endl;
+        return 0; //no hace daño.
+    }
+
+    //siempre existe un 20% de probabilidad de activar un crítico (si ya venia forzado se mantiene igual).
+    if ((rand() % 100) < 20) forcedCritical = true;
 
     if (forcedCritical){
         finalDamage = static_cast<int>(finalDamage * 1.5); //aumento daño por critico.
         forcedCritical = false;
     }
 
-    //aplicar daño al oponente.
-    target->receiveDamage(finalDamage);
-    if (!target->getHealth()) targetTeam->loseMember(target);
-    cout << " and deals " << finalDamage << " damage!" << endl;
+    //reparto el daño para cuando el warlock haga Soul Link.
+    Mage::warlockSoulLink(target, targetTeam, finalDamage);
+
+    if ((target->getType() == "Barbarian" || target->getType() == "Gladiator") && rand() % 100 < 20 && target->getHealth()){
+        //los barbaros y gladiadores tienen un 20% de chance de contraatacar haciendo un 40% menos de daño.
+        this->receiveDamage(finalDamage * 0.6);
+        cout << target->getName() << " (" << target->getType() << ") counterattacks!" << endl;
+    }
 
     return finalDamage;
 }
@@ -44,7 +59,7 @@ bool Conjurer::isShielded() const {
     return shielded;
 }
 
-void Conjurer::updateCooldown() {
+void Conjurer::updateCooldown(){
     if (cooldown > 0) cooldown--;
     if (cooldown == 0) shielded = false;
 }
@@ -57,7 +72,7 @@ bool Conjurer::canUseShield() const {
     return cooldown == 0;
 }
 
-void Conjurer::empowerAttribute() {
+void Conjurer::empowerAttribute(){
     if (health <= 10) return;
     this->health -= 10;
     this->empoweredDamage += 5;
