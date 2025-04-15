@@ -68,24 +68,6 @@ pair<shared_ptr<Weapon>, shared_ptr<Weapon>> Mage::inventory() const {
     return weapons;
 }
 
-int Mage::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
-    if (!targetTeam) return 0;
-    if (!weapon) return 0;
-
-    int weaponDamage = 0;
-
-    if (weapon->isCombat()) weaponDamage = weapon->attack();
-
-    //SIN IMPLEMENTAR
-    //si el arma es magica se aplicaran los efectos correspondientes.
-    if (!weapon->isCombat()){
-        //aplicar efectos de magia.
-        target->getName(); //para que no me tire warning de variable no usada.
-    }
-
-    return weaponDamage;
-}
-
 void Mage::loseWeapon(shared_ptr<Weapon> weapon){
     if (weapons.first == weapon) weapons.first = nullptr;
     else if (weapons.second == weapon) weapons.second = nullptr;
@@ -96,34 +78,40 @@ void Mage::endTurnUpdate(){
     this->effectUpdate();
 }
 
-void Mage::warlockSoulLink(shared_ptr<Character> target, shared_ptr<Team> targetTeam, int finalDamage){
+string Mage::warlockSoulLink(shared_ptr<Character> target, shared_ptr<Team> targetTeam, int finalDamage){
+    string logText;
+
     shared_ptr<Warlock> opponentWarlock = targetTeam->getWarlock();
-    if (target->hasEffect(SOUL_LINKED) && opponentWarlock->linkedAllies.size()){
-        cout << " dealing " << finalDamage << " damage to all linked allies!" << endl;
+
+    if (target->hasEffect(SOUL_LINKED) && opponentWarlock->linkedAllies.size()) {
+        logText += " dealing " + to_string(finalDamage) + " damage to all linked allies!\n";
         int nAlives = static_cast<int>(opponentWarlock->linkedAllies.size());
-        for (auto it = opponentWarlock->linkedAllies.begin(); it != opponentWarlock->linkedAllies.end(); it++){
+
+        for (auto it = opponentWarlock->linkedAllies.begin(); it != opponentWarlock->linkedAllies.end(); it++) {
             auto opponent = *it;
 
             //el daño total se reparte equitativamente entre los aliados enlazados.
             opponent->receiveDamage(finalDamage / nAlives);
-            cout << opponent->getName() << " (" << opponent->getType() << ") receives " << finalDamage / nAlives << " damage from Soul Link!" << endl;
+            logText += opponent->getName() + " (" + opponent->getType() + ") receives " + to_string(finalDamage / nAlives) + " damage from Soul Link!\n";
 
             // si un oponente muere, se corta su vínculo.
-            if (!opponent->getHealth()){
+            if (!opponent->getHealth()) {
                 it = opponentWarlock->linkedAllies.erase(it);
                 it--;
             }
 
             //si no queda nadie enlazado es porque murieron todos.
-            if (opponentWarlock->linkedAllies.empty()) return;
+            if (opponentWarlock->linkedAllies.empty()) break;
         }
+
         if (!opponentWarlock->getHealth()) opponentWarlock->breakSoulLink();
-    }
-    else{
+    } else {
         //aplicar daño al oponente.
-        cout << " and deals " << finalDamage << " damage!" << endl;
+        logText += " and deals " + to_string(finalDamage) + " damage!\n";
         target->receiveDamage(finalDamage);
     }
+
+    return logText; // Return the log
 }
 
 // ======= METODOS PARA MANEJAR EFECTOS ======= //

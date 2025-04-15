@@ -42,15 +42,15 @@ void showWeaponOptions(){
 string getRandomName(CharacterType characterType){
     string filepath;
     switch (characterType){
-        case BARBARIAN: filepath = "utils/character_names/barbarian.txt"; break;
-        case GLADIATOR: filepath = "utils/character_names/gladiator.txt"; break;
-        case KNIGHT: filepath = "utils/character_names/knight.txt"; break;
-        case MERCENARY: filepath = "utils/character_names/mercenary.txt"; break;
-        case PALADIN: filepath = "utils/character_names/paladin.txt"; break;
-        case CONJURER: filepath = "utils/character_names/conjurer.txt"; break;
-        case NECRO: filepath = "utils/character_names/necromancer.txt"; break;
-        case SORCERER: filepath = "utils/character_names/sorcerer.txt"; break;
-        case WARLOCK: filepath = "utils/character_names/warlock.txt"; break;
+        case BARBARIAN: filepath = "../character_names/barbarian.txt"; break;
+        case GLADIATOR: filepath = "../character_names/gladiator.txt"; break;
+        case KNIGHT: filepath = "../character_names/knight.txt"; break;
+        case MERCENARY: filepath = "../character_names/mercenary.txt"; break;
+        case PALADIN: filepath = "../character_names/paladin.txt"; break;
+        case CONJURER: filepath = "../character_names/conjurer.txt"; break;
+        case NECRO: filepath = "../character_names/necromancer.txt"; break;
+        case SORCERER: filepath = "../character_names/sorcerer.txt"; break;
+        case WARLOCK: filepath = "../character_names/warlock.txt"; break;
         default: cout << "Invalid character type!" << endl; return ""; break;
     }
 
@@ -234,6 +234,7 @@ void fullFillingTeam(shared_ptr<Team> team, int numWarriors, int numMages, bool 
 //funcion especifica de este ejercicio para mostrar de forma mas fachera los equipos.
 void showTeamMembers(shared_ptr<Team> team){
     int n = 1;
+    cout << team->getName() << " members:" << endl;
     for (auto member : team->getMembers()){ //aca tengo que ver si puedo evitar getMembers y hacerlo de otra forma.
         cout << n << ". " << member->getName() << " (" << member->getType() << ") - ";
         if (member->inventory().first){

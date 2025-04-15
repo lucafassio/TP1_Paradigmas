@@ -1,4 +1,7 @@
 #include "funcs.hpp"
+// #include "team.cpp"
+// #include "funcs.cpp"
+// #include "factory.cpp"
 
 class Team;
 
@@ -12,8 +15,8 @@ int main(){
     cout << "Both teams will have " << numWarriors << " warriors and " << numMages << " mages.";
 
     //creo los dos equipos
-    shared_ptr<Team> team1 = make_shared<Team>();
-    shared_ptr<Team> team2 = make_shared<Team>();
+    shared_ptr<Team> team1 = make_shared<Team>("Team 1");
+    shared_ptr<Team> team2 = make_shared<Team>("Team 2");
 
     cout << endl << "First team will be created by hand." << endl;
     fullFillingTeam(team1, numWarriors, numMages, false);
@@ -22,7 +25,6 @@ int main(){
     fullFillingTeam(team2, numWarriors, numMages, true);
 
     cout << "========== Teams created. ==========" << endl;
-    cout << "Team 1:" << endl;
     showTeamMembers(team1);
     cout << endl;
     showTeamMembers(team2);

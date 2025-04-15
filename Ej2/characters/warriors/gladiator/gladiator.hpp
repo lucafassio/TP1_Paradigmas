@@ -13,7 +13,7 @@ private:
 public:
     Gladiator(string name);
 
-    int useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
+    string useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
     void receiveDamage(int dmg) override;
     void blastOfGlory(shared_ptr<Team> ownTeam, shared_ptr<Team> enemyTeam);
 };

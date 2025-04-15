@@ -40,6 +40,38 @@ using namespace std;
 #include "../Ej2/characters/mages/sorcerer/sorcerer.hpp"
 #include "../Ej2/characters/mages/warlock/warlock.hpp"
 #include "../Ej2/characters/mages/necromancer/necromancer.hpp"
+#include "../Ej2/characters/mages/necromancer/larry.hpp"
+
+// Combat weapons and base
+#include "../Ej2/weapons/combat_weapons/combat.cpp"
+#include "../Ej2/weapons/combat_weapons/sword/sword.cpp"
+#include "../Ej2/weapons/combat_weapons/axe/axe.cpp"
+#include "../Ej2/weapons/combat_weapons/spear/spear.cpp"
+#include "../Ej2/weapons/combat_weapons/basto/basto.cpp"
+#include "../Ej2/weapons/combat_weapons/double_axe/double_axe.cpp"
+
+// Magic items
+#include "../Ej2/weapons/magic_items/magic.cpp"
+#include "../Ej2/weapons/magic_items/amulet/amulet.cpp"
+#include "../Ej2/weapons/magic_items/potion/potion.cpp"
+#include "../Ej2/weapons/magic_items/spellbook/spellbook.cpp"
+#include "../Ej2/weapons/magic_items/staff/staff.cpp"
+
+// Warriors
+#include "../Ej2/characters/warriors/warrior.cpp"
+#include "../Ej2/characters/warriors/barbarian/barbarian.cpp"
+#include "../Ej2/characters/warriors/gladiator/gladiator.cpp"
+#include "../Ej2/characters/warriors/knight/knight.cpp"
+#include "../Ej2/characters/warriors/paladin/paladin.cpp"
+#include "../Ej2/characters/warriors/mercenary/mercenary.cpp"
+
+// Mages
+#include "../Ej2/characters/mages/mage.cpp"
+#include "../Ej2/characters/mages/conjurer/conjurer.cpp"
+#include "../Ej2/characters/mages/sorcerer/sorcerer.cpp"
+#include "../Ej2/characters/mages/warlock/warlock.cpp"
+#include "../Ej2/characters/mages/necromancer/necromancer.cpp"
+#include "../Ej2/characters/mages/necromancer/larry.cpp"
 
 class Team;
 

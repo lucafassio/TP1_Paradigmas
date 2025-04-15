@@ -6,6 +6,10 @@ Team::Team(string name):
     name(name), members()
 {}
 
+string Team::getName() const {
+    return name;
+}
+
 vector<shared_ptr<Character>> Team::getMembers() const {
     return members;
 }
@@ -33,4 +37,20 @@ void Team::showMembers() const {
     cout << name << " members:" << endl;
     for (const auto& member : members)
         if (member) cout << member->getName() << " (" << member->getType() << ")" << endl;
+}
+
+void Team::sortMembersByType() {
+    vector<string> typeOrder = {
+        "Barbarian", "Gladiator", "Paladin", "Knight",
+        "Conjurer", "Sorcerer", "Warlock", "Necromancer", "Mercenary"
+    };
+
+    auto getTypePriority = [&typeOrder](const string& type) {
+        auto it = find(typeOrder.begin(), typeOrder.end(), type);
+        return it != typeOrder.end() ? distance(typeOrder.begin(), it) : typeOrder.size();
+    };
+
+    sort(members.begin(), members.end(), [&getTypePriority](const shared_ptr<Character>& a, const shared_ptr<Character>& b) {
+        return getTypePriority(a->getType()) < getTypePriority(b->getType());
+    });
 }

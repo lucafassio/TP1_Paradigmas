@@ -36,11 +36,11 @@ public:
 
     void addWeapon(shared_ptr<Weapon> w) override;
     pair<shared_ptr<Weapon>, shared_ptr<Weapon>> inventory() const override;
-    int useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) = 0;
+    string useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) = 0;
     void loseWeapon(shared_ptr<Weapon> weapon) override;
     void endTurnUpdate() override;
 
-    void warlockSoulLink(shared_ptr<Character> target, shared_ptr<Team> targetTeam, int finalDamage);
+    string warlockSoulLink(shared_ptr<Character> target, shared_ptr<Team> targetTeam, int finalDamage) override;
 
     //metodos para manejar efectos.
     void applyEffect(Effect effect, int duration) override;

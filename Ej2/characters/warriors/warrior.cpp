@@ -78,12 +78,15 @@ void Warrior::endTurnUpdate(){
     this->effectUpdate();
 }
 
-void Warrior::warlockSoulLink(shared_ptr<Character> target, shared_ptr<Team> targetTeam, int finalDamage){
+string Warrior::warlockSoulLink(shared_ptr<Character> target, shared_ptr<Team> targetTeam, int finalDamage) {
+    string logText;
     shared_ptr<Warlock> opponentWarlock = targetTeam->getWarlock();
-    if (target->hasEffect(SOUL_LINKED) && opponentWarlock->linkedAllies.size()){
-        cout << " dealing " << finalDamage << " damage to all linked allies!" << endl;
+
+    if (target->hasEffect(SOUL_LINKED) && opponentWarlock->linkedAllies.size()) {
+        logText += " dealing " + to_string(finalDamage) + " damage to all linked allies!\n";
         int nAlives = static_cast<int>(opponentWarlock->linkedAllies.size());
-        for (auto it = opponentWarlock->linkedAllies.begin(); it != opponentWarlock->linkedAllies.end(); it++){
+
+        for (auto it = opponentWarlock->linkedAllies.begin(); it != opponentWarlock->linkedAllies.end(); it++) {
             auto opponent = *it;
 
             //me lo guardo para handelear el caso de que Mercenary se escape.
@@ -93,26 +96,29 @@ void Warrior::warlockSoulLink(shared_ptr<Character> target, shared_ptr<Team> tar
             opponent->receiveDamage(finalDamage / nAlives);
 
             //me fijo si no se fue el Mercenary.
-            if (!targetTeam->getMember(name)){
-                cout << "se fue." << endl;
+            if (!targetTeam->getMember(name)) {
+                logText += name + " has escaped.\n";
                 it = opponentWarlock->linkedAllies.erase(it);
                 it--;
             }
-            cout << opponent->getName() << " (" << opponent->getType() << ") receives " << finalDamage / nAlives << " damage from Soul Link!" << endl;
+
+            logText += opponent->getName() + " (" + opponent->getType() + ") receives " + to_string(finalDamage / nAlives) + " damage from Soul Link!\n";
 
             // si un oponente muere, se corta su vínculo.
-            if (!opponent->getHealth()){
+            if (!opponent->getHealth()) {
                 it = opponentWarlock->linkedAllies.erase(it);
                 it--;
             }
         }
+
         if (!opponentWarlock->getHealth()) opponentWarlock->breakSoulLink();
-    }
-    else{
+    } else {
         //aplicar daño al oponente.
-        cout << " and deals " << finalDamage << " damage!" << endl;
+        logText += " and deals " + to_string(finalDamage) + " damage!\n";
         target->receiveDamage(finalDamage);
     }
+
+    return logText; // Return the log
 }
 
 // ======= METODOS PARA MANEJAR EFECTOS ======= //

@@ -15,6 +15,8 @@ private:
 public:
     Sorcerer(string name);
 
+    string useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam);
+
     void changeElement(SorcererType newType);
     void attack(shared_ptr<Character> target);
     void special(shared_ptr<Character> target, shared_ptr<Team> team);

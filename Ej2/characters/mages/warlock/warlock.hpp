@@ -15,13 +15,12 @@ public:
 
     Warlock(string name);
 
-    int useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> enemyTeam) override;
+    string useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> enemyTeam) override;
     void soulLink(shared_ptr<Team> ownTeam);
     void bornAgain(shared_ptr<Team> ownTeam);
 
     void updateCooldowns();
     void breakSoulLink();
 };
-
 
 #endif // WARLOCK_HPP

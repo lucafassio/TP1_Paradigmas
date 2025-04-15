@@ -11,7 +11,7 @@ private:
 public:
     Knight(string name);
 
-    int useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
+    string useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
     void receiveDamage(int damage) override;
     void ironWill();
     void endTurnUpdate() override;
