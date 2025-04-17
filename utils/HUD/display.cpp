@@ -1,10 +1,9 @@
 #include "../../Ej2/characters/character.hpp"
 #include "../../Ej2/characters/warriors/warrior.hpp"
 #include "../../Ej2/characters/mages/mage.hpp"
-#include <algorithm> // For transform
-#include <sstream> // For ostringstream
+#include <algorithm>
+#include <sstream>
 
-// Helper function to convert a string to uppercase
 string toUpperCase(const string& str) {
     string upperStr = str;
     transform(upperStr.begin(), upperStr.end(), upperStr.begin(), ::toupper);
@@ -34,12 +33,10 @@ string effectToString(Effect effect) {
     }
 }
 
-// Function to generate a health bar
 string getHealthBar(int health, int maxHealth) {
-    int filledBars = (health * 20) / maxHealth; // Each '#' represents 5%, so 20 total segments
+    int filledBars = (health * 20) / maxHealth;
     int emptyBars = 20 - filledBars;
 
-    // Format the health counter with proper alignment
     ostringstream healthCounterStream;
     healthCounterStream << setw(4) << right << health << "/" << setw(4) << left << maxHealth;
 
@@ -47,19 +44,16 @@ string getHealthBar(int health, int maxHealth) {
 }
 
 string getManaBar(int mana, int maxMana) {
-    int filledBars = (mana * 20) / maxMana; // Each '#' represents 5%, so 20 total segments
+    int filledBars = (mana * 20) / maxMana;
     int emptyBars = 20 - filledBars;
 
-    // Format the mana counter with proper alignment
     ostringstream manaCounterStream;
     manaCounterStream << setw(4) << right << mana << "/" << setw(4) << left << maxMana;
 
     return "[" + string(filledBars, '#') + string(emptyBars, '_') + "] " + manaCounterStream.str();
 }
 
-// Function to generate a mana bar
 string getEmptyManaBar(){
-    // Return an empty mana bar for non-Mage characters
     return "[" + string(20, '_') + "] " + "   0/0   ";
 }
 
@@ -67,7 +61,6 @@ string getCombinedInventoryString(shared_ptr<Character> leftChar, shared_ptr<Cha
     auto leftInventory = leftChar->inventory();
     auto rightInventory = rightChar->inventory();
 
-    // Handle left character inventory
     string leftInventoryString = leftInventory.first || leftInventory.second ? "Inventory:" : "Inventory is empty.";
     string leftWeapons;
     if (leftInventory.first) {
@@ -80,7 +73,6 @@ string getCombinedInventoryString(shared_ptr<Character> leftChar, shared_ptr<Cha
         leftWeapons += leftInventory.second->getName();
     }
 
-    // Handle right character inventory
     string rightInventoryString = rightInventory.first || rightInventory.second ? "Inventory:" : "Inventory is empty.";
     string rightWeapons;
     if (rightInventory.first) {
@@ -93,7 +85,6 @@ string getCombinedInventoryString(shared_ptr<Character> leftChar, shared_ptr<Cha
         rightWeapons += rightInventory.second->getName();
     }
 
-    // Center inventory strings
     int leftInventoryPadding = (70 - leftInventoryString.length()) / 2;
     int rightInventoryPadding = (70 - rightInventoryString.length()) / 2;
 
@@ -119,7 +110,6 @@ void showCharactersInfo(shared_ptr<Character> leftChar, shared_ptr<Character> ri
     cout << setfill(' ') << setw(leftPadding) << " " << leftInfo << setw(71 - leftPadding - leftInfo.length()) << "|";
     cout << setw(rightPadding) << " " << rightInfo << setw(69 - rightPadding - rightInfo.length()) << endl;
 
-    // Print health bars with counters
     string leftHealthBar = getHealthBar(leftChar->getHealth(), leftChar->getMaxHealth());
     string rightHealthBar = getHealthBar(rightChar->getHealth(), rightChar->getMaxHealth());
     int healthBarPadding = (70 - 22 - 9) / 2; // 22 is the fixed length of the health bar
@@ -128,7 +118,6 @@ void showCharactersInfo(shared_ptr<Character> leftChar, shared_ptr<Character> ri
     cout << setw(healthBarPadding) << " " << rightHealthBar
          << setw(69 - healthBarPadding - 22 - 9) << endl;
 
-    // Print mana or armor indicator
     string leftIndicator = dynamic_pointer_cast<Mage>(leftChar) 
                            ? "Mana: " + to_string(dynamic_pointer_cast<Mage>(leftChar)->getMana()) + "/100" 
                            : "Armor: " + to_string(dynamic_pointer_cast<Warrior>(leftChar)->getArmor());
@@ -140,29 +129,23 @@ void showCharactersInfo(shared_ptr<Character> leftChar, shared_ptr<Character> ri
     cout << setfill(' ') << setw(leftIndicatorPadding) << " " << leftIndicator << setw(71 - leftIndicatorPadding - leftIndicator.length()) << "|";
     cout << setw(rightIndicatorPadding) << " " << rightIndicator << setw(69 - rightIndicatorPadding - rightIndicator.length()) << endl;
 
-    // Get combined inventory string
     string combinedInventory = getCombinedInventoryString(leftChar, rightChar);
 
-    // Print combined inventory
     cout << combinedInventory << endl;
 
-    // Prepare effects for both characters
     vector<pair<Effect, int>> leftEffects = leftChar->getCurrentEffects();
     vector<pair<Effect, int>> rightEffects = rightChar->getCurrentEffects();
 
     size_t maxEffects = max(leftEffects.size(), rightEffects.size());
 
-    // Display effects for both characters side by side
     if (maxEffects > 0) {
         string effectsHeader = "Effects:";
         int leftEffectsHeaderPadding = (70 - effectsHeader.length()) / 2;
         int rightEffectsHeaderPadding = (70 - effectsHeader.length()) / 2;
 
-        // Print the header for effects
         cout << setfill(' ') << setw(leftEffectsHeaderPadding) << " " << effectsHeader << setw(71 - leftEffectsHeaderPadding - effectsHeader.length()) << "|";
         cout << setw(rightEffectsHeaderPadding) << " " << effectsHeader << setw(69 - rightEffectsHeaderPadding - effectsHeader.length()) << endl;
 
-        // Print each effect line by line
         for (size_t i = 0; i < maxEffects; i++) {
             string leftEffectString = (i < leftEffects.size())
                                       ? effectToString(leftEffects[i].first) + ": " + to_string(leftEffects[i].second) + " turns"
@@ -250,7 +233,6 @@ void showSingleCharacterInfo(shared_ptr<Character> character, bool isLeft) {
         cout << setfill(' ') << setw(weaponsPadding) << " " << weapons << setw(69 - weaponsPadding - weapons.length()) << endl;
     }
 
-    // Display effects if any
     if (!character->getCurrentEffects().empty()) {
         string effectsHeader = "Effects:";
         int effectsHeaderPadding = (70 - effectsHeader.length()) / 2;
@@ -283,7 +265,6 @@ void showSingleCharacterInfo(shared_ptr<Character> character, bool isLeft) {
 void showBattleField(shared_ptr<Team> leftTeam, shared_ptr<Team> rightTeam) {
     cout << "=============================================================== Battle Field ===============================================================" << endl;
 
-    // Convert team names to uppercase and center them
     string leftTeamName = toUpperCase(leftTeam->getName());
     string rightTeamName = toUpperCase(rightTeam->getName());
 
@@ -293,14 +274,12 @@ void showBattleField(shared_ptr<Team> leftTeam, shared_ptr<Team> rightTeam) {
     cout << setfill(' ') << setw(leftTeamPadding) << " " << leftTeamName << setw(71 - leftTeamPadding - leftTeamName.length()) << "|";
     cout << setw(rightTeamPadding) << " " << rightTeamName << setw(69 - rightTeamPadding - rightTeamName.length()) << endl;
 
-    // Add an empty line between team names and character info
     cout << setfill(' ') << setw(71) << "|" << endl; 
 
     size_t maxSize = max(leftTeam->getMembers().size(), rightTeam->getMembers().size());
     for (size_t i = 0; i < maxSize; i++) {
         if (i < leftTeam->getMembers().size() && i < rightTeam->getMembers().size()) {
 
-            // Ensure inventory handling works with unique_ptr
             string leftWeapons = leftTeam->getMembers()[i]->inventory().first ? leftTeam->getMembers()[i]->inventory().first->getName() : "";
             if (leftTeam->getMembers()[i]->inventory().second) {
                 if (!leftWeapons.empty()) leftWeapons += " - ";
@@ -321,6 +300,5 @@ void showBattleField(shared_ptr<Team> leftTeam, shared_ptr<Team> rightTeam) {
         }
     }
 
-    // Add a closing line of '='
     cout << "============================================================================================================================================" << endl;
 }

@@ -374,7 +374,7 @@ void logCreationCharacterAttacks(shared_ptr<Character> character, shared_ptr<Tea
 }
 
 vector<int> readLogLine(string line){
-    vector<int> result(6, -1); // Initialize with -1
+    vector<int> result(6, -1);
     stringstream ss(line);
     string value;
     int index = 0;
@@ -383,7 +383,7 @@ vector<int> readLogLine(string line){
         try {
             result[index] = stoi(value);
         } catch (const invalid_argument&) {
-            result[index] = -1; // Default to -1 if conversion fails
+            result[index] = -1;
         }
         index++;
     }
@@ -479,14 +479,14 @@ string excecuteAction(vector<int> data, shared_ptr<Team> currentTeam, shared_ptr
 string excecute_Knight_Action(shared_ptr<Character> knightCharacter, int action){
     shared_ptr<Knight> knight = dynamic_pointer_cast<Knight>(knightCharacter);
     if (action == 2) return knight->ironWill(); 
-    return ""; // No action performed
+    return ""; 
 }
 
 string excecute_Warlock_Action(shared_ptr<Character> warlockCharacter, shared_ptr<Team> warlockTeam, int action){
     shared_ptr<Warlock> warlock = dynamic_pointer_cast<Warlock>(warlockCharacter);
     if (action == 2) return warlock->soulLink(warlockTeam); 
     else if (action == 3) return warlock->bornAgain(warlockTeam);
-    return ""; // No action performed
+    return ""; 
 }
 
 string excecute_Necromancer_Action(shared_ptr<Character> necromancerCharacter, shared_ptr<Team> currentTeam, shared_ptr<Character> targetCharacter, shared_ptr<Character> targetTeammate, int action){
@@ -494,12 +494,12 @@ string excecute_Necromancer_Action(shared_ptr<Character> necromancerCharacter, s
     if (action == 2) return necromancer->drainLife(targetCharacter); 
     else if (action == 3) return necromancer->raiseDead(currentTeam);
     else if (action == 4) return necromancer->reviveTeammate(targetTeammate);
-    return ""; // No action performed
+    return ""; 
 }
 
 string excecute_Mercenary_Action(shared_ptr<Character> mercenaryCharacter, int action){
     shared_ptr<Mercenary> mercenary = dynamic_pointer_cast<Mercenary>(mercenaryCharacter);
     if (action == 2) return mercenary->recruitAlly(); 
     else if (action == 3) return mercenary->getInvisible();
-    return ""; // No action performed
+    return ""; 
 }
