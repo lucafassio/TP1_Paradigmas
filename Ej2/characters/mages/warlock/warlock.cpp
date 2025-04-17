@@ -1,13 +1,12 @@
 #include "warlock.hpp"
-#include "../../../../Ej3/team.hpp"
 
 using namespace std;
 
 Warlock::Warlock(string name): 
-    Mage(name, WARLOCK, 100, 100), soulLinkCooldown(0), ultimateCooldown(0)
+    Mage(name, WARLOCK, 100, 100), soulLinkCooldown(0)
 {}
 
-string Warlock::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
+string Warlock::useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
     string logText;
     int finalDamage = BASE_DAMAGE;
 
@@ -26,13 +25,12 @@ string Warlock::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> targe
     //aplico el debuff de SCARED si corresponde.
     if (hasEffect(SCARED) && rand() % 100 < 60) {
         logText += ". " + name + " (Warlock) is scared and misses the attack!\n";
-        cout << logText; // Print the log at the end
         return logText;
     }
 
     if (stunned) {
         logText += ". " + name + " (Warlock) is stunned!\n";
-        cout << logText; // Print the log at the end
+        stunned = false;
         return logText;
     }
 
@@ -68,33 +66,41 @@ string Warlock::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> targe
         logText += target->getName() + " (" + target->getType() + ") counterattacks!\n";
     }
 
-    cout << logText; // Print the log at the end
     return logText;
 }
 
-void Warlock::soulLink(shared_ptr<Team> ownTeam){
-    if (soulLinkCooldown > 0) return;
-
+string Warlock::soulLink(shared_ptr<Team> ownTeam){
     for (const auto& member : ownTeam->getMembers())
         if (member->getHealth() > 0){
             linkedAllies.push_back(member);
             member->applyEffect(SOUL_LINKED, 3);
         }
-    soulLinkCooldown = 0;
+    soulLinkCooldown = 3;
+    return this->name + " (Warlock) activated Soul Link!\n";
 }
 
-void Warlock::bornAgain(shared_ptr<Team> ownTeam){
+int Warlock::getSoulLinkCooldown() const {
+    return soulLinkCooldown;
+}
+
+string Warlock::bornAgain(shared_ptr<Team> ownTeam){
     vector<shared_ptr<Character>> deadAllies;
-    for (const auto& member : ownTeam->getMembers()){
+    for (const auto& member : ownTeam->getMembers())
         if (!member->getHealth()) deadAllies.push_back(member);
-    }
+
     for (const auto& member : deadAllies)
         member->heal(member->getMaxHealth() / static_cast<int>(deadAllies.size()));
+
+    this->bornAgainUsed = true;
+    return this->name + " (Warlock): Born Again!!\n";
+}
+
+bool Warlock::hasUsedBornAgain() const {
+    return bornAgainUsed;
 }
 
 void Warlock::updateCooldowns(){
     if (soulLinkCooldown > 0) soulLinkCooldown--;
-    if (ultimateCooldown > 0) ultimateCooldown--;
     if (soulLinkCooldown == 0) breakSoulLink();
 }
 

@@ -1,6 +1,4 @@
 #include "Larry.hpp"
-#include "../../../../Ej3/team.hpp"
-#include "../warlock/warlock.hpp"
 
 Larry::Larry():
     //pongo tipo necro pero no afecta en nada porque overrideo el metodo getType.
@@ -12,41 +10,39 @@ string Larry::getType() const {
 }
 
 //el skelly no tiene mana, no puede usar armas y no puede curarse.
-string Larry::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
+string Larry::useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
     string logText;
     int finalDamage = SKELETON_DAMAGE;
 
     logText += name + " (Skelly) attacks " + target->getName() + " (" + target->getType() + ")";
 
-    if (weapon) {
-        if (weapon->isCombat()) finalDamage += weapon->attack();
+    if (weapon && weapon->isCombat()){
+        finalDamage += weapon->attack();
         logText += " with " + weapon->getName();
-    } else {
-        logText += " with his little sword";
-    }
+    } 
+    else logText += " with his little sword";
 
     //aplico el buff de STRENGTH si corresponde.
     if (hasEffect(STRENGTH)) finalDamage = static_cast<int>(finalDamage * 1.5);
 
     //aplico el debuff de SCARED si corresponde.
-    if (hasEffect(SCARED) && rand() % 100 < 60) {
+    if (hasEffect(SCARED) && rand() % 100 < 60){
         logText += ". " + name + " (Skelly) is scared and misses the attack!\n";
-        cout << logText; // Print the log at the end
         return logText;
     }
 
-    if (stunned) {
+    if (this->stunned){
         logText += ". " + name + " (Skelly) is stunned!\n";
-        cout << logText; // Print the log at the end
+        stunned = false;
         return logText;
     }
 
     //siempre existe un 20% de probabilidad de activar un crítico (si ya venia forzado se mantiene igual).
     if ((rand() % 100) < 20) forcedCritical = true;
 
-    if (forcedCritical) {
+    if (this->forcedCritical) {
         finalDamage = static_cast<int>(finalDamage * 1.5); //aumento daño por critico.
-        forcedCritical = false;
+        this->forcedCritical = false;
     }
 
     //reparto el daño para cuando el warlock haga Soul Link.

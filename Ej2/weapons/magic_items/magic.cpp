@@ -1,7 +1,7 @@
 #include "magic.hpp"
 
-Magic::Magic(int durability): 
-    durability(durability)
+Magic::Magic(int duration, bool reusable, int cooldown): 
+    duration(duration), reusable(reusable), cooldown(cooldown)
 {}
 
 string Magic::getName() const {
@@ -12,11 +12,14 @@ bool Magic::isCombat() const {
     return false;
 }
 
-int Magic::getDurability() const {
-    return durability;
+int Magic::getDuration() const {
+    return duration;
 }
 
 int Magic::attack(){
-    cout << "Attacking with magic!" << endl;
-    return 0; // Placeholder for magic attack damage
+    return 0;
+}
+
+void Magic::decreaseCooldown(){
+    if (cooldown > 0) cooldown--;
 }

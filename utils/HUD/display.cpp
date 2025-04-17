@@ -11,6 +11,29 @@ string toUpperCase(const string& str) {
     return upperStr;
 }
 
+string effectToString(Effect effect) {
+    switch (effect) {
+        case REGENERATION: return "Regeneration";
+        case STRENGTH: return "Strength";
+        case BURNING: return "Burning";
+        case BLEEDING: return "Bleeding";
+        case POISON: return "Poison";
+        case STUN: return "Stun";
+        case LUCK: return "Luck";
+        case IMMUNITY: return "Immunity";
+        case INVISIBILITY: return "Invisibility";
+        case FREEZING: return "Frozen";
+        case STONE_SKIN: return "Stone Skin";
+        case MAGIC_SILENCE: return "Magic Silence";
+        case ELEMENTAL_EXPOSURE: return "Elemental Exposure";
+        case MANA_LEECH: return "Mana Leech";
+        case SOUL_LINKED: return "Soul Linked";
+        case SCARED: return "Scared";
+        case RAGE: return "Rage";
+        default: return "Unknown";
+    }
+}
+
 // Function to generate a health bar
 string getHealthBar(int health, int maxHealth) {
     int filledBars = (health * 20) / maxHealth; // Each '#' represents 5%, so 20 total segments
@@ -123,7 +146,41 @@ void showCharactersInfo(shared_ptr<Character> leftChar, shared_ptr<Character> ri
     // Print combined inventory
     cout << combinedInventory << endl;
 
-    // Add a vertical bar in the empty space separating characters
+    // Prepare effects for both characters
+    vector<pair<Effect, int>> leftEffects = leftChar->getCurrentEffects();
+    vector<pair<Effect, int>> rightEffects = rightChar->getCurrentEffects();
+
+    size_t maxEffects = max(leftEffects.size(), rightEffects.size());
+
+    // Display effects for both characters side by side
+    if (maxEffects > 0) {
+        string effectsHeader = "Effects:";
+        int leftEffectsHeaderPadding = (70 - effectsHeader.length()) / 2;
+        int rightEffectsHeaderPadding = (70 - effectsHeader.length()) / 2;
+
+        // Print the header for effects
+        cout << setfill(' ') << setw(leftEffectsHeaderPadding) << " " << effectsHeader << setw(71 - leftEffectsHeaderPadding - effectsHeader.length()) << "|";
+        cout << setw(rightEffectsHeaderPadding) << " " << effectsHeader << setw(69 - rightEffectsHeaderPadding - effectsHeader.length()) << endl;
+
+        // Print each effect line by line
+        for (size_t i = 0; i < maxEffects; i++) {
+            string leftEffectString = (i < leftEffects.size())
+                                      ? effectToString(leftEffects[i].first) + ": " + to_string(leftEffects[i].second) + " turns"
+                                      : "";
+            string rightEffectString = (i < rightEffects.size())
+                                       ? effectToString(rightEffects[i].first) + ": " + to_string(rightEffects[i].second) + " turns"
+                                       : "";
+
+            int leftEffectPadding = (70 - leftEffectString.length()) / 2;
+            int rightEffectPadding = (70 - rightEffectString.length()) / 2;
+
+            cout << setfill(' ') << setw(leftEffectPadding) << " " << leftEffectString << setw(71 - leftEffectPadding - leftEffectString.length()) << "|";
+            cout << setw(rightEffectPadding) << " " << rightEffectString << setw(69 - rightEffectPadding - rightEffectString.length()) << endl;
+        }
+    }
+
+    cout << setfill(' ') << setw(71) << "|" << endl;
+    cout << setfill(' ') << setw(71) << "|" << endl;
     cout << setfill(' ') << setw(71) << "|" << endl;
 }
 
@@ -193,6 +250,33 @@ void showSingleCharacterInfo(shared_ptr<Character> character, bool isLeft) {
         cout << setfill(' ') << setw(weaponsPadding) << " " << weapons << setw(69 - weaponsPadding - weapons.length()) << endl;
     }
 
+    // Display effects if any
+    if (!character->getCurrentEffects().empty()) {
+        string effectsHeader = "Effects:";
+        int effectsHeaderPadding = (70 - effectsHeader.length()) / 2;
+
+        if (isLeft) {
+            cout << setfill(' ') << setw(effectsHeaderPadding) << " " << effectsHeader << setw(71 - effectsHeaderPadding - effectsHeader.length()) << "|";
+            cout << setw(70) << " " << endl;
+        } else {
+            cout << setw(70) << " " << "|";
+            cout << setfill(' ') << setw(effectsHeaderPadding) << " " << effectsHeader << setw(69 - effectsHeaderPadding - effectsHeader.length()) << endl;
+        }
+
+        for (const auto& effect : character->getCurrentEffects()) {
+            string effectString = effectToString(effect.first) + ": " + to_string(effect.second) + " turns";
+            int effectPadding = (70 - effectString.length()) / 2;
+
+            if (isLeft) {
+                cout << setfill(' ') << setw(effectPadding) << " " << effectString << setw(71 - effectPadding - effectString.length()) << "|";
+                cout << setw(70) << " " << endl;
+            } else {
+                cout << setw(70) << " " << "|";
+                cout << setfill(' ') << setw(effectPadding) << " " << effectString << setw(69 - effectPadding - effectString.length()) << endl;
+            }
+        }
+    }
+
     cout << setfill(' ') << setw(71) << "|" << endl;
 }
 
@@ -215,6 +299,20 @@ void showBattleField(shared_ptr<Team> leftTeam, shared_ptr<Team> rightTeam) {
     size_t maxSize = max(leftTeam->getMembers().size(), rightTeam->getMembers().size());
     for (size_t i = 0; i < maxSize; i++) {
         if (i < leftTeam->getMembers().size() && i < rightTeam->getMembers().size()) {
+
+            // Ensure inventory handling works with unique_ptr
+            string leftWeapons = leftTeam->getMembers()[i]->inventory().first ? leftTeam->getMembers()[i]->inventory().first->getName() : "";
+            if (leftTeam->getMembers()[i]->inventory().second) {
+                if (!leftWeapons.empty()) leftWeapons += " - ";
+                leftWeapons += leftTeam->getMembers()[i]->inventory().second->getName();
+            }
+
+            string rightWeapons = rightTeam->getMembers()[i]->inventory().first ? rightTeam->getMembers()[i]->inventory().first->getName() : "";
+            if (rightTeam->getMembers()[i]->inventory().second) {
+                if (!rightWeapons.empty()) rightWeapons += " - ";
+                rightWeapons += rightTeam->getMembers()[i]->inventory().second->getName();
+            }
+
             showCharactersInfo(leftTeam->getMembers()[i], rightTeam->getMembers()[i]);
         } else if (i < leftTeam->getMembers().size()) {
             showSingleCharacterInfo(leftTeam->getMembers()[i], true);

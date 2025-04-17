@@ -3,9 +3,6 @@
 
 #include "../utils/data.hpp"
 
-class Character;
-class Warlock;
-
 class Team{
     private:
         string name;
@@ -25,6 +22,7 @@ class Team{
         friend class Factory;
         friend class Mercenary;
         friend class Necromancer;
+        friend class Spellbook;
 };
 
 #endif // TEAM_HPP

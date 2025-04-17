@@ -3,7 +3,7 @@
 
 #include "../warrior.hpp"
 
-class Knight : public Warrior {
+class Knight: public Warrior{
 private:
     int timesWithIronWill;
     int cooldownIronWill;
@@ -11,9 +11,10 @@ private:
 public:
     Knight(string name);
 
-    string useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
+    string useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
     void receiveDamage(int damage) override;
-    void ironWill();
+    string ironWill();
+    int getIronWillCooldown() const;
     void endTurnUpdate() override;
 };
 

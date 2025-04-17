@@ -1,45 +1,40 @@
 #include "necromancer.hpp"
-#include "../../../../Ej3/team.hpp"
-#include "../warlock/warlock.hpp"
-#include "larry.hpp"
 
 Necromancer::Necromancer(string name): 
     Mage(name, NECRO, 100, 100)
 {}
 
-string Necromancer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
+string Necromancer::useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
     string logText;
     int finalDamage = BASE_DAMAGE;
 
-    logText += name + " (Necromancer) attacks " + target->getName() + " (" + target->getType() + ")";
+    logText += this->name + " (Necromancer) attacks " + target->getName() + " (" + target->getType() + ")";
 
-    if (weapon) {
-        if (weapon->isCombat()) finalDamage += weapon->attack();
+    if (weapon && weapon->isCombat()){
+        finalDamage += weapon->attack();
         logText += " with " + weapon->getName();
-    } else {
-        logText += " with his own power";
-    }
+    } 
+    else logText += " with his own power";
 
     //aplico el buff de STRENGTH si corresponde.
     if (hasEffect(STRENGTH)) finalDamage = static_cast<int>(finalDamage * 1.5);
 
     //aplico el debuff de SCARED si corresponde.
-    if (hasEffect(SCARED) && rand() % 100 < 60) {
+    if (hasEffect(SCARED) && rand() % 100 < 60){
         logText += ". " + name + " (Necromancer) is scared and misses the attack!\n";
-        cout << logText; // Print the log at the end
         return logText;
     }
 
-    if (stunned) {
+    if (this->stunned){
         logText += ". " + name + " (Necromancer) is stunned!\n";
-        cout << logText; // Print the log at the end
+        this->stunned = false;
         return logText;
     }
 
     //siempre existe un 20% de probabilidad de activar un crítico (si ya venia forzado se mantiene igual).
-    if ((rand() % 100) < 20) forcedCritical = true;
+    if ((rand() % 100) < 20) this->forcedCritical = true;
 
-    if (forcedCritical) {
+    if (this->forcedCritical){
         finalDamage = static_cast<int>(finalDamage * 1.5); //aumento daño por critico.
         forcedCritical = false;
     }
@@ -57,37 +52,40 @@ string Necromancer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> t
     return logText;
 }
 
-void Necromancer::raiseDead(shared_ptr<Team> currentTeam){
-    if (mana >= 25 && larrysCounter < 3){
-        cout << name << " raises Larry from the dead!" << endl;
+string Necromancer::raiseDead(shared_ptr<Team> currentTeam){
+    string logText;
+    if (this->mana >= 25 && this->larrysCounter < 3){
+        logText += this->name + " raises Larry from the dead!\n";
         currentTeam->members.push_back(static_pointer_cast<Character>(make_shared<Larry>()));
         currentTeam->members.back()->heal(1); //se inicializa con 100 de vida y asi se la bajo al maximo que tiene.
         larrysCounter++;
         mana -= 25;
     }
-    else if (larrysCounter >= 3) cout << name << " has already raised Larry 3 times!" << endl;
-    else cout << name << " doesn't have enough mana to raise Larry!" << endl;
+    else if (larrysCounter >= 3) logText += name + " has already raised Larry 3 times!\n";
+    else logText += name + " doesn't have enough mana to raise Larry!\n";
+    return logText;
 }
 
-void Necromancer::drainLife(shared_ptr<Character> target, shared_ptr<Team> targetTeam){
+string Necromancer::drainLife(shared_ptr<Character> target){
+    string logText;
     if (mana >= 10){
-        cout << name << " drains 10 life from " << target->getName();
+        logText += name + " drains 10 life from " + target->getName();
         target->receiveDamage(10);
-        if (!target->getHealth()){
-            targetTeam->loseMember(target);
-            cout << " taking him to the death world";
-        }
-        cout << "!" << endl;
+        if (!target->getHealth()) logText += " taking him to the death world";
+        logText += "!\n";
         this->heal(10);
     }
+    return logText;
 }
 
-void Necromancer::reviveTeammate(shared_ptr<Character> target){
+string Necromancer::reviveTeammate(shared_ptr<Character> target){
+    string logText;
     if (mana >= 20 && !target->getHealth()){
-        cout << name << " (Necromancer) revives " << target->getName() << " (" << target->getType() << ")" << endl;
+        logText += name + " (Necromancer) revives " + target->getName() + " (" + target->getType() + ")\n";
         target->heal(30);
         mana -= 20;
     }
-    else if (target->getHealth()) cout << target->getName() << " is not dead!" << endl;
-    else cout << name << " doesn't have enough mana to revive " << target->getName() << "!" << endl;
+    else if (target->getHealth()) logText += target->getName() + " is not dead!\n";
+    else logText += name + " doesn't have enough mana to revive " + target->getName() + "!\n";
+    return logText;
 }

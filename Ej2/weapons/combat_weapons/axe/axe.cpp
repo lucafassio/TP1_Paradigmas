@@ -7,6 +7,14 @@ Axe::Axe(Material mat):
         name = this->getMaterial() + " Axe";
 }
 
+Axe::Axe(const Axe& other):
+    Combat(other.material){
+        this->durability = other.durability;
+        this->damage = other.damage;
+        this->weight = other.weight;
+        this->name = other.name;
+}
+
 void Axe::setDamage(Material mat){
     switch (mat){
         case NONE: break;

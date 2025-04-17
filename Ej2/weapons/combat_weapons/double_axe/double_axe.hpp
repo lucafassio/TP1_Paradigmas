@@ -3,18 +3,19 @@
 
 #include "../combat.hpp"
 
-class DoubleAxe final : public Combat{
+class DoubleAxe final: public Combat{
 private:
     int weight;
 
-    void setDamage(Material mat);
+    void setDamage(Material mat) override;
     void setWeight(Material mat);
 
     int getBonusProbability(Material mat) const;
 public:
     DoubleAxe(Material mat);
+    DoubleAxe(const DoubleAxe& other);
 
-    int attack();
+    int attack() override;
     int getDamage() const;
     int getWeight() const;
 };

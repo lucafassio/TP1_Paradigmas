@@ -3,24 +3,22 @@
 
 #include "../weapon.hpp"
 
-class Magic : public Weapon{
+class Magic: public Weapon{
 protected:
     string name;
-    int durability;
+    int duration;
+    bool reusable;
+    int cooldown;
 
+    Magic(int duration, bool reusable, int cooldown);
 public:
-    Magic(int durability);
-
     string getName() const override;
     bool isCombat() const override;
-    int getDurability() const override;
-    
-    string getMaterial() const = 0;
-    virtual void use() = 0;
-
+    int getDuration() const;
     int attack() override;
+    void decreaseCooldown();
 
-    virtual ~Magic() = default;
+    virtual string use(shared_ptr<Team> holderTeam, shared_ptr<Character> holder, shared_ptr<Character> target, int spellNumber) = 0;
 };
 
 #endif // MAGIC_HPP

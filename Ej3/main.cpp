@@ -1,9 +1,6 @@
 #include "funcs.hpp"
-// #include "team.cpp"
-// #include "funcs.cpp"
-// #include "factory.cpp"
-
-class Team;
+#include "team.hpp"
+#include "../utils/HUD/display.hpp"
 
 int main(){
     clearScreen();
@@ -24,11 +21,8 @@ int main(){
     cout << endl << "Second team will be randomly generated" << endl;
     fullFillingTeam(team2, numWarriors, numMages, true);
 
-    cout << "========== Teams created. ==========" << endl;
-    showTeamMembers(team1);
-    cout << endl;
-    showTeamMembers(team2);
-    cout << endl;
+    clearScreen();
+    showBattleField(team1, team2);
 
     return 0;
 }

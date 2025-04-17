@@ -1,11 +1,10 @@
 #include "paladin.hpp"
-#include "../../mages/warlock/warlock.hpp"
 
 Paladin::Paladin(string name): 
     Warrior(name, PALADIN, 100, 30), divineShieldHits(0)
 {}
 
-string Paladin::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
+string Paladin::useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
     string logText;
     int finalDamage = BASE_DAMAGE;
 
@@ -24,13 +23,12 @@ string Paladin::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> targe
     //aplico el debuff de SCARED si corresponde.
     if (hasEffect(SCARED) && rand() % 100 < 60) {
         logText += ". " + name + " (Paladin) is scared and misses the attack!\n";
-        cout << logText; // Print the log at the end
         return logText;
     }
 
     if (stunned) {
         logText += ". " + name + " (Paladin) is stunned!\n";
-        cout << logText; // Print the log at the end
+        stunned = false;
         return logText;
     }
 

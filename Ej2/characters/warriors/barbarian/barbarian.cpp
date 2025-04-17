@@ -1,12 +1,10 @@
 #include "barbarian.hpp"
-#include "../../../../Ej3/team.hpp"
-#include "../../mages/warlock/warlock.hpp"
 
 Barbarian::Barbarian(string name): 
     Warrior(name, BARBARIAN, 100, 3)
 {}
 
-string Barbarian::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
+string Barbarian::useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
     string logText;
 
     //verifico si se activa rage (20% de probabilidad).
@@ -35,14 +33,13 @@ string Barbarian::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> tar
     //aplico el debuff de SCARED si corresponde. Al barbaro enfurecido no le afecta.
     if (!hasEffect(RAGE) && hasEffect(SCARED) && rand() % 100 < 60) {
         logText += ". " + name + " (Barbarian) is scared and misses the attack!\n";
-        cout << logText; // Print the log at the end
-        return 0; //no hace daño.
+        return logText; //no hace daño.
     }
 
     if (stunned) {
         logText += ". " + name + " (Barbarian) is stunned!\n";
-        cout << logText; // Print the log at the end
-        return 0; //no hace daño.
+        stunned = false;
+        return logText; //no hace daño.
     }
 
     //siempre existe un 20% de probabilidad de activar un crítico (si ya venia forzado se mantiene igual).
@@ -62,6 +59,5 @@ string Barbarian::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> tar
         logText += target->getName() + " (" + target->getType() + ") counterattacks!\n";
     }
 
-    cout << logText;
     return logText;
 }

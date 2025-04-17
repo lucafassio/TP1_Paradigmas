@@ -5,23 +5,17 @@
 
 class Character;
 
-class Amulet final : public Magic{
+class Amulet final: public Magic{
     private:
         AmuletProp property;
-        bool active;
-        int cooldown;
-        shared_ptr<Character> holder;
 
     public:
-        Amulet(AmuletProp prop, shared_ptr<Character> holder);
+        Amulet(AmuletProp prop);
+        Amulet(const Amulet& other);
         
-        string getMaterial() const override;
+        string getType() const;
 
-        void setHolder(shared_ptr<Character> holder);
-
-        void use();
-        void giveEffect();
-    
+        string use(shared_ptr<Team> holderTeam, shared_ptr<Character> holder, shared_ptr<Character> target, int spellNumber) override;
 };
 
 #endif // AMULET_HPP

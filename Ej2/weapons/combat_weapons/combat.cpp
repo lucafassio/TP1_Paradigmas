@@ -34,20 +34,6 @@ void Combat::repair(int amount){
     }
 }
 
-void Combat::loseDurability(int amount){
-    this->durability -= amount;
-    if (this->durability < 0) {
-        this->durability = 0;
-    }
-}
-
-void Combat::use() {
-    if (this->durability <= 0) {
-        cout << "Weapon is broken!" << endl;
-        return;
-    }
-    this->durability--;
-    if (this->durability == 0) {
-        cout << "Weapon broke!" << endl;
-    }
+string Combat::use(shared_ptr<Team>, shared_ptr<Character>, shared_ptr<Character>, int) {
+    return "no che, las armas de combate no usan esto (usan attack)";
 }

@@ -6,6 +6,14 @@ Sword::Sword(Material mat):
         name = this->getMaterial() + " Sword";
 }
 
+Sword::Sword(const Sword& other):
+    Combat(other.material){
+        this->durability = other.durability;
+        this->damage = other.damage;
+        this->sharpness = other.sharpness;
+        this->name = other.name;
+}
+
 void Sword::setDamage(Material mat){
     switch (mat){
         case NONE: break;

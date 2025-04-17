@@ -3,28 +3,18 @@
 
 #include "../mage.hpp"
 
-class Sorcerer final : public Mage {
+class Sorcerer final: public Mage {
 private:
     SorcererType currentType;
-    int cooldown;
-    int switchCooldown;
 
-    void elementalAttack(shared_ptr<Character> target);
-    void elementalSpecial(shared_ptr<Character> target, shared_ptr<Team> team);
-
+    
 public:
     Sorcerer(string name);
 
-    string useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam);
+    string useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override; // Changed to unique_ptr
 
-    void changeElement(SorcererType newType);
-    void attack(shared_ptr<Character> target);
-    void special(shared_ptr<Character> target, shared_ptr<Team> team);
-    
-    void resetCooldown();
-    void tickCooldown();
-    bool specialReady() const;
-    bool canChangeElement() const;
+    void changeElement(SorcererType newType);    
+    void elementalAttack(shared_ptr<Character> target);
 
     string getType() const override;
 };

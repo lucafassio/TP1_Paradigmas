@@ -3,7 +3,7 @@
 
 #include "../mage.hpp"
 
-class Conjurer : public Mage{
+class Conjurer final: public Mage{
 private:
     bool shielded;
     int cooldown;
@@ -12,15 +12,15 @@ private:
 public:
     Conjurer(string name);
 
-    string useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
+    string useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
 
-    void summonShield(); // bloquea daño 1 turno
+    void summonShield();
     bool isShielded() const;
     void updateCooldown();
 
     void applyEffectTo(shared_ptr<Character> target, Effect effectType);
 
-    void empowerAttribute(); // incrementa buff en 5 a costa de 10 HP
+    void empowerAttribute();
     bool canUseShield() const;
 };
 

@@ -92,13 +92,14 @@ void teamCreation(shared_ptr<Team> team) {
 
             if (slot < 1 || slot > 5 || slot > static_cast<int>(team->getMembers().size())) {
                 cout << "Invalid slot. Please try again." << endl;
-                system("PAUSE"); // Pause to let the user read the message
+
+                //espero dos segundos y borro la linea de arriba.
+                this_thread::sleep_for(chrono::seconds(2));
+                cout << "\033[A\33[2K";
                 continue;
             }
 
             team->loseMember(team->getMembers()[slot - 1]); // Adjust for 0-based indexing
-            cout << "Character in slot " << slot << " has been removed." << endl;
-            system("PAUSE"); // Pause to let the user read the message
             continue;
         }
 
@@ -108,7 +109,10 @@ void teamCreation(shared_ptr<Team> team) {
             newCharacter = Factory::createCharacter(static_cast<CharacterType>(input - 1), getRandomName(static_cast<CharacterType>(input - 1)));
         } else {
             cout << "Invalid choice. Please try again." << endl;
-            system("PAUSE"); // Pause to let the user read the message
+
+            //espero dos segundos y borro la linea de arriba.
+            this_thread::sleep_for(chrono::seconds(2));
+            cout << "\033[A\33[2K";
             continue;
         }
 
@@ -120,7 +124,10 @@ void teamCreation(shared_ptr<Team> team) {
 
             if (slot < 1 || slot > 5) {
                 cout << "Invalid slot. Please try again." << endl;
-                system("PAUSE"); // Pause to let the user read the message
+                
+                //espero dos segundos y borro la linea de arriba.
+                this_thread::sleep_for(chrono::seconds(2));
+                cout << "\033[A\33[2K";
                 continue;
             }
 
@@ -130,6 +137,9 @@ void teamCreation(shared_ptr<Team> team) {
 
         // Add the new character to the team using Factory
         Factory::addCharacterToTeam(team, newCharacter);
+
+        fullFillingWeapons(newCharacter, true);
+
         team->sortMembersByType();
     }
 }

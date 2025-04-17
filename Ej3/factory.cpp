@@ -1,5 +1,27 @@
 #include "factory.hpp"
-#include "team.hpp"
+
+#include "../Ej2/characters/mages/conjurer/conjurer.hpp"
+#include "../Ej2/characters/mages/necromancer/necromancer.hpp"
+#include "../Ej2/characters/mages/sorcerer/sorcerer.hpp"
+#include "../Ej2/characters/mages/warlock/warlock.hpp"
+
+#include "../Ej2/characters/warriors/barbarian/barbarian.hpp"
+#include "../Ej2/characters/warriors/gladiator/gladiator.hpp"
+#include "../Ej2/characters/warriors/knight/knight.hpp"
+#include "../Ej2/characters/warriors/mercenary/mercenary.hpp"
+#include "../Ej2/characters/warriors/paladin/paladin.hpp"
+
+#include "../Ej2/weapons/magic_items/amulet/amulet.hpp"
+#include "../Ej2/weapons/magic_items/potion/potion.hpp"
+#include "../Ej2/weapons/magic_items/spellbook/spellbook.hpp"
+#include "../Ej2/weapons/magic_items/staff/staff.hpp"
+
+#include "../Ej2/weapons/combat_weapons/axe/axe.hpp"
+#include "../Ej2/weapons/combat_weapons/basto/basto.hpp"
+#include "../Ej2/weapons/combat_weapons/double_axe/double_axe.hpp"
+#include "../Ej2/weapons/combat_weapons/spear/spear.hpp"
+#include "../Ej2/weapons/combat_weapons/sword/sword.hpp"
+
 
 shared_ptr<Character> Factory::createCharacter(CharacterType type, string name){
     switch (type){
@@ -29,38 +51,54 @@ void Factory::addCharacterToTeam(shared_ptr<Team> team, shared_ptr<Character> ch
     }
 }
 
-shared_ptr<Weapon> Factory::createWeapon(WeaponType type, Material mat){
-    switch (type){
-        case AXE: return make_shared<Axe>(mat);
-        case BASTO: return make_shared<Basto>(mat);
-        case DOUBLE_AXE: return make_shared<DoubleAxe>(mat);
-        case SPEAR: return make_shared<Spear>(mat);
-        case SWORD: return make_shared<Sword>(mat);
-        case AMULET: return make_shared<Amulet>(PROP_HEALING, nullptr);
-        case POTION: return make_shared<Potion>("Health", 3);
-        case SPELLBOOK: return make_shared<Spellbook>("Spellbook", 3);
-        case STAFF: return make_shared<Staff>("Magic Staff", 3);
-        default: return nullptr;
+void Factory::createAndAddWeaponToCharacter(shared_ptr<Character> character, WeaponType type, Material mat) {
+    if (!character) {
+        cout << "Error: Character is null!" << endl;
+        return;
     }
+
+    unique_ptr<Weapon> weapon;
+    switch (type) {
+        case AXE: weapon = make_unique<Axe>(mat); break;
+        case BASTO: weapon = make_unique<Basto>(mat); break;
+        case DOUBLE_AXE: weapon = make_unique<DoubleAxe>(mat); break;
+        case SPEAR: weapon = make_unique<Spear>(mat); break;
+        case SWORD: weapon = make_unique<Sword>(mat); break;
+        case SPELLBOOK: weapon = make_unique<Spellbook>("Spellbook"); break;
+        case STAFF: weapon = make_unique<Staff>("Magic Staff"); break;
+        default:
+            cout << "Error: Invalid weapon type!" << endl;
+            return;
+    }
+
+    character->addWeapon(move(weapon));
 }
 
-shared_ptr<Weapon> Factory::createWeapon(WeaponType type, AmuletProp prop){
+void Factory::createAndAddWeaponToCharacter(shared_ptr<Character> character, WeaponType type, AmuletProp prop) {
+    if (!character) {
+        cout << "Error: Character is null!" << endl;
+        return;
+    }
+
     if (type != AMULET) {
         cout << "Invalid weapon type for amulet creation!" << endl;
-        return nullptr;
+        return;
     }
-    return make_shared<Amulet>(prop, nullptr);
+
+    unique_ptr<Weapon> weapon = make_unique<Amulet>(prop);
+    character->addWeapon(move(weapon));
 }
 
-void Factory::addWeaponToCharacter(shared_ptr<Character> character, shared_ptr<Weapon> weapon) {
-    if (character && weapon){
-        character->addWeapon(weapon);
+void Factory::createAndAddWeaponToCharacter(shared_ptr<Character> character, WeaponType type, PotionType effect) {
+    if (!character) {
+        cout << "Error: Character is null!" << endl;
+        return;
+    }
 
-        //si el arma es un amuleto, se le asigna el holder.
-        shared_ptr<Amulet> amulet = dynamic_pointer_cast<Amulet>(weapon);
-        if (amulet) {
-            amulet->setHolder(character);
-        }
-    } 
-    else cout << "Error adding weapon to character!" << endl;
+    if (type != POTION) {
+        cout << "Invalid weapon type for potion creation!" << endl;
+        return;
+    }
+    unique_ptr<Weapon> weapon = make_unique<Potion>(effect);
+    character->addWeapon(move(weapon));
 }

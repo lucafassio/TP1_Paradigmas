@@ -1,4 +1,5 @@
 #include "funcs.hpp"
+#include "../Ej3/funcs.hpp"
 
 int main(){
     clearScreen();

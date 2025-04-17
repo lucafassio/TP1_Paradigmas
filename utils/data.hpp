@@ -10,7 +10,45 @@
 #include <cstdlib>
 #include <ctime>
 #include <memory>
+#include <utility>
+#include <fstream>
+#include <thread>
+#include <chrono>
+#include <set>
+#include <random>
 using namespace std;
+
+class Character;
+class Warrior;
+class Barbarian;
+class Knight;
+class Gladiator;
+class Mercenary;
+class Paladin;
+
+class Mage;
+class Conjurer;
+class Larry;
+class Necromancer;
+class Sorcerer;
+class Warlock;
+
+class Weapon;
+class Combat;
+class Axe;
+class Basto;
+class DoubleAxe;
+class Spear;
+class Sword;
+
+class Magic;
+class Amulet;
+class Potion;
+class Spellbook;
+class Staff;
+
+
+class Team;
 
 //tipos de armas que pueden existir en el juego.
 enum WeaponType{
@@ -55,7 +93,7 @@ enum Effect{
     LUCK,
     IMMUNITY,
     INVISIBILITY,
-    FROZEN,
+    FREEZING,
     STONE_SKIN,
     MAGIC_SILENCE,
     ELEMENTAL_EXPOSURE,
@@ -81,7 +119,23 @@ enum AmuletProp{
     PROP_STRENGTH,
     PROP_IMMUNITY,
     PROP_LUCK,
-    PROP_INVISIBILITY
+};
+
+enum PotionType{
+    MOLOTOV,
+    POTION_POISON,
+    POTION_STUN,
+    POTION_FROZEN,
+    POTION_HEALING,
+    POTION_INVISIBILITY
+};
+
+enum Spells{
+    FIREBALL,
+    ICE_SPIKE,
+    CLONE_ILLUSION,
+    MAGIC_SEAL,
+    ELEMENTAL_RUPTURE
 };
 
 enum SorcererType {
@@ -97,5 +151,13 @@ enum Attack{
     GOLPE_FUERTE = 2,
     DEFENSA_Y_GOLPE = 3
 };
+
+// //interfaces y abstractas
+// #include "../Ej2/characters/character.hpp"
+// #include "../Ej2/characters/warriors/warrior.hpp"
+// #include "../Ej2/characters/mages/mage.hpp"
+// #include "../Ej2/weapons/weapon.hpp"
+// #include "../Ej2/weapons/combat_weapons/combat.hpp"
+// #include "../Ej2/weapons/magic_items/magic.hpp"
 
 #endif // ENUMS_DATA_HPP

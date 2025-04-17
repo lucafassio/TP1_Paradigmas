@@ -1,7 +1,4 @@
 #include "../utils/data.hpp"
-#include "../Ej3/funcs.hpp"
-
-class Character;
 
 shared_ptr<Character> createPlayer1();
 

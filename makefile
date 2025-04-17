@@ -6,15 +6,16 @@ CXXFLAGS = -Wall -Wextra -std=c++17 -MMD -MP
 SRC_DIR_EJ2 = Ej2
 SRC_DIR_EJ3 = Ej3
 SRC_DIR_EJ4 = Ej4
+SRC_DIR_HUD = utils/HUD
 UTILS_DIR = utils
 BUILD_DIR = $(UTILS_DIR)/build
 BIN_DIR = bin
 
 # Includes
-INCLUDES = -I./$(SRC_DIR_EJ2) -I./$(SRC_DIR_EJ3) -I./$(SRC_DIR_EJ4) -I./$(UTILS_DIR)
+INCLUDES = -I./$(SRC_DIR_EJ2) -I./$(SRC_DIR_EJ3) -I./$(SRC_DIR_EJ4) -I./$(SRC_DIR_HUD) -I./$(UTILS_DIR)
 
 # Archivos fuente y objetos
-CPP_FILES_EJ2 = $(shell find $(SRC_DIR_EJ2) -name '*.cpp')
+CPP_FILES_EJ2 = $(shell find $(SRC_DIR_EJ2) -name '*.cpp' ! -name 'main.cpp')
 OBJ_FILES_EJ2 = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(CPP_FILES_EJ2))
 
 CPP_FILES_EJ3 = $(shell find $(SRC_DIR_EJ3) -name '*.cpp' ! -name 'main.cpp')
@@ -23,6 +24,9 @@ OBJ_FILES_EJ3 = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(CPP_FILES_EJ3))
 CPP_FILES_EJ4 = $(shell find $(SRC_DIR_EJ4) -name '*.cpp' ! -name 'main.cpp')
 OBJ_FILES_EJ4 = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(CPP_FILES_EJ4))
 
+CPP_FILES_HUD = $(shell find $(SRC_DIR_HUD) -name '*.cpp')
+OBJ_FILES_HUD = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(CPP_FILES_HUD))
+
 UTILS_CPP = $(shell find $(UTILS_DIR) -name '*.cpp')
 UTILS_OBJ = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(UTILS_CPP))
 
@@ -30,21 +34,27 @@ MAIN_GLOBAL = $(shell find . -maxdepth 1 -name 'main.cpp')
 MAIN_OBJ = $(patsubst %.cpp,%.o,$(MAIN_GLOBAL))
 
 # Ejecutables
+BIN_EJ2 = $(BIN_DIR)/ej2
 BIN_EJ3 = $(BIN_DIR)/ej3
 BIN_EJ4 = $(BIN_DIR)/ej4
 BIN_JUEGO = $(BIN_DIR)/juego
 
 # Default
 default: all
-all: $(BIN_EJ3) $(BIN_EJ4) $(BIN_JUEGO)
+all: $(BIN_EJ2) $(BIN_EJ3) $(BIN_EJ4) $(BIN_JUEGO)
 
 # Regla general para objetos
 $(BUILD_DIR)/%.o: %.cpp
 	@mkdir -p $(dir $@)
 	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
+# Ejecutable Ej2
+$(BIN_EJ2): $(OBJ_FILES_EJ2) $(OBJ_FILES_EJ3) $(OBJ_FILES_HUD) $(BUILD_DIR)/$(SRC_DIR_EJ2)/main.o
+	@mkdir -p $(BIN_DIR)
+	$(CXX) $^ -o $@
+
 # Ejecutable Ej3
-$(BIN_EJ3): $(OBJ_FILES_EJ2) $(OBJ_FILES_EJ3) $(BUILD_DIR)/$(SRC_DIR_EJ3)/main.o
+$(BIN_EJ3): $(OBJ_FILES_EJ2) $(OBJ_FILES_EJ3) $(OBJ_FILES_HUD) $(BUILD_DIR)/$(SRC_DIR_EJ3)/main.o
 	@mkdir -p $(BIN_DIR)
 	$(CXX) $^ -o $@
 
@@ -54,11 +64,14 @@ $(BIN_EJ4): $(OBJ_FILES_EJ2) $(OBJ_FILES_EJ3) $(OBJ_FILES_EJ4) $(BUILD_DIR)/$(SR
 	$(CXX) $^ -o $@
 
 # Ejecutable principal con main global
-$(BIN_JUEGO): $(OBJ_FILES_EJ2) $(OBJ_FILES_EJ3) $(MAIN_OBJ)
+$(BIN_JUEGO): $(OBJ_FILES_EJ2) $(OBJ_FILES_EJ3) $(OBJ_FILES_HUD) $(MAIN_OBJ)
 	@mkdir -p $(BIN_DIR)
 	$(CXX) $^ -o $@
 
 # Comandos de ejecución
+run2: $(BIN_EJ2)
+	./$(BIN_EJ2)
+
 run3: $(BIN_EJ3)
 	./$(BIN_EJ3)
 
@@ -84,4 +97,5 @@ clean:
 -include $(OBJ_FILES_EJ2:.o=.d)
 -include $(OBJ_FILES_EJ3:.o=.d)
 -include $(OBJ_FILES_EJ4:.o=.d)
+-include $(OBJ_FILES_HUD:.o=.d)
 -include $(UTILS_OBJ:.o=.d)

@@ -1,6 +1,18 @@
 #include "warrior.hpp"
-#include "../../../Ej3/team.hpp"
 #include "../mages/warlock/warlock.hpp"
+
+// Combat weapons and base
+#include "../../weapons/combat_weapons/sword/sword.hpp"
+#include "../../weapons/combat_weapons/axe/axe.hpp"
+#include "../../weapons/combat_weapons/spear/spear.hpp"
+#include "../../weapons/combat_weapons/basto/basto.hpp"
+#include "../../weapons/combat_weapons/double_axe/double_axe.hpp"
+
+// Magic items
+#include "../../weapons/magic_items/amulet/amulet.hpp"
+#include "../../weapons/magic_items/potion/potion.hpp"
+#include "../../weapons/magic_items/spellbook/spellbook.hpp"
+#include "../../weapons/magic_items/staff/staff.hpp"
 
 Warrior::Warrior(string name, CharacterType type, int maxHealth, int armor):
     name(name), type(type), health(100), maxHealth(maxHealth), armor(armor), combatBuff(2), weapons(nullptr, nullptr)
@@ -32,11 +44,12 @@ void Warrior::heal(int amount) {
 }
 
 void Warrior::receiveDamage(int dam){
-    if (opponentMiss) {
+    if (opponentMiss){
         cout << name << " dodges the attack!" << endl;
         opponentMiss = false;
         return;
     }
+    if (exposed) dam = static_cast<int>(dam * 1.3); //el daño se multiplica por 1.3 si el guerrero esta expuesto.
     health-=dam;
     if (health <= 0){
         health = 0;
@@ -59,22 +72,45 @@ string Warrior::getType() const {
     }
 }
 
-void Warrior::addWeapon(shared_ptr<Weapon> w){
-    if (weapons.first == nullptr) weapons.first = w;
-    else if (weapons.second == nullptr) weapons.second = w;
+void Warrior::addWeapon(unique_ptr<Weapon> w) {
+    if (!weapons.first) weapons.first = move(w);
+    else if (!weapons.second) weapons.second = move(w);
+    else cout << "Both weapon slots are occupied." << endl;
 }
 
-pair<shared_ptr<Weapon>, shared_ptr<Weapon>> Warrior::inventory() const {
-    return weapons;
+pair<unique_ptr<Weapon>, unique_ptr<Weapon>> Warrior::inventory(){
+    unique_ptr<Weapon> weaponsCopy1 = nullptr;
+    unique_ptr<Weapon> weaponsCopy2 = nullptr;
+    if (auto castedWeapon = dynamic_cast<Axe*>(weapons.first.get())) weaponsCopy1 = make_unique<Axe>(*castedWeapon);
+    else if (auto castedWeapon = dynamic_cast<Basto*>(weapons.first.get())) weaponsCopy1 = make_unique<Basto>(*castedWeapon);
+    else if (auto castedWeapon = dynamic_cast<DoubleAxe*>(weapons.first.get())) weaponsCopy1 = make_unique<DoubleAxe>(*castedWeapon);
+    else if (auto castedWeapon = dynamic_cast<Spear*>(weapons.first.get())) weaponsCopy1 = make_unique<Spear>(*castedWeapon);
+    else if (auto castedWeapon = dynamic_cast<Sword*>(weapons.first.get())) weaponsCopy1 = make_unique<Sword>(*castedWeapon);
+    else if (auto castedWeapon = dynamic_cast<Amulet*>(weapons.first.get())) weaponsCopy1 = make_unique<Amulet>(*castedWeapon);
+    else if (auto castedWeapon = dynamic_cast<Potion*>(weapons.first.get())) weaponsCopy1 = make_unique<Potion>(*castedWeapon);
+    else if (auto castedWeapon = dynamic_cast<Spellbook*>(weapons.first.get())) weaponsCopy1 = make_unique<Spellbook>(*castedWeapon);
+    else if (auto castedWeapon = dynamic_cast<Staff*>(weapons.first.get())) weaponsCopy1 = make_unique<Staff>(*castedWeapon);
+
+    if (auto castedWeapon = dynamic_cast<Axe*>(weapons.second.get())) weaponsCopy2 = make_unique<Axe>(*castedWeapon);
+    else if (auto castedWeapon = dynamic_cast<Basto*>(weapons.second.get())) weaponsCopy2 = make_unique<Basto>(*castedWeapon);
+    else if (auto castedWeapon = dynamic_cast<DoubleAxe*>(weapons.second.get())) weaponsCopy2 = make_unique<DoubleAxe>(*castedWeapon);
+    else if (auto castedWeapon = dynamic_cast<Spear*>(weapons.second.get())) weaponsCopy2 = make_unique<Spear>(*castedWeapon);
+    else if (auto castedWeapon = dynamic_cast<Sword*>(weapons.second.get())) weaponsCopy2 = make_unique<Sword>(*castedWeapon);
+    else if (auto castedWeapon = dynamic_cast<Amulet*>(weapons.second.get())) weaponsCopy2 = make_unique<Amulet>(*castedWeapon);
+    else if (auto castedWeapon = dynamic_cast<Potion*>(weapons.second.get())) weaponsCopy2 = make_unique<Potion>(*castedWeapon);
+    else if (auto castedWeapon = dynamic_cast<Spellbook*>(weapons.second.get())) weaponsCopy2 = make_unique<Spellbook>(*castedWeapon);
+    else if (auto castedWeapon = dynamic_cast<Staff*>(weapons.second.get())) weaponsCopy2 = make_unique<Staff>(*castedWeapon);
+
+    return {move(weaponsCopy1), move(weaponsCopy2)};
 }
 
-void Warrior::loseWeapon(shared_ptr<Weapon> weapon){
-    if (weapons.first == weapon) weapons.first = nullptr;
-    else if (weapons.second == weapon) weapons.second = nullptr;
+void Warrior::loseWeapon(unique_ptr<Weapon>& weapon) {
+    if (weapons.first && weapons.first.get() == weapon.get()) weapons.first.reset();
+    else if (weapons.second && weapons.second.get() == weapon.get()) weapons.second.reset();
     else cout << "Weapon not found in inventory." << endl;
 }
 
-void Warrior::endTurnUpdate(){
+void Warrior::endTurnUpdate() {
     this->effectUpdate();
 }
 
@@ -123,7 +159,15 @@ string Warrior::warlockSoulLink(shared_ptr<Character> target, shared_ptr<Team> t
 
 // ======= METODOS PARA MANEJAR EFECTOS ======= //
 void Warrior::applyEffect(Effect effect, int duration){
-    currentEffects.push_back(make_pair(effect, duration));
+    if (hasEffect(effect)){
+        for (auto it = currentEffects.begin(); it != currentEffects.end(); it++)
+            if (it->first == effect) it->second += duration;
+    }
+    else currentEffects.push_back(make_pair(effect, duration));
+}
+
+vector<pair<Effect, int>> Warrior::getCurrentEffects() const {
+    return currentEffects;
 }
 
 bool Warrior::hasEffect(Effect effect) const {
@@ -134,9 +178,11 @@ bool Warrior::hasEffect(Effect effect) const {
 }
 
 void Warrior::effectUpdate(){
+    if (this->currentEffects.empty()) return;
     for (auto effect = this->currentEffects.begin(); effect != this->currentEffects.end();){
         if (!effect->second){
             effect = this->currentEffects.erase(effect);
+            if (effect == this->currentEffects.end()) return; //si borro el ultimo efecto, salgo.
         }
         else{
             switch (effect->first){
@@ -149,7 +195,7 @@ void Warrior::effectUpdate(){
                 case STUN: this->stunCase(); break;
                 case IMMUNITY: break; //no se aplica aca.
                 case INVISIBILITY: this->invisibilityCase(); break;
-                case FROZEN: this->frozenCase(); break;
+                case FREEZING: this->freezingCase(); break;
                 case STONE_SKIN: break; //no afecta a los warriors
                 case MAGIC_SILENCE: break; //no afecta a los warriors
                 case ELEMENTAL_EXPOSURE: this->elementalExposureCase(); break;
@@ -170,7 +216,7 @@ void Warrior::regenCase(){
 }
 
 void Warrior::burnCase(){
-    if (!!hasEffect(IMMUNITY)) health -= 5;
+    if (!hasEffect(IMMUNITY)) health -= 5;
     if (health < 0) health = 0;
 }
 
@@ -206,7 +252,7 @@ void Warrior::invisibilityCase(){
     opponentMiss = true;
 }
 
-void Warrior::frozenCase(){
+void Warrior::freezingCase(){
     stunned = true; //el proximo turno no puede atacar.
 }
 

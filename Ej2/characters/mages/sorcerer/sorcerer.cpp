@@ -1,10 +1,10 @@
 #include "sorcerer.hpp"
 
 Sorcerer::Sorcerer(string name):
-    Mage(name, SORCERER, 100, 100), currentType(FIRE), cooldown(0), switchCooldown(0) 
+    Mage(name, SORCERER, 100, 100), currentType(FIRE)
 {}
 
-string Sorcerer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
+string Sorcerer::useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
     string logText;
     int finalDamage = BASE_DAMAGE;
 
@@ -23,13 +23,12 @@ string Sorcerer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> targ
     //aplico el debuff de SCARED si corresponde.
     if (hasEffect(SCARED) && rand() % 100 < 60) {
         logText += ". " + name + " (Sorcerer) is scared and misses the attack!\n";
-        cout << logText; // Print the log at the end
         return logText;
     }
 
     if (stunned) {
         logText += ". " + name + " (Sorcerer) is stunned!\n";
-        cout << logText; // Print the log at the end
+        stunned = false;
         return logText;
     }
 
@@ -54,66 +53,17 @@ string Sorcerer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> targ
     return logText;
 }
 
-void Sorcerer::attack(shared_ptr<Character> target) {
-    elementalAttack(target);
-}
-
-void Sorcerer::special(shared_ptr<Character> target, shared_ptr<Team> team) {
-    if (!specialReady()) return;
-    elementalSpecial(target, team);
-    resetCooldown();
-}
-
 void Sorcerer::elementalAttack(shared_ptr<Character> target) {
     switch (currentType) {
         case FIRE: target->applyEffect(BURNING, 2); break;
-        case WATER: target->applyEffect(FROZEN, 1); break;
+        case WATER: target->applyEffect(FREEZING, 1); break;
         case AIR: target->applyEffect(STUN, 1); break;
         case EARTH: target->applyEffect(STONE_SKIN, 2); break;
     }
 }
 
-void Sorcerer::elementalSpecial(shared_ptr<Character> target, shared_ptr<Team> team) {
-    switch (currentType) {
-        case FIRE:
-            target->applyEffect(ELEMENTAL_EXPOSURE, 3);
-            break;
-        case WATER:
-            target->applyEffect(MAGIC_SILENCE, 2);
-            break;
-        case AIR:
-            target->applyEffect(POISON, 3);
-            break;
-        case EARTH:
-            for (const auto& c : team->getMembers()) {
-                c->applyEffect(STONE_SKIN, 2);
-            }
-            break;
-    }
-}
-
-void Sorcerer::changeElement(SorcererType newType) {
-    if (canChangeElement()) {
-        currentType = newType;
-        switchCooldown = 1;
-    }
-}
-
-bool Sorcerer::canChangeElement() const {
-    return switchCooldown == 0;
-}
-
-void Sorcerer::resetCooldown() {
-    cooldown = 3;
-}
-
-void Sorcerer::tickCooldown() {
-    if (cooldown > 0) cooldown--;
-    if (switchCooldown > 0) switchCooldown--;
-}
-
-bool Sorcerer::specialReady() const {
-    return cooldown == 0;
+void Sorcerer::changeElement(SorcererType newType){
+    currentType = newType;
 }
 
 string Sorcerer::getType() const {

@@ -6,6 +6,20 @@ Basto::Basto(Material reinforcement) :
         reinforce(reinforcement);
 }
 
+Basto::Basto(const Basto& other) : 
+    Combat(other.material) {
+        this->durability = other.durability;
+        this->damage = other.damage;
+        this->reinforcement = other.reinforcement;
+        this->damageBoost = other.damageBoost;
+        this->durabilityBoost = other.durabilityBoost;
+        this->name = other.name;
+}
+
+void Basto::setDamage(Material){
+    return; //el daño base del basto es siempre 3 y la modifica reinforce
+}
+
 int Basto::attack(){
     if (this->durability <= 0) {
         cout << "Basto is broken!" << endl;

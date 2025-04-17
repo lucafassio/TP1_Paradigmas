@@ -2,19 +2,16 @@
 #define WEAPON_HPP
 
 #include "../../utils/data.hpp"
-
-class Character;
+#include "../characters/character.hpp"
+#include "../../Ej3/team.hpp"
 
 class Weapon{
     public:
         virtual string getName() const = 0;
         virtual bool isCombat() const = 0;
-        virtual int getDurability() const = 0;
-        
-        virtual string getMaterial() const = 0;
-        virtual void use() = 0;
-        
+
         virtual int attack() = 0;
+        virtual string use(shared_ptr<Team> targetTeam, shared_ptr<Character> holder, shared_ptr<Character> target, int spellNumber) = 0;
         
         virtual ~Weapon() = default;
 };

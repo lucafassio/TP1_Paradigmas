@@ -3,16 +3,17 @@
 
 #include "../magic.hpp"
 
-class Potion : public Magic {
+class Potion: public Magic{
 private:
-    string type;
-    bool expired;
+    PotionType type;
+    bool thrown;
 
 public:
-    Potion(string type, int durability);
+    Potion(PotionType type);
+    Potion(const Potion& other);
 
-    string getMaterial() const override;
-    void use() override;
+    string getType() const;
+    string use(shared_ptr<Team> holderTeam, shared_ptr<Character> holder, shared_ptr<Character> target, int spellNumber) override;
 };
 
 #endif // POTION_HPP

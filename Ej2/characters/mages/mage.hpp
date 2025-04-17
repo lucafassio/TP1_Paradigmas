@@ -3,7 +3,7 @@
 
 #include "../character.hpp"
 
-class Mage : public Character, public enable_shared_from_this<Mage>{
+class Mage: public Character, public enable_shared_from_this<Mage> {
 protected:
     string name;
     CharacterType type;
@@ -11,7 +11,7 @@ protected:
     int maxHealth;
     int mana;
     int magicBuff;
-    pair<shared_ptr<Weapon>, shared_ptr<Weapon>> weapons;
+    pair<unique_ptr<Weapon>, unique_ptr<Weapon>> weapons;
     int BASE_DAMAGE=10;
 
     //atributos para manejar efectos.
@@ -21,9 +21,8 @@ protected:
     bool opponentMiss = false;
     bool exposed = false;
 
-public:
     Mage(string name, CharacterType type, int maxHealth, int mana);
-
+public:
     string getName() const override;
     int getHealth() const override;
     int getMaxHealth() const override;
@@ -34,17 +33,18 @@ public:
     void heal(int amount) override;
     string getType() const override;
 
-    void addWeapon(shared_ptr<Weapon> w) override;
-    pair<shared_ptr<Weapon>, shared_ptr<Weapon>> inventory() const override;
-    string useWeapon(shared_ptr<Weapon> w, shared_ptr<Character> op, shared_ptr<Team> targetTeam) = 0;
-    void loseWeapon(shared_ptr<Weapon> weapon) override;
+    void addWeapon(unique_ptr<Weapon> w) override;
+    pair<unique_ptr<Weapon>, unique_ptr<Weapon>> inventory() override;
+    string useWeapon(unique_ptr<Weapon> w, shared_ptr<Character> op, shared_ptr<Team> targetTeam) = 0;
+    void loseWeapon(unique_ptr<Weapon>& weapon) override;
     void endTurnUpdate() override;
 
     string warlockSoulLink(shared_ptr<Character> target, shared_ptr<Team> targetTeam, int finalDamage) override;
     
     //metodos para manejar efectos.
     void applyEffect(Effect effect, int duration) override;
-    bool hasEffect(Effect effect) const;
+    vector<pair<Effect, int>> getCurrentEffects() const override;
+    bool hasEffect(Effect effect) const override;
     void effectUpdate() override;
     void regenCase() override;
     void burnCase() override;
@@ -53,11 +53,15 @@ public:
     void stunCase() override;
     void luckCase() override;
     void invisibilityCase() override;
-    void frozenCase() override;
+    void freezingCase() override;
     void stoneSkinCase();
     void magicSilenceCase();
     void elementalExposureCase() override;
     void manaLeechCase();
+
+    friend class Staff;
+    friend class Potion;
+    friend class Spellbook;
 };
 
 #endif // MAGE_HPP

@@ -6,6 +6,14 @@ Spear::Spear(Material mat):
         name = this->getMaterial() + " Spear";
 }
 
+Spear::Spear(const Spear& other):
+    Combat(other.material){
+        this->durability = other.durability;
+        this->damage = other.damage;
+        this->length = other.length;
+        this->name = other.name;
+}
+
 void Spear::setDamage(Material mat){
     switch (mat){
         case NONE: break;

@@ -7,6 +7,7 @@
 using namespace std;
 
 int main(){
+    cout << "========== Ej1: Central Regional ==========" << endl;
     CentralRegional central("LATAM");
 
     central.agregarPais("Uruguay");
