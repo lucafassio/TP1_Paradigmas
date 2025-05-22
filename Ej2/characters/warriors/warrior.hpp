@@ -35,9 +35,9 @@ public:
     void receiveDamage(int dam) override;
 
     void addWeapon(shared_ptr<Weapon> w) override;
-    pair<shared_ptr<Weapon>, shared_ptr<Weapon>> inventory() override;
+    pair<shared_ptr<Weapon>, shared_ptr<Weapon>> inventory() const override;
     string useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) = 0;
-    void loseWeapon(shared_ptr<Weapon>& weapon) override;
+    void loseWeapon(shared_ptr<Weapon> weapon) override;
     void endTurnUpdate() override;
 
     string warlockSoulLink(shared_ptr<Character> target, shared_ptr<Team> targetTeam, int finalDamage) override;

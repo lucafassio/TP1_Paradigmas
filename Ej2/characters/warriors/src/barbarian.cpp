@@ -4,7 +4,7 @@ Barbarian::Barbarian(string name):
     Warrior(name, BARBARIAN, 100, 3)
 {}
 
-string Barbarian::useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
+string Barbarian::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
     string logText;
 
     //verifico si se activa rage (20% de probabilidad).

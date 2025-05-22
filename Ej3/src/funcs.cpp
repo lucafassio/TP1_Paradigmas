@@ -1,7 +1,7 @@
-#include "funcs.hpp"
-#include "../Ej2/characters/character.hpp"
-#include "factory.hpp"
-#include "team.hpp"
+#include "../headers/funcs.hpp"
+#include "../../Ej2/characters/character.hpp"
+#include "../headers/factory.hpp"
+#include "../headers/team.hpp"
 
 
 //esto esta sacado de internet, es para limpiar la terminal nomas.

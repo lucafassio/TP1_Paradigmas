@@ -21,6 +21,7 @@ public:
     virtual pair<shared_ptr<Weapon>, shared_ptr<Weapon>> inventory() const = 0;
     virtual string useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) = 0;
     virtual void loseWeapon(shared_ptr<Weapon> weapon) = 0;
+    virtual void endTurnUpdate() = 0;
 
     virtual string warlockSoulLink(shared_ptr<Character> target, shared_ptr<Team> targetTeam, int finalDamage) = 0;
 

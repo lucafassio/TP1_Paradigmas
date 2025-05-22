@@ -1,4 +1,4 @@
-#include "potion.hpp"
+#include "../headers/potion.hpp"
 #include "../../../characters/warriors/warrior.hpp"
 #include "../../../characters/mages/mage.hpp"
 

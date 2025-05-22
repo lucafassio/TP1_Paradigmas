@@ -13,7 +13,7 @@ public:
 
     Warlock(string name);
 
-    string useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> enemyTeam) override;
+    string useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> enemyTeam) override;
     string soulLink(shared_ptr<Team> ownTeam);
     int getSoulLinkCooldown() const;
     string bornAgain(shared_ptr<Team> ownTeam);

@@ -11,7 +11,7 @@ private:
 public:
     Sorcerer(string name);
 
-    string useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override; // Changed to unique_ptr
+    string useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override; // Changed to shared_ptr
 
     void changeElement(SorcererType newType);    
     void elementalAttack(shared_ptr<Character> target);

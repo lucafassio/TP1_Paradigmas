@@ -4,7 +4,7 @@ Paladin::Paladin(string name):
     Warrior(name, PALADIN, 100, 30), divineShieldHits(0)
 {}
 
-string Paladin::useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
+string Paladin::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
     string logText;
     int finalDamage = BASE_DAMAGE;
 

@@ -4,7 +4,7 @@ Knight::Knight(string name):
     Warrior(name, KNIGHT, 100, 25), timesWithIronWill(0), cooldownIronWill(0)
 {}
 
-string Knight::useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
+string Knight::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
     string logText;
     int finalDamage = BASE_DAMAGE;
 

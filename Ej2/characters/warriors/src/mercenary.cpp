@@ -4,7 +4,7 @@ Mercenary::Mercenary(string name, shared_ptr<Team> currentTeam):
     Warrior(name, MERCENARY, 100, 0), allysRemaining(1), currentTeam(currentTeam) 
 {}
 
-string Mercenary::useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
+string Mercenary::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
     string logText;
     int finalDamage = BASE_DAMAGE;
 

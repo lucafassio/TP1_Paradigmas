@@ -9,7 +9,7 @@ private:
 
 public:
     Barbarian(string name);
-    string useWeapon(unique_ptr<Weapon> w, shared_ptr<Character> op, shared_ptr<Team> targetTeam) override;
+    string useWeapon(shared_ptr<Weapon> w, shared_ptr<Character> op, shared_ptr<Team> targetTeam) override;
 };
 
 #endif // BARBARIAN_HPP

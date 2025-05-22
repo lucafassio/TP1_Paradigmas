@@ -13,7 +13,7 @@ private:
 public:
     Mercenary(string name, shared_ptr<Team> currentTeam);
 
-    string useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
+    string useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
     void entersTeam(shared_ptr<Team> team);
     void receiveDamage(int damage) override;
     void runAway();

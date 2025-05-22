@@ -1,7 +1,7 @@
 #include "funcs.hpp"
 #include "../Ej2/characters/character.hpp"
-#include "../Ej3/funcs.hpp"
-#include "../Ej3/factory.hpp"
+#include "../Ej3/headers/funcs.hpp"
+#include "../Ej3/headers/factory.hpp"
 
 shared_ptr<Character> createPlayer1(){
     string name;

@@ -3,7 +3,7 @@
 
 #include "../../utils/data.hpp"
 #include "../characters/character.hpp"
-#include "../../Ej3/team.hpp"
+#include "../../Ej3/headers/team.hpp"
 
 class Weapon{
     public:

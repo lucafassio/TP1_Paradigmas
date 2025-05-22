@@ -1,6 +1,6 @@
-#include "../../Ej2/characters/character.hpp"
-#include "../../Ej2/characters/warriors/warrior.hpp"
-#include "../../Ej2/characters/mages/mage.hpp"
+#include "../../../Ej2/characters/character.hpp"
+#include "../../../Ej2/characters/warriors/warrior.hpp"
+#include "../../../Ej2/characters/mages/mage.hpp"
 #include <algorithm>
 #include <sstream>
 

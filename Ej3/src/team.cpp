@@ -1,6 +1,6 @@
-#include "team.hpp"
-#include "../Ej2/characters/character.hpp"
-#include "../Ej2/characters/mages/headers/warlock.hpp"
+#include "../headers/team.hpp"
+#include "../../Ej2/characters/character.hpp"
+#include "../../Ej2/characters/mages/headers/warlock.hpp"
 
 Team::Team(string name): 
     name(name), members()

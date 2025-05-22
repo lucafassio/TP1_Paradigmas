@@ -10,7 +10,7 @@ string Larry::getType() const {
 }
 
 //el skelly no tiene mana, no puede usar armas y no puede curarse.
-string Larry::useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
+string Larry::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
     string logText;
     int finalDamage = SKELETON_DAMAGE;
 

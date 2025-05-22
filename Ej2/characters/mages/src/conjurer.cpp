@@ -4,7 +4,7 @@ Conjurer::Conjurer(string name):
     Mage(name, CONJURER, 100, 100), shielded(false), cooldown(0), empoweredDamage(0)
 {}
 
-string Conjurer::useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
+string Conjurer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
     string logText;
     int finalDamage = BASE_DAMAGE + empoweredDamage;
 

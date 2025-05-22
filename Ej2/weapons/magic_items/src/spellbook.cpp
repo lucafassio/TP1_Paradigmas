@@ -1,4 +1,4 @@
-#include "spellbook.hpp"
+#include "../headers/spellbook.hpp"
 #include "../../../characters/mages/headers/conjurer.hpp"
 #include "../../../characters/mages/headers/necromancer.hpp"
 #include "../../../characters/mages/headers/sorcerer.hpp"

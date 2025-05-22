@@ -4,7 +4,7 @@ Necromancer::Necromancer(string name):
     Mage(name, NECRO, 100, 100)
 {}
 
-string Necromancer::useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
+string Necromancer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
     string logText;
     int finalDamage = BASE_DAMAGE;
 

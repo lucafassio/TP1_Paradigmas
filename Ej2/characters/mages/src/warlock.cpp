@@ -6,7 +6,7 @@ Warlock::Warlock(string name):
     Mage(name, WARLOCK, 100, 100), soulLinkCooldown(0)
 {}
 
-string Warlock::useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
+string Warlock::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
     string logText;
     int finalDamage = BASE_DAMAGE;
 

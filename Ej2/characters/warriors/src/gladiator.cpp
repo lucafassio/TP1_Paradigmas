@@ -5,7 +5,7 @@ Gladiator::Gladiator(string name):
     combatBuff = 3;
 }
 
-string Gladiator::useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
+string Gladiator::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
     string logText;
     int finalDamage = BASE_DAMAGE;
 

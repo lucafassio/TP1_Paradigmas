@@ -4,7 +4,7 @@ Sorcerer::Sorcerer(string name):
     Mage(name, SORCERER, 100, 100), currentType(FIRE)
 {}
 
-string Sorcerer::useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
+string Sorcerer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
     string logText;
     int finalDamage = BASE_DAMAGE;
 

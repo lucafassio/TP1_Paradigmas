@@ -11,7 +11,7 @@ private:
 public:
     Necromancer(string name);
 
-    string useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
+    string useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) override;
     string raiseDead(shared_ptr<Team> currentTeam);
     string drainLife(shared_ptr<Character> target);
     string reviveTeammate(shared_ptr<Character> target);
