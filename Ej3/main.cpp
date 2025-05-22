@@ -1,5 +1,5 @@
-#include "funcs.hpp"
-#include "team.hpp"
+#include "headers/funcs.hpp"
+#include "headers/team.hpp"
 #include "../utils/HUD/display.hpp"
 
 int main(){

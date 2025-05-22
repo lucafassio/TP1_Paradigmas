@@ -1,101 +1,32 @@
-# Compilador y flags
-CXX = g++
-CXXFLAGS = -Wall -Wextra -std=c++17 -MMD -MP
+COMPILER = g++
+CXXFLAGS = -Wall -Wextra -Wpedantic -Werror -Wconversion -Wsign-conversion -Wshadow -Wnull-dereference -Wfloat-equal -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wformat=2 -Wcast-align -Wstrict-overflow=5 -Wunsafe-loop-optimizations -Wuseless-cast -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wnon-virtual-dtor -Wzero-as-null-pointer-constant -Wmissing-declarations -Weffc++ -Wstack-protector
+LDFLAGS = -o run
+VALGRIND = valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all --track-origins=yes -s
+COMPILE = $(COMPILER) $(CXXFLAGS) $(LDFLAGS)
 
-# Carpetas internas (ya estamos en la raíz)
-SRC_DIR_EJ2 = Ej2
-SRC_DIR_EJ3 = Ej3
-SRC_DIR_EJ4 = Ej4
-SRC_DIR_HUD = utils/HUD
-UTILS_DIR = utils
-BUILD_DIR = $(UTILS_DIR)/build
-BIN_DIR = bin
+EJ2_ABS = Ej2/characters/mages/mage.cpp Ej2/characters/warriors/warrior.cpp Ej2/weapons/combat_weapons/combat.cpp Ej2/weapons/magic_weapons/magic.cpp
+EJ2_SRC = Ej2/characters/mages/src/* Ej2/characters/warriors/src/* Ej2/weapons/combat_weapons/src/* Ej2/weapons/magic_weapons/src/*
 
-# Includes
-INCLUDES = -I./$(SRC_DIR_EJ2) -I./$(SRC_DIR_EJ3) -I./$(SRC_DIR_EJ4) -I./$(SRC_DIR_HUD) -I./$(UTILS_DIR)
+EJ3 = Ej3/src/*
+EJ4 = Ej4/funcs.cpp
+UTILS = utils/HUD/src/*
 
-# Archivos fuente y objetos
-CPP_FILES_EJ2 = $(shell find $(SRC_DIR_EJ2) -name '*.cpp' ! -name 'main.cpp')
-OBJ_FILES_EJ2 = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(CPP_FILES_EJ2))
+make:
+	@$(COMPILE) $(EJ2_ABS) $(EJ2_SRC) $(EJ3) $(EJ4) $(UTILS) main.cpp
+	@valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all --track-origins=yes -s ./run
+	@rm run
 
-CPP_FILES_EJ3 = $(shell find $(SRC_DIR_EJ3) -name '*.cpp' ! -name 'main.cpp')
-OBJ_FILES_EJ3 = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(CPP_FILES_EJ3))
+run2:
+	@$(COMPILE) $(EJ2_ABS) $(EJ2_SRC) $(EJ3) $(EJ4) $(UTILS) Ej2/main.cpp
+	@valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all --track-origins=yes ./run
+	@rm run
 
-CPP_FILES_EJ4 = $(shell find $(SRC_DIR_EJ4) -name '*.cpp' ! -name 'main.cpp')
-OBJ_FILES_EJ4 = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(CPP_FILES_EJ4))
+run3:
+	@$(COMPILE) $(EJ2_ABS) $(EJ2_SRC) $(EJ3) $(EJ4) $(UTILS) Ej3/main.cpp
+	@valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all --track-origins=yes ./run
+	@rm run
 
-CPP_FILES_HUD = $(shell find $(SRC_DIR_HUD) -name '*.cpp')
-OBJ_FILES_HUD = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(CPP_FILES_HUD))
-
-UTILS_CPP = $(shell find $(UTILS_DIR) -name '*.cpp')
-UTILS_OBJ = $(patsubst %.cpp,$(BUILD_DIR)/%.o,$(UTILS_CPP))
-
-MAIN_GLOBAL = $(shell find . -maxdepth 1 -name 'main.cpp')
-MAIN_OBJ = $(patsubst %.cpp,%.o,$(MAIN_GLOBAL))
-
-# Ejecutables
-BIN_EJ2 = $(BIN_DIR)/ej2
-BIN_EJ3 = $(BIN_DIR)/ej3
-BIN_EJ4 = $(BIN_DIR)/ej4
-BIN_JUEGO = $(BIN_DIR)/juego
-
-# Default
-default: all
-all: $(BIN_EJ2) $(BIN_EJ3) $(BIN_EJ4) $(BIN_JUEGO)
-
-# Regla general para objetos
-$(BUILD_DIR)/%.o: %.cpp
-	@mkdir -p $(dir $@)
-	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
-
-# Ejecutable Ej2
-$(BIN_EJ2): $(OBJ_FILES_EJ2) $(OBJ_FILES_EJ3) $(OBJ_FILES_HUD) $(BUILD_DIR)/$(SRC_DIR_EJ2)/main.o
-	@mkdir -p $(BIN_DIR)
-	$(CXX) $^ -o $@
-
-# Ejecutable Ej3
-$(BIN_EJ3): $(OBJ_FILES_EJ2) $(OBJ_FILES_EJ3) $(OBJ_FILES_HUD) $(BUILD_DIR)/$(SRC_DIR_EJ3)/main.o
-	@mkdir -p $(BIN_DIR)
-	$(CXX) $^ -o $@
-
-# Ejecutable Ej4
-$(BIN_EJ4): $(OBJ_FILES_EJ2) $(OBJ_FILES_EJ3) $(OBJ_FILES_EJ4) $(BUILD_DIR)/$(SRC_DIR_EJ4)/main.o
-	@mkdir -p $(BIN_DIR)
-	$(CXX) $^ -o $@
-
-# Ejecutable principal con main global
-$(BIN_JUEGO): $(OBJ_FILES_EJ2) $(OBJ_FILES_EJ3) $(OBJ_FILES_HUD) $(MAIN_OBJ)
-	@mkdir -p $(BIN_DIR)
-	$(CXX) $^ -o $@
-
-# Comandos de ejecución
-run2: $(BIN_EJ2)
-	./$(BIN_EJ2)
-
-run3: $(BIN_EJ3)
-	./$(BIN_EJ3)
-
-run4: $(BIN_EJ4)
-	./$(BIN_EJ4)
-
-runjuego: $(BIN_JUEGO)
-	./$(BIN_JUEGO)
-
-valgrind3: $(BIN_EJ3)
-	valgrind --leak-check=full ./$(BIN_EJ3)
-
-valgrind4: $(BIN_EJ4)
-	valgrind --leak-check=full ./$(BIN_EJ4)
-
-valgrindjuego: $(BIN_JUEGO)
-	valgrind --leak-check=full ./$(BIN_JUEGO)
-
-# Clean
-clean:
-	rm -rf $(BUILD_DIR) $(BIN_DIR) *.o *.d
-
--include $(OBJ_FILES_EJ2:.o=.d)
--include $(OBJ_FILES_EJ3:.o=.d)
--include $(OBJ_FILES_EJ4:.o=.d)
--include $(OBJ_FILES_HUD:.o=.d)
--include $(UTILS_OBJ:.o=.d)
+run4:
+	@$(COMPILE) $(EJ2_ABS) $(EJ2_SRC) $(EJ3) $(EJ4) $(UTILS) Ej4/main.cpp
+	@valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all --track-origins=yes ./run
+	@rm run

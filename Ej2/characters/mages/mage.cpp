@@ -1,18 +1,5 @@
 #include "mage.hpp"
-#include "warlock/warlock.hpp"
-
-// Combat weapons and base
-#include "../../weapons/combat_weapons/sword/sword.hpp"
-#include "../../weapons/combat_weapons/axe/axe.hpp"
-#include "../../weapons/combat_weapons/spear/spear.hpp"
-#include "../../weapons/combat_weapons/basto/basto.hpp"
-#include "../../weapons/combat_weapons/double_axe/double_axe.hpp"
-
-// Magic items
-#include "../../weapons/magic_items/amulet/amulet.hpp"
-#include "../../weapons/magic_items/potion/potion.hpp"
-#include "../../weapons/magic_items/spellbook/spellbook.hpp"
-#include "../../weapons/magic_items/staff/staff.hpp"
+#include "headers/warlock.hpp"
 
 Mage::Mage(string name, CharacterType type, int maxHealth, int mana):
     name(name), type(type), health(100), maxHealth(maxHealth), mana(mana), weapons(nullptr, nullptr)
@@ -71,41 +58,19 @@ string Mage::getType() const {
     }
 }
 
-void Mage::addWeapon(unique_ptr<Weapon> w) {
-    if (!weapons.first) weapons.first = move(w);
-    else if (!weapons.second) weapons.second = move(w);
-    else cout << "Both weapon slots are occupied." << endl;
+void Mage::addWeapon(shared_ptr<Weapon> w){
+    if (weapons.first == nullptr) weapons.first = w;
+    else if (weapons.second == nullptr) weapons.second = w;
+
 }
 
-pair<unique_ptr<Weapon>, unique_ptr<Weapon>> Mage::inventory(){
-    unique_ptr<Weapon> weaponsCopy1 = nullptr;
-    unique_ptr<Weapon> weaponsCopy2 = nullptr;
-    if (auto castedWeapon = dynamic_cast<Axe*>(weapons.first.get())) weaponsCopy1 = make_unique<Axe>(*castedWeapon);
-    else if (auto castedWeapon = dynamic_cast<Basto*>(weapons.first.get())) weaponsCopy1 = make_unique<Basto>(*castedWeapon);
-    else if (auto castedWeapon = dynamic_cast<DoubleAxe*>(weapons.first.get())) weaponsCopy1 = make_unique<DoubleAxe>(*castedWeapon);
-    else if (auto castedWeapon = dynamic_cast<Spear*>(weapons.first.get())) weaponsCopy1 = make_unique<Spear>(*castedWeapon);
-    else if (auto castedWeapon = dynamic_cast<Sword*>(weapons.first.get())) weaponsCopy1 = make_unique<Sword>(*castedWeapon);
-    else if (auto castedWeapon = dynamic_cast<Amulet*>(weapons.first.get())) weaponsCopy1 = make_unique<Amulet>(*castedWeapon);
-    else if (auto castedWeapon = dynamic_cast<Potion*>(weapons.first.get())) weaponsCopy1 = make_unique<Potion>(*castedWeapon);
-    else if (auto castedWeapon = dynamic_cast<Spellbook*>(weapons.first.get())) weaponsCopy1 = make_unique<Spellbook>(*castedWeapon);
-    else if (auto castedWeapon = dynamic_cast<Staff*>(weapons.first.get())) weaponsCopy1 = make_unique<Staff>(*castedWeapon);
-
-    if (auto castedWeapon = dynamic_cast<Axe*>(weapons.second.get())) weaponsCopy2 = make_unique<Axe>(*castedWeapon);
-    else if (auto castedWeapon = dynamic_cast<Basto*>(weapons.second.get())) weaponsCopy2 = make_unique<Basto>(*castedWeapon);
-    else if (auto castedWeapon = dynamic_cast<DoubleAxe*>(weapons.second.get())) weaponsCopy2 = make_unique<DoubleAxe>(*castedWeapon);
-    else if (auto castedWeapon = dynamic_cast<Spear*>(weapons.second.get())) weaponsCopy2 = make_unique<Spear>(*castedWeapon);
-    else if (auto castedWeapon = dynamic_cast<Sword*>(weapons.second.get())) weaponsCopy2 = make_unique<Sword>(*castedWeapon);
-    else if (auto castedWeapon = dynamic_cast<Amulet*>(weapons.second.get())) weaponsCopy2 = make_unique<Amulet>(*castedWeapon);
-    else if (auto castedWeapon = dynamic_cast<Potion*>(weapons.second.get())) weaponsCopy2 = make_unique<Potion>(*castedWeapon);
-    else if (auto castedWeapon = dynamic_cast<Spellbook*>(weapons.second.get())) weaponsCopy2 = make_unique<Spellbook>(*castedWeapon);
-    else if (auto castedWeapon = dynamic_cast<Staff*>(weapons.second.get())) weaponsCopy2 = make_unique<Staff>(*castedWeapon);
-
-    return {move(weaponsCopy1), move(weaponsCopy2)};
+pair<shared_ptr<Weapon>, shared_ptr<Weapon>> Mage::inventory() const {
+    return weapons;
 }
 
-void Mage::loseWeapon(unique_ptr<Weapon>& weapon) {
-    if (weapons.first && weapons.first.get() == weapon.get()) weapons.first.reset();
-    else if (weapons.second && weapons.second.get() == weapon.get()) weapons.second.reset();
+void Mage::loseWeapon(shared_ptr<Weapon> weapon){
+    if (weapons.first == weapon) weapons.first = nullptr;
+    else if (weapons.second == weapon) weapons.second = nullptr;
     else cout << "Weapon not found in inventory." << endl;
 }
 

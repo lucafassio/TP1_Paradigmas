@@ -11,7 +11,7 @@ protected:
     int maxHealth;
     int armor;
     int combatBuff;
-    pair<unique_ptr<Weapon>, unique_ptr<Weapon>> weapons;
+    pair<shared_ptr<Weapon>, shared_ptr<Weapon>> weapons;
     int BASE_DAMAGE = 10;
 
     //atributos para manejar efectos.
@@ -34,10 +34,10 @@ public:
     void heal(int amount) override;
     void receiveDamage(int dam) override;
 
-    void addWeapon(unique_ptr<Weapon> w) override;
-    pair<unique_ptr<Weapon>, unique_ptr<Weapon>> inventory() override;
-    string useWeapon(unique_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) = 0;
-    void loseWeapon(unique_ptr<Weapon>& weapon) override;
+    void addWeapon(shared_ptr<Weapon> w) override;
+    pair<shared_ptr<Weapon>, shared_ptr<Weapon>> inventory() override;
+    string useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) = 0;
+    void loseWeapon(shared_ptr<Weapon>& weapon) override;
     void endTurnUpdate() override;
 
     string warlockSoulLink(shared_ptr<Character> target, shared_ptr<Team> targetTeam, int finalDamage) override;
