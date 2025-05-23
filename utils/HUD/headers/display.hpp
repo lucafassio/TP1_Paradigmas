@@ -1,7 +1,7 @@
 #ifndef DISPLAY_HPP
 #define DISPLAY_HPP
 
-#include "../data.hpp"
+#include "../../data.hpp"
 
 string toUpperCase(const string& str);
 

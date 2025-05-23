@@ -23,12 +23,13 @@ string Paladin::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> targe
     //aplico el debuff de SCARED si corresponde.
     if (hasEffect(SCARED) && rand() % 100 < 60) {
         logText += ". " + name + " (Paladin) is scared and misses the attack!\n";
+        cout << logText; // Print the log at the end
         return logText;
     }
 
     if (stunned) {
         logText += ". " + name + " (Paladin) is stunned!\n";
-        stunned = false;
+        cout << logText; // Print the log at the end
         return logText;
     }
 

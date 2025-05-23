@@ -33,13 +33,14 @@ string Barbarian::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> tar
     //aplico el debuff de SCARED si corresponde. Al barbaro enfurecido no le afecta.
     if (!hasEffect(RAGE) && hasEffect(SCARED) && rand() % 100 < 60) {
         logText += ". " + name + " (Barbarian) is scared and misses the attack!\n";
-        return logText; //no hace daño.
+        cout << logText; // Print the log at the end
+        return 0; //no hace daño.
     }
 
     if (stunned) {
         logText += ". " + name + " (Barbarian) is stunned!\n";
-        stunned = false;
-        return logText; //no hace daño.
+        cout << logText; // Print the log at the end
+        return 0; //no hace daño.
     }
 
     //siempre existe un 20% de probabilidad de activar un crítico (si ya venia forzado se mantiene igual).
@@ -59,5 +60,6 @@ string Barbarian::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> tar
         logText += target->getName() + " (" + target->getType() + ") counterattacks!\n";
     }
 
+    cout << logText;
     return logText;
 }

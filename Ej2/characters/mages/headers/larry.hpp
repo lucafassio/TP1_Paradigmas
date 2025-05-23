@@ -7,7 +7,7 @@
 #define SKELETON_HEALTH 30
 #define SKELETON_DAMAGE 6
 
-class Larry final: public Mage {
+class Larry : public Mage {
 private:
     int lifetimeRemaining = 2; //turnos restantes de vida.
 
@@ -20,4 +20,5 @@ public:
     void loseLifetime();
 };
 
-#endif // LARRY_HPP
+
+#endif 

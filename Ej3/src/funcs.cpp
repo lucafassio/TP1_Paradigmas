@@ -3,7 +3,6 @@
 #include "../headers/factory.hpp"
 #include "../headers/team.hpp"
 
-
 //esto esta sacado de internet, es para limpiar la terminal nomas.
 void clearScreen() {
     #ifdef _WIN32
@@ -69,64 +68,56 @@ string getRandomName(CharacterType characterType){
     return name;
 }
 
-void fullFillingWeapons(shared_ptr<Character> character, bool random) {
-    clearScreen();
-    cout << "========== Ej 3: Factory ==========" << endl;
-    //defino cuantas armas va a llevar el guerrero creado.
+void fullFillingWeapons(shared_ptr<Character> character, bool random){
+    //defino cuatas armas va a llevar el guerrero creado.
     int numWeapons = rand() % 3; //numero entre 0 y 2.
-    vector<Material> mats = {NONE, WOOD, STONE, IRON, GOLD, DIAMOND};
     cout << character->getName() << " will carry " << numWeapons << " weapons." << endl;
     for (int i = 0; i < numWeapons; i++){
-        try {
+        try{
             int selectedWeapon;
 
             if (!random){
+
                 //muestro las opciones que hay
                 showWeaponOptions();
                 cout << endl << "> ";
                 cin >> selectedWeapon;
-                if (cin.fail()) {
+                if (cin.fail()){
                     cin.clear();
                     cin.ignore(9999, '\n');
-                    throw invalid_argument("Invalid input. Please enter a number.");
+                    cout << "Invalid input. Please enter a number." << endl;
+                    i--;
+                    continue;
                 }
             }
-            else selectedWeapon = rand() % 9 + 1; //numero entre 1 y 9.
+            else selectedWeapon = rand() % 9 + 1; //numero entre 1 y 8.
+    
+            //para aleatoriezar el material de las armas de combate (el basto puede salir none).
+            vector<Material> mats = {NONE, WOOD, STONE, IRON, GOLD, DIAMOND};
 
             //meto el arma correspondiente.
-            switch (selectedWeapon - 1) {
-                case AXE: Factory::createAndAddWeaponToCharacter(character, AXE, mats[rand() % 5 + 1]); break;
-                case BASTO:Factory::createAndAddWeaponToCharacter(character, BASTO, mats[rand() % 6]); break;
-                case DOUBLE_AXE:Factory::createAndAddWeaponToCharacter(character, DOUBLE_AXE, mats[rand() % 5 + 1]); break;
-                case SPEAR:Factory::createAndAddWeaponToCharacter(character, SPEAR, mats[rand() % 5 + 1]); break;
-                case SWORD:Factory::createAndAddWeaponToCharacter(character, SWORD, mats[rand() % 5 + 1]); break;
-                case AMULET:Factory::createAndAddWeaponToCharacter(character, AMULET, static_cast<AmuletProp>(rand() % 5)); break;
-                case POTION:Factory::createAndAddWeaponToCharacter(character, POTION, static_cast<PotionType>(rand() % 6)); break;
-                case SPELLBOOK:Factory::createAndAddWeaponToCharacter(character, SPELLBOOK, NONE); break;
-                case STAFF:Factory::createAndAddWeaponToCharacter(character, STAFF, NONE); break;
-                default: throw invalid_argument("Invalid weapon type!"); break;
+            switch (selectedWeapon - 1){
+                case AXE: Factory::addWeaponToCharacter(character, Factory::createWeapon(AXE, mats[rand() % 5 + 1])); break;
+                case BASTO: Factory::addWeaponToCharacter(character, Factory::createWeapon(BASTO, mats[rand() % 6])); break;
+                case DOUBLE_AXE: Factory::addWeaponToCharacter(character, Factory::createWeapon(DOUBLE_AXE, mats[rand() % 5 + 1])); break;
+                case SPEAR: Factory::addWeaponToCharacter(character, Factory::createWeapon(SPEAR, mats[rand() % 5 + 1])); break;
+                case SWORD: Factory::addWeaponToCharacter(character, Factory::createWeapon(SWORD, mats[rand() % 5 + 1])); break;
+                case AMULET: Factory::addWeaponToCharacter(character, Factory::createWeapon(AMULET, static_cast<AmuletProp>(rand() % 5))); break;
+                case POTION: Factory::addWeaponToCharacter(character, Factory::createWeapon(POTION, NONE)); break;
+                case SPELLBOOK: Factory::addWeaponToCharacter(character, Factory::createWeapon(SPELLBOOK, NONE)); break;
+                case STAFF: Factory::addWeaponToCharacter(character, Factory::createWeapon(STAFF, NONE)); break;
+                default: cout << "Invalid weapon type!" << endl; i--; break;
             }
-
-            clearScreen();
-            cout << "========== Ej 3: Factory ==========" << endl;
-            cout << character->getName() << " now has " << character->inventory().first->getName() << ", select another weapon." << endl;
-        } 
+        }
         catch (bad_alloc& e){
             cout << "Memory allocation failed: " << e.what() << endl;
             return;
-        } 
-        catch (invalid_argument& e){
+        }
+        catch (invalid_argument &e){
             cout << e.what() << endl;
             i--;
-
-            //espero dos segundos y limpio la terminal.
-            this_thread::sleep_for(chrono::seconds(2));
-            clearScreen();
-            cout << "========== Ej 3: Factory ==========" << endl;
-            if (character->inventory().first) cout << character->getName() << " now has " << character->inventory().first->getName() << ", select another weapon." << endl;
-            else cout << character->getName() << " will carry " << numWeapons << " weapons." << endl;
             continue;
-        } 
+        }
         catch (exception& e){
             cout << e.what() << endl;
             return;
@@ -173,7 +164,6 @@ void fullFillingTeam(shared_ptr<Team> team, int numWarriors, int numMages, bool 
 
             //si todo sale bien, limpio la terminal.
             clearScreen();
-            cout << "========== Ej 3: Factory ==========" << endl;
         }
         catch(const std::bad_alloc& e){
             cout << "Memory allocation failed: " << e.what() << endl;
@@ -182,11 +172,6 @@ void fullFillingTeam(shared_ptr<Team> team, int numWarriors, int numMages, bool 
         catch(invalid_argument &e){
             cout << e.what() << endl;
             i--;
-
-            //espero dos segundos y limpio la terminal.
-            //this_thread::sleep_for(chrono::seconds(2));
-            clearScreen();
-            cout << "========== Ej 3: Factory ==========" << endl;
             continue;
         }
         catch (exception& e){
@@ -232,7 +217,6 @@ void fullFillingTeam(shared_ptr<Team> team, int numWarriors, int numMages, bool 
 
             //si todo sale bien, limpio la terminal.
             clearScreen();
-            cout << "========== Ej 3: Factory ==========" << endl;
         }
         catch (const std::bad_alloc& e){
             cout << "Memory allocation failed: " << e.what() << endl;
@@ -241,16 +225,27 @@ void fullFillingTeam(shared_ptr<Team> team, int numWarriors, int numMages, bool 
         catch(invalid_argument &e){
             cout << e.what() << endl;
             i--;
-
-            //espero dos segundos y limpio la terminal.
-            this_thread::sleep_for(chrono::seconds(2));
-            clearScreen();
-            cout << "========== Ej 3: Factory ==========" << endl;
             continue;
         }
         catch (const std::exception& e){
             cout << "An error occurred: " << e.what() << endl;
             return;
         }
+    }
+}
+
+//funcion especifica de este ejercicio para mostrar de forma mas fachera los equipos.
+void showTeamMembers(shared_ptr<Team> team){
+    int n = 1;
+    cout << team->getName() << " members:" << endl;
+    for (auto member : team->getMembers()){ //aca tengo que ver si puedo evitar getMembers y hacerlo de otra forma.
+        cout << n << ". " << member->getName() << " (" << member->getType() << ") - ";
+        if (member->inventory().first){
+            cout << "Inventory: " << member->inventory().first->getName();
+            if (member->inventory().second) cout << " & " << member->inventory().second->getName() << endl;
+            else cout << endl;
+        }
+        else cout << "Inventory is empty" << endl;
+        n++;
     }
 }

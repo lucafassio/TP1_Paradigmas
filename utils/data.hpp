@@ -47,7 +47,6 @@ class Potion;
 class Spellbook;
 class Staff;
 
-
 class Team;
 
 //tipos de armas que pueden existir en el juego.
@@ -151,13 +150,5 @@ enum Attack{
     GOLPE_FUERTE = 2,
     DEFENSA_Y_GOLPE = 3
 };
-
-// //interfaces y abstractas
-// #include "../Ej2/characters/character.hpp"
-// #include "../Ej2/characters/warriors/warrior.hpp"
-// #include "../Ej2/characters/mages/mage.hpp"
-// #include "../Ej2/weapons/weapon.hpp"
-// #include "../Ej2/weapons/combat_weapons/combat.hpp"
-// #include "../Ej2/weapons/magic_items/magic.hpp"
 
 #endif // ENUMS_DATA_HPP

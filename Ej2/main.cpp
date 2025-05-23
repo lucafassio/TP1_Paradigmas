@@ -66,7 +66,7 @@ int main(){
     cout << endl << "========== Attack with weapon test ==========" << endl;
     
     cout << "Creating sword for Conan..." << endl;
-    shared_ptr<Weapon> sword = Factory::createWeapon(SWORD, IRON);
+    auto sword = dynamic_pointer_cast<Sword>(Factory::createWeapon(SWORD, IRON));
     Factory::addWeaponToCharacter(team1->getMember("Conan"), sword);
 
     cout << endl << "Conan inventory: " << endl;
@@ -74,9 +74,9 @@ int main(){
     if (team1->getMember("Conan")->inventory().second) cout << team1->getMember("Conan")->inventory().second->getName() << endl;
 
     cout << endl << "Sword stats: " << endl;
-    cout << "Material: " << team1->getMember("Conan")->inventory().first->getMaterial() << endl;
+    cout << "Material: " << sword->getMaterial() << endl;
     cout << "Damage: " << team1->getMember("Conan")->inventory().first->attack() << endl;
-    cout << "Durability: " << team1->getMember("Conan")->inventory().first->getDurability() << endl;
+    cout << "Durability: " << sword->getDurability() << endl;
 
     cout << endl << "Maximus health: " << team2->getMember("Maximus")->getHealth() << endl;
     
@@ -84,27 +84,21 @@ int main(){
 
     cout << "Maximus health: " << team2->getMember("Maximus")->getHealth() << endl;
 
-    cout << endl << "Conans sword durability: " << team1->getMember("Conan")->inventory().first->getDurability() << endl;
+    cout << endl << "Conans sword durability: " << sword->getDurability() << endl;
 
 
     cout << endl << "========== Amulet test ==========" << endl;
 
     cout << "Creating amulet for Maximus..." << endl;
-    shared_ptr<Weapon> amulet = Factory::createWeapon(AMULET, PROP_HEALING);
+    auto amulet = dynamic_pointer_cast<Amulet>(Factory::createWeapon(AMULET, PROP_HEALING));
     Factory::addWeaponToCharacter(team2->getMember("Maximus"), amulet);
-
-    cout << endl << "Sword stats: " << endl;
-    cout << "Material: " << team1->getMember("Conan")->inventory().first->getMaterial() << endl;
-    cout << "Damage: " << team1->getMember("Conan")->inventory().first->attack() << endl;
-    cout << "Durability: " << team1->getMember("Conan")->inventory().first->getDurability() << endl;
 
     cout << endl << "Maximus inventory: " << endl;
     if (team2->getMember("Maximus")->inventory().first) cout << team2->getMember("Maximus")->inventory().first->getName() << endl;
     if (team2->getMember("Maximus")->inventory().second) cout << team2->getMember("Maximus")->inventory().second->getName() << endl;
 
     cout << endl << "Amulet stats: " << endl;
-    cout << "Type: " << team2->getMember("Maximus")->inventory().first->getMaterial() << endl;
-    cout << "Durability: " << team2->getMember("Maximus")->inventory().first->getDurability() << endl;
+    cout << "Type: " << amulet->getType() << endl;
     
     cout << "Maximus current health: " << team2->getMember("Maximus")->getHealth() << endl;
     cout << "Simulating turn passed..." << endl;
@@ -330,10 +324,9 @@ int main(){
 
     gladiator->blastOfGlory(team2, team1);
 
-    cout << "Conan will hit Sportacus with a sword." << endl;
+    cout << "Conan will hit Spartacus with a sword." << endl;
     Factory::addWeaponToCharacter(team1->getMember("Conan"), Factory::createWeapon(DOUBLE_AXE, DIAMOND));
     team1->getMember("Conan")->useWeapon(team1->getMember("Conan")->inventory().first, team2->getMember("Spartacus"), team2);
-
     cout << "Spartacus current health: " << team2->getMember("Spartacus")->getHealth() << endl;
 
 
@@ -355,14 +348,13 @@ int main(){
     cout << endl << "Galahad will use his ultimate." << endl;
     paladin->divineShield();
 
-    cout << "Spartacus will attack Galahad three times with a double axe." << endl;
+    cout << "Spartacus will attack Galahad six times with a double axe." << endl;
     Factory::addWeaponToCharacter(team2->getMember("Spartacus"), Factory::createWeapon(DOUBLE_AXE, DIAMOND));
-    for (int i = 0; i < 3; i++){
+    for (int i = 0; i < 6; i++){
         team2->getMember("Spartacus")->useWeapon(team2->getMember("Spartacus")->inventory().first, team1->getMember("Galahad"), team1);
         cout << "Galahad current health: " << team1->getMember("Galahad")->getHealth() << endl;
     }
-
-    cout << endl << "Galahad current health: " << team1->getMember("Galahad")->getHealth() << endl;
+    cout << endl << endl;
 
     cout << "========== Knight Iron Will test ==========" << endl;
     Factory::addCharacterToTeam(team2, Factory::createCharacter(KNIGHT, "Lancelot"));

@@ -1,5 +1,27 @@
 #include "../headers/factory.hpp"
 
+#include "../../Ej2/characters/mages/headers/conjurer.hpp"
+#include "../../Ej2/characters/mages/headers/necromancer.hpp"
+#include "../../Ej2/characters/mages/headers/sorcerer.hpp"
+#include "../../Ej2/characters/mages/headers/warlock.hpp"
+
+#include "../../Ej2/characters/warriors/headers/barbarian.hpp"
+#include "../../Ej2/characters/warriors/headers/gladiator.hpp"
+#include "../../Ej2/characters/warriors/headers/knight.hpp"
+#include "../../Ej2/characters/warriors/headers/mercenary.hpp"
+#include "../../Ej2/characters/warriors/headers/paladin.hpp"
+
+#include "../../Ej2/weapons/magic_items/headers/amulet.hpp"
+#include "../../Ej2/weapons/magic_items/headers/potion.hpp"
+#include "../../Ej2/weapons/magic_items/headers/spellbook.hpp"
+#include "../../Ej2/weapons/magic_items/headers/staff.hpp"
+
+#include "../../Ej2/weapons/combat_weapons/headers/axe.hpp"
+#include "../../Ej2/weapons/combat_weapons/headers/basto.hpp"
+#include "../../Ej2/weapons/combat_weapons/headers/double_axe.hpp"
+#include "../../Ej2/weapons/combat_weapons/headers/spear.hpp"
+#include "../../Ej2/weapons/combat_weapons/headers/sword.hpp"
+
 shared_ptr<Character> Factory::createCharacter(CharacterType type, string name){
     switch (type){
         case BARBARIAN: return make_shared<Barbarian>(name);
@@ -36,9 +58,9 @@ shared_ptr<Weapon> Factory::createWeapon(WeaponType type, Material mat){
         case SPEAR: return make_shared<Spear>(mat);
         case SWORD: return make_shared<Sword>(mat);
         case AMULET: return make_shared<Amulet>(PROP_HEALING, nullptr);
-        case POTION: return make_shared<Potion>("Health", 3);
-        case SPELLBOOK: return make_shared<Spellbook>("Spellbook", 3);
-        case STAFF: return make_shared<Staff>("Magic Staff", 3);
+        case POTION: return make_shared<Potion>(MOLOTOV);
+        case SPELLBOOK: return make_shared<Spellbook>("Spellbook");
+        case STAFF: return make_shared<Staff>("Magic Staff");
         default: return nullptr;
     }
 }
@@ -49,6 +71,14 @@ shared_ptr<Weapon> Factory::createWeapon(WeaponType type, AmuletProp prop){
         return nullptr;
     }
     return make_shared<Amulet>(prop, nullptr);
+}
+
+shared_ptr<Weapon> Factory::createWeapon(WeaponType type, PotionType pType){
+    if (type != POTION){
+        cout << "Invalid weapon type for potion creation!" << endl;
+        return nullptr;
+    }
+    return make_shared<Potion>(pType);
 }
 
 void Factory::addWeaponToCharacter(shared_ptr<Character> character, shared_ptr<Weapon> weapon) {

@@ -4,37 +4,39 @@ Necromancer::Necromancer(string name):
     Mage(name, NECRO, 100, 100)
 {}
 
-string Necromancer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam){
+string Necromancer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target, shared_ptr<Team> targetTeam) {
     string logText;
     int finalDamage = BASE_DAMAGE;
 
-    logText += this->name + " (Necromancer) attacks " + target->getName() + " (" + target->getType() + ")";
+    logText += name + " (Necromancer) attacks " + target->getName() + " (" + target->getType() + ")";
 
-    if (weapon && weapon->isCombat()){
-        finalDamage += weapon->attack();
+    if (weapon) {
+        if (weapon->isCombat()) finalDamage += weapon->attack();
         logText += " with " + weapon->getName();
-    } 
-    else logText += " with his own power";
+    } else {
+        logText += " with his own power";
+    }
 
     //aplico el buff de STRENGTH si corresponde.
     if (hasEffect(STRENGTH)) finalDamage = static_cast<int>(finalDamage * 1.5);
 
     //aplico el debuff de SCARED si corresponde.
-    if (hasEffect(SCARED) && rand() % 100 < 60){
+    if (hasEffect(SCARED) && rand() % 100 < 60) {
         logText += ". " + name + " (Necromancer) is scared and misses the attack!\n";
+        cout << logText; // Print the log at the end
         return logText;
     }
 
-    if (this->stunned){
+    if (stunned) {
         logText += ". " + name + " (Necromancer) is stunned!\n";
-        this->stunned = false;
+        cout << logText; // Print the log at the end
         return logText;
     }
 
     //siempre existe un 20% de probabilidad de activar un crítico (si ya venia forzado se mantiene igual).
-    if ((rand() % 100) < 20) this->forcedCritical = true;
+    if ((rand() % 100) < 20) forcedCritical = true;
 
-    if (this->forcedCritical){
+    if (forcedCritical) {
         finalDamage = static_cast<int>(finalDamage * 1.5); //aumento daño por critico.
         forcedCritical = false;
     }
@@ -52,40 +54,37 @@ string Necromancer::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> t
     return logText;
 }
 
-string Necromancer::raiseDead(shared_ptr<Team> currentTeam){
-    string logText;
-    if (this->mana >= 25 && this->larrysCounter < 3){
-        logText += this->name + " raises Larry from the dead!\n";
+void Necromancer::raiseDead(shared_ptr<Team> currentTeam){
+    if (mana >= 25 && larrysCounter < 3){
+        cout << name << " raises Larry from the dead!" << endl;
         currentTeam->members.push_back(static_pointer_cast<Character>(make_shared<Larry>()));
         currentTeam->members.back()->heal(1); //se inicializa con 100 de vida y asi se la bajo al maximo que tiene.
         larrysCounter++;
         mana -= 25;
     }
-    else if (larrysCounter >= 3) logText += name + " has already raised Larry 3 times!\n";
-    else logText += name + " doesn't have enough mana to raise Larry!\n";
-    return logText;
+    else if (larrysCounter >= 3) cout << name << " has already raised Larry 3 times!" << endl;
+    else cout << name << " doesn't have enough mana to raise Larry!" << endl;
 }
 
-string Necromancer::drainLife(shared_ptr<Character> target){
-    string logText;
+void Necromancer::drainLife(shared_ptr<Character> target, shared_ptr<Team> targetTeam){
     if (mana >= 10){
-        logText += name + " drains 10 life from " + target->getName();
+        cout << name << " drains 10 life from " << target->getName();
         target->receiveDamage(10);
-        if (!target->getHealth()) logText += " taking him to the death world";
-        logText += "!\n";
+        if (!target->getHealth()){
+            targetTeam->loseMember(target);
+            cout << " taking him to the death world";
+        }
+        cout << "!" << endl;
         this->heal(10);
     }
-    return logText;
 }
 
-string Necromancer::reviveTeammate(shared_ptr<Character> target){
-    string logText;
+void Necromancer::reviveTeammate(shared_ptr<Character> target){
     if (mana >= 20 && !target->getHealth()){
-        logText += name + " (Necromancer) revives " + target->getName() + " (" + target->getType() + ")\n";
+        cout << name << " (Necromancer) revives " << target->getName() << " (" << target->getType() << ")" << endl;
         target->heal(30);
         mana -= 20;
     }
-    else if (target->getHealth()) logText += target->getName() + " is not dead!\n";
-    else logText += name + " doesn't have enough mana to revive " + target->getName() + "!\n";
-    return logText;
+    else if (target->getHealth()) cout << target->getName() << " is not dead!" << endl;
+    else cout << name << " doesn't have enough mana to revive " << target->getName() << "!" << endl;
 }

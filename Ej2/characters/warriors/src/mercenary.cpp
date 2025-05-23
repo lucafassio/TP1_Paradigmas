@@ -23,12 +23,13 @@ string Mercenary::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> tar
     //aplico el debuff de SCARED si corresponde.
     if (hasEffect(SCARED) && rand() % 100 < 60) {
         logText += ". " + name + " (Mercenary) is scared and misses the attack!\n";
+        cout << logText; // Print the log at the end
         return logText;
     }
 
     if (stunned) {
         logText += ". " + name + " (Mercenary) is stunned!\n";
-        stunned = false;
+        cout << logText; // Print the log at the end
         return logText;
     }
 
@@ -49,6 +50,7 @@ string Mercenary::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> tar
         logText += target->getName() + " (" + target->getType() + ") counterattacks!\n";
     }
 
+    cout << logText; // Print the log at the end
     return logText;
 }
 
@@ -57,7 +59,7 @@ void Mercenary::entersTeam(shared_ptr<Team> team){
     cout << name << " has joined the team!" << endl;
 }
 
-void Mercenary::receiveDamage(int damage){
+void Mercenary::receiveDamage(int damage) {
     Warrior::receiveDamage(damage);
     if (health <= 30)
         if ((rand() % 100) < 20) runAway();
@@ -83,17 +85,50 @@ void Mercenary::betray(shared_ptr<Team> currentTeam, shared_ptr<Team> objective)
     cout << "Mercenary is not in this team." << endl;
 }
 
-string Mercenary::getInvisible(){
-    this->applyEffect(INVISIBILITY, 3);
-    if (rand() % 100 < 30) runAway();
-    return name + " has become invisible!\n";
+void Mercenary::stealWeapon(shared_ptr<Character> target){
+    if (this->inventory().first && this->inventory().second){
+        cout << "Inventory full." << endl;
+        return;
+    }
+    shared_ptr<Weapon> stolenWeapon = nullptr;
+
+    //si tiene dos armas, elige.
+    if (target->inventory().first && target->inventory().second){
+        cout << "Select a weapon to steal." << endl;
+        cout << "1. " << target->inventory().first->getName() << endl;
+        cout << "2. " << target->inventory().second->getName() << endl;
+
+        int choice;
+        cin >> choice;
+        if (choice == 1) stolenWeapon = target->inventory().first;
+        else if (choice == 2) stolenWeapon = target->inventory().second;
+        else {
+            cout << "Invalid choice." << endl;
+            return;
+        }
+
+    } 
+    //si tiene una sola arma, la roba.
+    else if (target->inventory().first){
+        stolenWeapon = target->inventory().first;
+    } else if (target->inventory().second){
+        stolenWeapon = target->inventory().second;
+    }
+    //si no tiene armas, no puede robar.
+    else {
+        cout << target->getName() << " has no weapons to steal!" << endl;
+        return;
+    }
+
+    this->addWeapon(stolenWeapon);
+    target->loseWeapon(stolenWeapon);
+    cout << name << " has stolen " << stolenWeapon->getName() << " from " << target->getName() << "!" << endl;
 }
 
-string Mercenary::recruitAlly(){
+void Mercenary::getInvisible(){
+    this->applyEffect(INVISIBILITY, 1);
+}
+
+void Mercenary::recruitAlly(){
     currentTeam->members.push_back(make_shared<Mercenary>(this->getName() + "'s Ally", currentTeam));
-    return name + "'s Ally has been recruited!\n";
-}
-
-int Mercenary::getAllysRemaining() const {
-    return allysRemaining;
 }

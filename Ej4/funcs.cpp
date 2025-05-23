@@ -61,13 +61,33 @@ shared_ptr<Character> createPlayer1(){
         default: throw invalid_argument("Invalid character selected."); break;
     }
 
+    showWeaponOptions();
+    cout << "10. Random" << endl;
+
+    int weaponChoice;
+    cin >> weaponChoice;
+    while (cin.fail() || weaponChoice < 1 || weaponChoice > 10) {
+        cin.clear();
+        cin.ignore(9999, '\n');
+        cout << "Invalid weapon selected." << endl;
+        showWeaponOptions();
+        cout << "10. Random" << endl;
+        cin >> weaponChoice;
+    }
+
+    if (weaponChoice == 10) {
+        weaponChoice = rand() % 9 + 1;
+    }
+
+    Factory::addWeaponToCharacter(player1, Factory::createWeapon(static_cast<WeaponType>(weaponChoice - 1), IRON));
+
     return player1;
 }
 
 shared_ptr<Character> createPlayer2(){
     CharacterType type = static_cast<CharacterType>(rand() % 9);
     shared_ptr<Character> player2 = Factory::createCharacter(type, getRandomName(type));
-    Factory::createAndAddWeaponToCharacter(player2, static_cast<WeaponType>(rand() % 9), NONE);
+    Factory::addWeaponToCharacter(player2, Factory::createWeapon(static_cast<WeaponType>(rand() % 9), NONE));
 
     cout << "Player 2, your character is: " << player2->getName() << " (" << player2->getType() << ")" << endl;
 
@@ -129,3 +149,4 @@ void fight(shared_ptr<Character> player1, shared_ptr<Character> player2){
     if (!player1->getHealth()) cout << player2->getName() << " won." << endl;
     else cout << player1->getName() << " won." << endl;
 }
+

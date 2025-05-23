@@ -24,12 +24,13 @@ string Gladiator::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> tar
     //aplico el debuff de SCARED si corresponde.
     if (hasEffect(SCARED) && rand() % 100 < 60) {
         logText += ". " + name + " (Gladiator) is scared and misses the attack!\n";
+        cout << logText; // Print the log at the end
         return logText; //no hace daño.
     }
 
     if (stunned) {
         logText += ". " + name + " (Gladiator) is stunned!\n";
-        stunned = false;
+        cout << logText; // Print the log at the end
         return logText; //no hace daño.
     }
 
@@ -54,6 +55,7 @@ string Gladiator::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> tar
         logText += target->getName() + " (" + target->getType() + ") counterattacks!\n";
     }
 
+    cout << logText; // Print the log at the end
     return logText;
 }
 
@@ -74,8 +76,9 @@ void Gladiator::blastOfGlory(shared_ptr<Team> ownTeam, shared_ptr<Team> enemyTea
     if (gloryUsed) return;
 
     int aliveCount = 0;
-    for (auto& member : ownTeam->getMembers())
+    for (auto& member : ownTeam->getMembers()) {
         if (member->getHealth() > 0) aliveCount++;
+    }
 
     if (aliveCount != 1) return;
 

@@ -1,12 +1,11 @@
 #include "../headers/amulet.hpp"
 
-Amulet::Amulet(AmuletProp prop): 
-    Magic(3, true, 0), property(prop)
-{name = getType();}
-
-Amulet::Amulet(const Amulet& other):
-    Magic(other.duration, other.reusable, other.cooldown), property(other.property)
-{name = other.name;}
+Amulet::Amulet(AmuletProp prop, shared_ptr<Character> holder): 
+    Magic(3, false, 0), property(prop), active(false), cooldown(0){
+        name = getType();
+        this->holder = holder;
+        if (holder) giveEffect();
+}
 
 string Amulet::getType() const {
     switch (property){
@@ -18,7 +17,12 @@ string Amulet::getType() const {
     }
 }
 
-string Amulet::use(shared_ptr<Team>, shared_ptr<Character> holder, shared_ptr<Character>, int){
+void Amulet::setHolder(shared_ptr<Character> holder){
+    this->holder = holder;
+    giveEffect();
+}
+
+string Amulet::use(shared_ptr<Team>, shared_ptr<Character>, shared_ptr<Character>, int){
     if (this->cooldown) return holder->getName() + " can't use " + this->name + " yet!";
     switch (property){
         case PROP_HEALING: holder->applyEffect(REGENERATION, this->duration); break;
@@ -27,4 +31,14 @@ string Amulet::use(shared_ptr<Team>, shared_ptr<Character> holder, shared_ptr<Ch
         case PROP_LUCK: holder->applyEffect(LUCK, this->duration); break;
     }
     return holder->getName() + " activated " + name + "!\n";
+}
+
+void Amulet::giveEffect(){
+    if (active) return;
+    switch (property){
+        case PROP_HEALING: holder->applyEffect(REGENERATION, duration); break;
+        case PROP_STRENGTH: holder->applyEffect(STRENGTH, duration); break;
+        case PROP_IMMUNITY: holder->applyEffect(IMMUNITY, duration); break;
+        case PROP_LUCK: holder->applyEffect(LUCK, duration); break;
+    }
 }

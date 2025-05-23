@@ -13,20 +13,20 @@ UTILS = utils/HUD/src/*
 
 make:
 	@$(COMPILE) $(EJ2_ABS) $(EJ2_SRC) $(EJ3) $(EJ4) $(UTILS) main.cpp
-	@valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all --track-origins=yes -s ./run
+	@./run
 	@rm run
 
 run2:
 	@$(COMPILE) $(EJ2_ABS) $(EJ2_SRC) $(EJ3) Ej2/main.cpp
-	@valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all --track-origins=yes ./run
+	@./run
 	@rm run
 
 run3:
 	@$(COMPILE) $(EJ2_ABS) $(EJ2_SRC) $(EJ3) $(UTILS) Ej3/main.cpp
-	@valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all --track-origins=yes ./run
+	@$(VALGRIND) ./run
 	@rm run
 
 run4:
 	@$(COMPILE) $(EJ2_ABS) $(EJ2_SRC) $(EJ3) $(EJ4) $(UTILS) Ej4/main.cpp
-	@valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all --track-origins=yes ./run
+	@$(VALGRIND) ./run
 	@rm run

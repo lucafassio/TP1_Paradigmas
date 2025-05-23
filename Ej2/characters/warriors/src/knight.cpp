@@ -23,12 +23,13 @@ string Knight::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target
     //aplico el debuff de SCARED si corresponde.
     if (hasEffect(SCARED) && rand() % 100 < 60) {
         logText += ". " + name + " (Knight) is scared and misses the attack!\n";
+        cout << logText; // Print the log at the end
         return logText;
     }
 
     if (stunned) {
         logText += ". " + name + " (Knight) is stunned!\n";
-        stunned = false;
+        cout << logText; // Print the log at the end
         return logText;
     }
 
@@ -49,20 +50,17 @@ string Knight::useWeapon(shared_ptr<Weapon> weapon, shared_ptr<Character> target
         logText += target->getName() + " (" + target->getType() + ") counterattacks!\n";
     }
 
+    cout << logText; // Print the log at the end
     return logText;
 }
 
-string Knight::ironWill(){
-    this->armor += 15;
-    this->combatBuff += 5;
-    this->cooldownIronWill = 1;
-    timesWithIronWill++;
-    cout << name << " (Knight) uses Iron Will!" << endl;
-    return name + " (Knight) uses Iron Will!\n";
-}
-
-int Knight::getIronWillCooldown() const {
-    return cooldownIronWill;
+void Knight::ironWill(){
+    if (cooldownIronWill == 0){
+        this->armor += 15;
+        this->combatBuff += 5;
+        this->cooldownIronWill = 3;
+        timesWithIronWill++;
+    }
 }
 
 void Knight::receiveDamage(int damage){
