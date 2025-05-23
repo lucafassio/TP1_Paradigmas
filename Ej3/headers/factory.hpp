@@ -1,10 +1,8 @@
 #ifndef FACTORY_HPP
 #define FACTORY_HPP
 
-//enums data
 #include "../../utils/data.hpp"
 
-//no me gustaba el nombre PersonajeFactory, lo cambie a Factory porque tambien hace armas.
 class Factory{
     private:
         Factory() = delete;

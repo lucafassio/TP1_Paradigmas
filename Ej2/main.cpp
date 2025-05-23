@@ -40,6 +40,7 @@
 #include <ctime>
 
 int main(){
+    clearScreen();
     srand(static_cast<unsigned>(time(nullptr)));
     cout << "========== Ej1: Characters ==========" << endl;
     auto team1 = make_shared<Team>("Team 1");

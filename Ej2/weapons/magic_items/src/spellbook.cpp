@@ -3,6 +3,7 @@
 #include "../../../characters/mages/headers/necromancer.hpp"
 #include "../../../characters/mages/headers/sorcerer.hpp"
 #include "../../../characters/mages/headers/warlock.hpp"
+#include "../../../../Ej3/headers/team.hpp"
 
 Spellbook::Spellbook(string name): 
     Magic(0, true, 0){

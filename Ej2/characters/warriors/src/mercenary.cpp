@@ -1,4 +1,5 @@
 #include "../headers/mercenary.hpp"
+#include "../../../../Ej3/headers/team.hpp"
 
 Mercenary::Mercenary(string name, shared_ptr<Team> currentTeam): 
     Warrior(name, MERCENARY, 100, 0), allysRemaining(1), currentTeam(currentTeam) 

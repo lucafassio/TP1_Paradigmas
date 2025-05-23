@@ -22,6 +22,8 @@
 #include "../../Ej2/weapons/combat_weapons/headers/spear.hpp"
 #include "../../Ej2/weapons/combat_weapons/headers/sword.hpp"
 
+#include "../headers/team.hpp"
+
 shared_ptr<Character> Factory::createCharacter(CharacterType type, string name){
     switch (type){
         case BARBARIAN: return make_shared<Barbarian>(name);

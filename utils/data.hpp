@@ -16,6 +16,7 @@
 #include <chrono>
 #include <set>
 #include <random>
+#include <sstream>
 using namespace std;
 
 class Character;

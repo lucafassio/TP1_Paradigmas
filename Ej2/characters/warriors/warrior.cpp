@@ -1,5 +1,6 @@
 #include "warrior.hpp"
 #include "../mages/headers/warlock.hpp"
+#include "../../../Ej3/headers/team.hpp"
 
 Warrior::Warrior(string name, CharacterType type, int maxHealth, int armor):
     name(name), type(type), health(100), maxHealth(maxHealth), armor(armor), combatBuff(2), weapons(nullptr, nullptr)

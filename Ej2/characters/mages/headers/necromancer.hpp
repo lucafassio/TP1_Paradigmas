@@ -2,7 +2,6 @@
 #define NECROMANCER_HPP
 
 #include "../mage.hpp"
-#include "larry.hpp"
 
 class Necromancer final : public Mage {
 private:

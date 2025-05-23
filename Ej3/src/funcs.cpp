@@ -3,14 +3,14 @@
 #include "../headers/factory.hpp"
 #include "../headers/team.hpp"
 
-//esto esta sacado de internet, es para limpiar la terminal nomas.
-void clearScreen() {
+void clearScreen(){
     #ifdef _WIN32
         std::system("cls");
     #else
         std::system("clear");
     #endif
 }
+
 
 void showWarriorOptions(){
     cout << "Warrior options:" << endl;

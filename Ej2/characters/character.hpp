@@ -3,8 +3,6 @@
 
 #include "../../utils/data.hpp"
 #include "../weapons/weapon.hpp"
-#include "../../Ej3/headers/team.hpp"
-#include "../../Ej3/headers/factory.hpp"
 
 class Character{
 public:

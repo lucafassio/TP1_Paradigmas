@@ -1,6 +1,7 @@
 #include "../headers/staff.hpp"
 #include "../../../characters/warriors/warrior.hpp"
 #include "../../../characters/mages/mage.hpp"
+#include "../../../../Ej3/headers/team.hpp"
 
 Staff::Staff(string name):
     Magic(0, true, 0)

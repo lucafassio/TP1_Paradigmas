@@ -1,6 +1,6 @@
 #include "headers/funcs.hpp"
 #include "headers/team.hpp"
-#include "../utils/HUD/display.hpp"
+#include "../utils/HUD/headers/display.hpp"
 
 int main(){
     clearScreen();

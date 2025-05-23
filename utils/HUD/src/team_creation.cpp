@@ -3,12 +3,6 @@
 #include "../../../Ej3/headers/factory.hpp"
 #include "../../../Ej3/headers/funcs.hpp"
 #include "../../../Ej3/headers/team.hpp"
-#include <string>
-#include <vector>
-#include <memory>
-#include <iomanip>
-
-using namespace std;
 
 void displayTeamSlots(const shared_ptr<Team> team) {
     vector<shared_ptr<Character>> members = team->getMembers();

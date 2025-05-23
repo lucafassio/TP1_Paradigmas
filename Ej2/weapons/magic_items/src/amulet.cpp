@@ -1,4 +1,5 @@
 #include "../headers/amulet.hpp"
+#include "../../../characters/character.hpp"
 
 Amulet::Amulet(AmuletProp prop, shared_ptr<Character> holder): 
     Magic(3, false, 0), property(prop), active(false), cooldown(0){

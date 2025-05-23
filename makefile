@@ -1,32 +1,82 @@
-COMPILER = g++
-CXXFLAGS = -Wall -Wextra -Wpedantic -Werror -Wconversion -Wsign-conversion -Wshadow -Wnull-dereference -Wfloat-equal -Wduplicated-cond -Wduplicated-branches -Wlogical-op -Wformat=2 -Wcast-align -Wstrict-overflow=5 -Wunsafe-loop-optimizations -Wuseless-cast -Wmissing-include-dirs -Wold-style-cast -Woverloaded-virtual -Wnon-virtual-dtor -Wzero-as-null-pointer-constant -Wmissing-declarations -Weffc++ -Wstack-protector
-LDFLAGS = -o run
-VALGRIND = valgrind --error-exitcode=1 --leak-check=full --show-leak-kinds=all --track-origins=yes -s
-COMPILE = $(COMPILER) $(LDFLAGS)
+# Variables generales
+CXX := g++
+CXXFLAGS := -std=c++20 -Wall -Wextra -Werror -fPIC
+BUILD_DIR := build
+BIN_DIR := bin
 
-EJ2_ABS = Ej2/characters/mages/mage.cpp Ej2/characters/warriors/warrior.cpp Ej2/weapons/combat_weapons/combat.cpp Ej2/weapons/magic_items/magic.cpp
-EJ2_SRC = Ej2/characters/mages/src/* Ej2/characters/warriors/src/* Ej2/weapons/combat_weapons/src/* Ej2/weapons/magic_items/src/*
+# Archivos fuente comunes (sin main.cpp)
+SRC_FILES := $(shell find Ej2 Ej3 Ej4 utils -name '*.cpp' ! -name 'main.cpp')
+OBJ_FILES := $(patsubst %.cpp, $(BUILD_DIR)/%.o, $(SRC_FILES))
 
-EJ3 = Ej3/src/*
-EJ4 = Ej4/funcs.cpp
-UTILS = utils/HUD/src/*
+# Archivos por ejercicio
+MAIN_EJ2 := Ej2/main.cpp
+MAIN_EJ3 := Ej3/main.cpp
+MAIN_EJ4 := Ej4/main.cpp
+MAIN_GENERAL := main.cpp
 
-make:
-	@$(COMPILE) $(EJ2_ABS) $(EJ2_SRC) $(EJ3) $(EJ4) $(UTILS) main.cpp
-	@./run
-	@rm run
+# Objetos filtrados por módulo
+OBJ_EJ2 := $(filter $(BUILD_DIR)/Ej2/%, $(OBJ_FILES))
+OBJ_EJ3 := $(filter $(BUILD_DIR)/Ej3/%, $(OBJ_FILES))
+OBJ_EJ4 := $(filter $(BUILD_DIR)/Ej4/%, $(OBJ_FILES))
+OBJ_UTILS := $(filter $(BUILD_DIR)/utils/%, $(OBJ_FILES))
 
-run2:
-	@$(COMPILE) $(EJ2_ABS) $(EJ2_SRC) $(EJ3) Ej2/main.cpp
-	@./run
-	@rm run
+# Ejecutables
+BIN_EJ2 := $(BIN_DIR)/ej2
+BIN_EJ3 := $(BIN_DIR)/ej3
+BIN_EJ4 := $(BIN_DIR)/ej4
+BIN_ALL := $(BIN_DIR)/main
 
-run3:
-	@$(COMPILE) $(EJ2_ABS) $(EJ2_SRC) $(EJ3) $(UTILS) Ej3/main.cpp
-	@$(VALGRIND) ./run
-	@rm run
+# Targets principales
+.PHONY: all ej2 ej3 ej4 clean
 
-run4:
-	@$(COMPILE) $(EJ2_ABS) $(EJ2_SRC) $(EJ3) $(EJ4) $(UTILS) Ej4/main.cpp
-	@$(VALGRIND) ./run
-	@rm run
+all: $(BIN_ALL)
+	bin/main
+
+$(BIN_ALL): $(BUILD_DIR)/main.o $(OBJ_EJ2) $(OBJ_EJ3) $(OBJ_UTILS) | $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+# Reglas para objetos
+$(BUILD_DIR)/%.o: %.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+# Reglas por ejercicio
+$(BIN_EJ2): $(OBJ_EJ2) $(OBJ_EJ3) $(BUILD_DIR)/Ej2/main.o | $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+ej2: $(BIN_EJ2)
+	bin/ej2
+
+$(BIN_EJ3): $(OBJ_EJ3) $(OBJ_EJ2) $(OBJ_UTILS) $(BUILD_DIR)/Ej3/main.o | $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+ej3: $(BIN_EJ3)
+	bin/ej3
+
+$(BIN_EJ4): $(BUILD_DIR)/Ej4/main.o $(OBJ_EJ4) $(OBJ_EJ3) $(OBJ_EJ2) $(OBJ_UTILS) | $(BIN_DIR)
+	$(CXX) $(CXXFLAGS) -o $@ $^
+
+ej4: $(BIN_EJ4)
+	bin/ej4
+
+$(BUILD_DIR)/main.o: main.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/Ej2/main.o: Ej2/main.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/Ej3/main.o: Ej3/main.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(BUILD_DIR)/Ej4/main.o: Ej4/main.cpp
+	@mkdir -p $(dir $@)
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+$(BIN_DIR):
+	@mkdir -p $(BIN_DIR)
+
+clean:
+	rm -rf $(BUILD_DIR) $(BIN_DIR)

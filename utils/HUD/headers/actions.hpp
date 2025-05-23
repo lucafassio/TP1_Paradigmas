@@ -1,11 +1,7 @@
 #ifndef ACTIONS_HPP
 #define ACTIONS_HPP
 
-#include <memory>
-#include <string>
-#include <vector>
 #include "../../data.hpp"
-using namespace std;
 
 void createTeamLog(shared_ptr<Team> currentTeam, shared_ptr<Team> rivalTeam);
 

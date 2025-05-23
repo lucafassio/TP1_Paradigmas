@@ -1,4 +1,5 @@
 #include "../headers/gladiator.hpp"
+#include "../../../../Ej3/headers/team.hpp"
 
 Gladiator::Gladiator(string name): 
     Warrior(name, GLADIATOR, 100, 8){

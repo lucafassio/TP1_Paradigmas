@@ -1,5 +1,6 @@
 #include "mage.hpp"
 #include "headers/warlock.hpp"
+#include "../../../Ej3/headers/team.hpp"
 
 Mage::Mage(string name, CharacterType type, int maxHealth, int mana):
     name(name), type(type), health(100), maxHealth(maxHealth), mana(mana), weapons(nullptr, nullptr)

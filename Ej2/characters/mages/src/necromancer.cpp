@@ -1,4 +1,6 @@
 #include "../headers/necromancer.hpp"
+#include "../headers/larry.hpp"
+#include "../../../../Ej3/headers/team.hpp"
 
 Necromancer::Necromancer(string name): 
     Mage(name, NECRO, 100, 100)
